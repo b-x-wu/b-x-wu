@@ -37,9 +37,12 @@ export default function Document() {
           <nav className={"mx-auto p-6 bg-gray-100"}>
             <div className={"flex flex-row justify-between items-center flex-wrap"}>
               {/* The logo */}
-              <div className={"text-2xl"}>
+              <Link 
+                href={"/"}
+                className={"text-2xl"}
+              >
                 brucexwu
-              </div>
+              </Link>
               {/* The hidden checkbox to open the menu with the links for smaller screens */}
               <input
                 type={"checkbox"}
@@ -79,19 +82,25 @@ export default function Document() {
                 "sm:flex sm:flex-row sm:gap-x-4 sm:items-center " +
                 "peer-checked:flex peer-checked:flex-col peer-checked:basis-full "}>
                 <div>
-                  <a>
+                  <Link
+                    href={"/"}
+                  >
                     Home
-                  </a>
+                  </Link>
                 </div>
                 <div>
-                  <a>
+                  <Link
+                    href={"/blog"}
+                  >
                     Blog
-                  </a>
+                  </Link>
                 </div>
                 <div>
-                  <a>
+                  <Link
+                    href={"/resume"}
+                  >
                     Resume/CV
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -99,7 +108,7 @@ export default function Document() {
         </header>
         <Main />
         <NextScript />
-        <footer className="bg-gray-100 bottom-0 h-36 flex">
+        <footer className="bg-gray-100 bottom-0 h-36 flex mt-auto">
           {/* TODO: fix this footer */}
           <div className="m-auto p-6">
             <div className="text-center">
@@ -130,7 +139,7 @@ export default function Document() {
                 rel={"noreferrer noopener"}
               >
                 wu.bruce.x@gmail.com
-              </Link> © Bruce Wu. All Rights Reserved.
+              </Link> © Bruce Wu. All rights reserved.
             </p>
           </div>
         </footer>

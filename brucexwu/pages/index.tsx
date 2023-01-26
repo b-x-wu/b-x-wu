@@ -48,15 +48,12 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Bruce X. Wu</title>
+        <title>brucexwu</title>
         <meta name="description" content="Portfolio site for Bruce X. Wu" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <nav>
-
-        </nav>
+      <main className={"min-h-screen"}>
         <section className={"mx-12 p-6"}>
           { /* Introduction */ }
           <div className={"mx-auto py-6"}>
