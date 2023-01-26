@@ -15,6 +15,7 @@ function FeaturedProject({name, description, imagePath, url}: FeaturedProjectPro
       href={url ?? "#"}
       className="transition-all ease-in-out ring ring-0 duration-300 relative hover:ring-4 h-48 hover:ring group rounded-xl"
     >
+      {/* TODO: if we're using gifs, change it so that the gif only starts playing on hover */}
       {imagePath != null ? 
         <Image 
           src={imagePath} 
@@ -26,8 +27,8 @@ function FeaturedProject({name, description, imagePath, url}: FeaturedProjectPro
         <></>
       }
       <div className="transition-all ease-in duration-300 bg-gray-100 bg-opacity-90 absolute xl:w-1/3 xl:inset-y-0 xl:inset-x-auto xl:h-full xl:bottom-auto xl:right-0 sm:w-full sm:h-9 sm:bottom-0 sm:inset-x-0 sm:inset-y-auto inset-y-0 right-0 w-1/3 flex items-center justify-center group-hover:w-full group-hover:h-full group-hover:rounded-xl xl:rounded-r-lg xl:rounded-bl-none sm:rounded-tr-none sm:rounded-b-lg rounded-r-lg">
-        <div>
-          <h1 className="text-center align-middle text-lg">{name}</h1>
+        <div className="px-3">
+           <h1 className="text-center align-middle text-lg">{name}</h1>
           <p className="text-center sm:hidden sm:group-hover:block xl:block">{description}</p>
         </div>
       </div>
@@ -52,7 +53,7 @@ export default function Home() {
           { /* Introduction */ }
           <div className="mx-auto py-6">
             <Image 
-              src={"/photo_of_me_sweating.jpg"}
+              src={"/me_grinning.jpg"}
               alt={"Picture of me"}
               width={100}
               height={100}
