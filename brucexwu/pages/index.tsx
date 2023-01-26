@@ -30,7 +30,7 @@ function FeaturedProject({name, description, imagePath, url}: FeaturedProjectPro
         <></>
       }
       <div className={
-        "transition-all ease-in duration-300 bg-gray-100 bg-opacity-90 absolute inset-y-0 right-0 w-1/3 flex items-center justify-center rounded-r-lg " +
+        "transition-all ease-in duration-300 bg-gray-100 bg-opacity-80 absolute inset-y-0 right-0 w-1/3 flex items-center justify-center rounded-r-lg backdrop-blur " +
         "sm:w-full sm:h-9 sm:bottom-0 sm:inset-x-0 sm:inset-y-auto sm:rounded-tr-none sm:rounded-b-lg " +
         "xl:w-1/3 xl:inset-y-0 xl:inset-x-auto xl:h-full xl:bottom-auto xl:right-0 xl:rounded-r-lg xl:rounded-bl-none " +
         "group-hover:w-full group-hover:h-full group-hover:rounded-xl"
@@ -69,7 +69,7 @@ export default function Home() {
             />
           </div>
           <h1 className={"text-center text-2xl"}>
-            Hello, I&apos;m B! &#x1F44B;
+            Hello, I&apos;m B! <span role="img" aria-label="waving hand">&#x1F44B;</span>
             {/* IDEA: have this typed out as user enters the site? */}
           </h1>
           <h2 className={"text-center text-lg"}>
