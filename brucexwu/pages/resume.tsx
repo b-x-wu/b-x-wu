@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 
 interface ResumeItemProps {
     title: string
@@ -10,9 +11,14 @@ interface ResumeItemProps {
     location?: string
     dateDescription?: string
     bullets?: readonly string[]
+    hidden?: boolean
 }
 
-function ResumeItem({ title, subtitle, titleHref, subtitleHref, location, dateDescription, bullets }: ResumeItemProps) {
+function ResumeItem({ title, subtitle, titleHref, subtitleHref, location, dateDescription, bullets, hidden }: ResumeItemProps) {
+    if (hidden) {
+        return (<></>)
+    }
+
     const bulletList = bullets == null ? <></> :
         <ul className="list-[square] list-outside pl-4 pt-2 font-light">
             {bullets.map((bullet, idx) =>
@@ -63,37 +69,35 @@ function ResumeItem({ title, subtitle, titleHref, subtitleHref, location, dateDe
 }
 
 export default function Resume() {
+    const [full, setFull] = useState(false)
+
     return (
         <>
             <Head>
                 <title>Resume | brucexwu</title>
-                <meta name="description" content="Resume for Bruce X. Wu" />
+                <meta name="description" content="Bruce X. Wu's Resume" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className="min-h-screen">
                 <div className="flex flex-col m-6 p-6 gap-y-4 bg-gray-100 rounded-md">
-                    <section>
+                    <section className="flex justify-between">
                         {/* Introduction */}
                         <div className="flex flex-col gap-y-1 sm:flex-row sm:gap-x-2 sm:items-baseline">
                             <h1 className="text-3xl font-bold">Bruce X. Wu</h1>
                             <span className="inline-block font-light">(he/they)</span>
                         </div>
+                        <div className="justify-self-end pt-2 sm:pt-1 sm:self-center">
+                            <label className="flex relative cursor-pointer gap-x-1">
+                                <input type="checkbox" checked={full} onChange={(event) => setFull(!full)} className="sr-only peer"></input>
+                                <div className="transition-all duration-300 w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
+                                <div className="transition-opacity duration-300 font-semibold opacity-10 peer-checked:opacity-70">Full</div>
+                            </label>
+                        </div>
                     </section>
                     <section>
                         {/* Work Experience */}
                         <h2 className="text-2xl font-semibold">Work Experience</h2>
-                        <ResumeItem
-                            title="NYU University Learning Center"
-                            subtitle="Learning Assistant"
-                            titleHref="https://www.nyu.edu/students/academic-services/undergraduate-advisement/academic-resource-center/tutoring-and-learning.html"
-                            location="New York, NY"
-                            dateDescription="Jan. 2021 - Dec. 2022"
-                            bullets={[
-                                "Instructed 260 students per semester in one-on-one and group sessions in topics such as algorithms, data structures, mathematical logic, and linear algebra",
-                                "Developed internal tooling with a team of 4 in an Agile workflow and composed 12 pages of documentation on API usage and further development steps"
-                            ]}
-                        />
                         <ResumeItem
                             title="Amazon"
                             subtitle="Software Development Engineering Intern"
@@ -106,6 +110,42 @@ export default function Resume() {
                             ]}
                         />
                         <ResumeItem
+                            title="NYU University Learning Center"
+                            subtitle="Learning Assistant"
+                            titleHref="https://www.nyu.edu/students/academic-services/undergraduate-advisement/academic-resource-center/tutoring-and-learning.html"
+                            location="New York, NY"
+                            dateDescription="Jan. 2021 - Dec. 2022"
+                            bullets={[
+                                "Instructed 260 students per semester in one-on-one and group sessions in topics such as algorithms, data structures, mathematical logic, and linear algebra",
+                                "Developed internal tooling with a team of 4 in an Agile workflow and composed 12 pages of documentation on API usage and further development steps"
+                            ]}
+                            hidden={!full}
+                        />
+                        <ResumeItem
+                            title="NYU Courant Undergraduate Math Department"
+                            subtitle="Grader"
+                            titleHref="https://math.nyu.edu/dynamic/undergrad/ba-cas/activities-research/work-opportunities-math-department/"
+                            location="New York, NY"
+                            dateDescription="Aug. 2021 - Dec. 2022"
+                            bullets={[
+                                "Evaluated 110 assignments per week per semester with detailed feedback in the subjects of calculus, mathematical logic, and statistical analysis",
+                                "Compiled monthly reports on student performance based on aggregated grading data and presented trends in understanding to professors and peers"
+                            ]}
+                            hidden={!full}
+                        />
+                        <ResumeItem
+                            title="NYU Residential Life and Housing Services"
+                            subtitle="Resident Assistant"
+                            titleHref="https://www.nyu.edu/students/student-information-and-resources/housing-and-dining/on-campus-living/staff/student-staff/faqs-and-timeline.html"
+                            location="New York, NY"
+                            dateDescription="Aug. 2021 - Dec. 2022"
+                            bullets={[
+                                "Managed a floor of 40 residents with biweekly reports on community development and floor security",
+                                "Planned and hosted two events a month with an average turnout of 10 residents managing a budget of $400 per semester"
+                            ]}
+                            hidden={!full}
+                        />
+                        <ResumeItem
                             title="Bit Project"
                             subtitle="Program Co-Director"
                             titleHref="https://www.bitproject.org/"
@@ -116,6 +156,18 @@ export default function Resume() {
                                 "Directed a 5 week-long, 6-person focus group on the curriculum and converted collected feedback into deliverables"
                             ]}
                         />
+                        <ResumeItem
+                            title="Huaxia Chinese School at Northampton Community College"
+                            subtitle="Mathcounts Teacher"
+                            location="Bethlehem, PA"
+                            dateDescription="Aug. 2018 - May 2019"
+                            titleHref="https://www.hxcs.org/HX_Branches/LehighValley/index.htmls"
+                            bullets={[
+                                "Developed a curriculum of weekly classes preparing middle schoolers for math competitions resulting in 12% of students receiving recognition at loocal events",
+                                "Corresponded with parents through weekly newsletters about class logistics and class materials and through individual communication about student performance"
+                            ]}
+                        />
+                            
                     </section>
                     <section>
                         {/* Education */}

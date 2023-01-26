@@ -46,7 +46,7 @@ export default function Document() {
               {/* The hidden checkbox to open the menu with the links for smaller screens */}
               <input
                 type={"checkbox"}
-                className={"hidden peer"}
+                className={"sr-only peer"}
                 id="nav-hamburger"
               ></input>
               {/* The visible hamburger menu to open the menu for smaller screens */}
