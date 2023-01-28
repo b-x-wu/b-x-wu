@@ -69,9 +69,9 @@ export default function Document() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
               </label>
@@ -80,6 +80,7 @@ export default function Document() {
               <div className={
                 "hidden " +
                 "sm:flex sm:flex-row sm:gap-x-4 sm:items-center " +
+                "sm:peer-checked:flex-row sm:peer-checked:basis-0 " +
                 "peer-checked:flex peer-checked:flex-col peer-checked:basis-full "}>
                 <div>
                   <Link

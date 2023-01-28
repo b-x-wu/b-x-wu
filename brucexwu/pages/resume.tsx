@@ -119,7 +119,6 @@ export default function Resume() {
                                 "Instructed 260 students per semester in one-on-one and group sessions in topics such as algorithms, data structures, mathematical logic, and linear algebra",
                                 "Developed internal tooling with a team of 4 in an Agile workflow and composed 12 pages of documentation on API usage and further development steps"
                             ]}
-                            hidden={!full}
                         />
                         <ResumeItem
                             title="NYU Courant Undergraduate Math Department"
@@ -166,6 +165,7 @@ export default function Resume() {
                                 "Developed a curriculum of weekly classes preparing middle schoolers for math competitions resulting in 12% of students receiving recognition at loocal events",
                                 "Corresponded with parents through weekly newsletters about class logistics and class materials and through individual communication about student performance"
                             ]}
+                            hidden={!full}
                         />
                             
                     </section>
@@ -177,6 +177,10 @@ export default function Resume() {
                             subtitle="BA in Mathematics and Computer Science, Minor in Data Science"
                             location="New York, NY"
                             dateDescription="Dec. 2022"
+                            bullets={full ? [
+                                "GPA: 3.99",
+                                "Coursework: Causal Inference, Theory of Probability, Linear and Nonlinear Optimization, Applied Internet Technology, Operating Systems, Artificial Intelligence"
+                            ] : undefined}
                         />
                     </section>
                     <section>
@@ -187,11 +191,17 @@ export default function Resume() {
                             title="ULC Schedule Maker V2"
                             subtitle="A web app that aggregates tutoring schedules"
                             titleHref="https://ulc-schedule-maker-v2-production.up.railway.app/login"
+                            bullets={full ? [
+                                "Technologies used: Node.js, Express, React, MongoDB, TypeScript, Tailwind CSS, Google API, Next.js"
+                            ] : undefined}
                         />
                         <ResumeItem
-                            title="Our Soundtrack"
-                            subtitle="A web app that merges group Spotify listening preferences"
-                            titleHref="https://github.com/bruce-x-wu/our-soundtrack"
+                            title="Create React Sandbox"
+                            subtitle="A command-line tool to create lightweight React environments"
+                            titleHref="https://www.npmjs.com/package/create-react-sandbox"
+                            bullets={full ? [
+                                "Technologies used: Node.js, Webpack, Babel, React"
+                            ] : undefined}
                         />
                     </section>
                     <section>
@@ -204,7 +214,7 @@ export default function Resume() {
                             </div>
                             <div className="flex flex-col md:flex-row gap-x-2 items-baseline">
                                 <h3 className="font-medium text-lg">Frameworks and Software:</h3>
-                                <span className="font-light">Node.js, React, MongoDB, AWS, NumPy, SciPy, Figma, Git</span>
+                                <span className="font-light">Node.js, React, MongoDB, AWS, Docker, NumPy, SciPy, Figma, Git</span>
                             </div>
                             <div className="flex flex-col md:flex-row gap-x-2 items-baseline">
                                 <h3 className="font-medium text-lg">Foreign Language:</h3>
