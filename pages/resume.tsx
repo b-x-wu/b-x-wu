@@ -52,16 +52,13 @@ function ResumeItem({ title, subtitle, titleHref, subtitleHref, location, dateDe
 
     return (
         <div className="flex flex-col py-4">
-            <div className="flex justify-between sm:items-baseline sm:gap-x-4">
+            <div className="flex flex-wrap justify-between items-baseline gap-x-6">
                 <h3 className="font-medium text-lg">{titleElement}</h3>
                 <span className="hidden sm:inline sm:font-light sm:text-right">{location}</span>
             </div>
-            <div className="flex justify-between sm:items-baseline sm:gap-x-4">
+            <div className="flex flex-wrap justify-between items-baseline gap-x-6">
                 <h4 className="text-lg">{subtitleElement}</h4>
-                <span className="hidden sm:inline sm:font-light sm:text-right">{dateDescription}</span>
-            </div>
-            <div className="sm:hidden">
-                <span className="font-light">{dateDescription}</span>
+                <span className="inline font-light text-right">{dateDescription}</span>
             </div>
             {bulletList}
         </div>
@@ -80,26 +77,38 @@ export default function Resume() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className="min-h-screen">
-                <div className="flex flex-col mx-6">
-                    <Link
-                        href="/resume.pdf"
-                        className="p-6 bg-gray-100"
-                    >
-                        Download Resume
-                    </Link>
+                <div className="flex flex-col m-6 gap-y-4">
+                    <section className="flex justify-between content-center">
+                        {/* Controls */}
+                        <Link
+                            href={"/resume.pdf"}
+                            aria-label="Download Resume"
+                            target={"_blank"}
+                            rel={"noreferrer noopener"}
+                            className="transition-all duration-300 w-7 h-7 p-1 bg-gray-200 rounded-md ring ring-0 hover:ring hover:ring-2"
+                        >
+                            <Image
+                                src={"https://www.svgrepo.com/show/488905/download-2.svg"}
+                                width={100}
+                                height={100}
+                                className=""
+                                alt="Download Resume"
+                            />
+                        </Link>
+                        <div className="justify-self-end pt-2 sm:pt-1 sm:self-center">
+                            <label className="flex relative cursor-pointer gap-x-1">
+                                <input type="checkbox" checked={full} onChange={(event) => setFull(!full)} className="sr-only peer"></input>
+                                <div className="transition-all duration-300 w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
+                                <div className="transition-opacity duration-300 font-semibold opacity-10 peer-checked:opacity-70">Full</div>
+                            </label>
+                        </div>
+                    </section>
                     <div className="flex flex-col p-6 gap-y-4 bg-gray-100 rounded-md">
                         <section className="flex justify-between">
                             {/* Introduction */}
-                            <div className="flex flex-col gap-y-1 sm:flex-row sm:gap-x-2 sm:items-baseline">
+                            <div className="flex flex-wrap gap-y-1 gap-x-2">
                                 <h1 className="text-3xl font-bold">Bruce X. Wu</h1>
-                                <span className="inline-block font-light">(he/they)</span>
-                            </div>
-                            <div className="justify-self-end pt-2 sm:pt-1 sm:self-center">
-                                <label className="flex relative cursor-pointer gap-x-1">
-                                    <input type="checkbox" checked={full} onChange={(event) => setFull(!full)} className="sr-only peer"></input>
-                                    <div className="transition-all duration-300 w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
-                                    <div className="transition-opacity duration-300 font-semibold opacity-10 peer-checked:opacity-70">Full</div>
-                                </label>
+                                <span className="inline-block font-light self-end">(he/they)</span>
                             </div>
                         </section>
                         <section>
@@ -167,7 +176,7 @@ export default function Resume() {
                                 subtitle="Mathcounts Teacher"
                                 location="Bethlehem, PA"
                                 dateDescription="Aug. 2018 - May 2019"
-                                titleHref="https://www.hxcs.org/HX_Branches/LehighValley/index.htmls"
+                                titleHref="https://www.hxcs.org/HX_Branches/LehighValley/index.html"
                                 bullets={[
                                     "Developed a curriculum of weekly classes preparing middle schoolers for math competitions resulting in 12% of students receiving recognition at loocal events",
                                     "Corresponded with parents through weekly newsletters about class logistics and class materials and through individual communication about student performance"
