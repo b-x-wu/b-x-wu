@@ -1,23 +1,11 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { Post, ApiFailResponse } from '../../..'
 
-// TODO: this is in two places
-type PostData = {
-    id: string
-    title: string
-    datePublished: Date
-    description?: string
-    text: string
-}
-
-type ErrorData = {
-    message: string
-}
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse<PostData[] | ErrorData>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Post[] | ApiFailResponse>) {
     if (req.method !== 'GET') {
-        res.status(404).json({ message: "Incorrect method. Must use 'GET'." })
+        res.status(404).json({ message: "Incorrect method. Must use 'GET'.", data: { method: req.method } } as ApiFailResponse)
         return
     }
 
@@ -25,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const blogPostDirectory = path.join(process.cwd(), 'blog_posts')
     try {
         const postFiles = await fs.readdir(blogPostDirectory)
-        const postDatas: PostData[] = postFiles.map((postFile: string) => {
+        const postDatas: Post[] = postFiles.map((postFile: string) => {
             return {
                 id: postFile.split('.')[0],
                 title: "",
@@ -34,8 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             }
         })
         res.status(200).json(postDatas)
-    } catch {
-        res.status(404).json({ message: "Could not find blog post: " + postId })
+    } catch (error) {
+        res.status(500).json({ message: "Error getting blog posts." })
     }
 
 }

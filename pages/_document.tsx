@@ -76,7 +76,6 @@ export default function Document() {
                 </svg>
               </label>
               {/* The links to other pages */}
-              {/* TODO: add the links and hrefs and change to Link components */}
               <div className={
                 "hidden " +
                 "sm:flex sm:flex-row sm:gap-x-4 sm:items-center " +
@@ -110,7 +109,6 @@ export default function Document() {
         <Main />
         <NextScript />
         <footer className="bg-gray-100 bottom-0 h-36 flex mt-auto">
-          {/* TODO: fix this footer */}
           <div className="m-auto p-6">
             <div className="text-center">
               Let's chat!

@@ -1,20 +1,13 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
-
-type PostData = {
-    id: string
-    title: string
-    datePublished: Date
-    description?: string
-    text: string
-}
+import { Post } from '../../..'
 
 type ErrorData = {
     message: string
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<PostData | ErrorData>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Post | ErrorData>) {
     if (req.method !== 'GET') {
         res.status(404).json({ message: "Incorrect method. Must use 'GET'." })
         return
