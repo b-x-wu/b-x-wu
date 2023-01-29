@@ -10,3 +10,8 @@ export interface Post {
     description?: string
     text: string
 }
+
+export interface MarkdownData {
+    [field: string]: string // metadata
+    text: string // the text without the metadata
+}
