@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             id: postId as string,
             title: markdownData.metadata.title, // will be undefined if the field is not defined in metadata
             datePublished: new Date(markdownData.metadata.datePublished),
-            text: markdownData.content
+            content: markdownData.content
         })
     } catch (error: any) {
         if (error.errno === -4058) {

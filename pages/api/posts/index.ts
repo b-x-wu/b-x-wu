@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 id: postFile.split('.')[0],
                 title: "",
                 datePublished: new Date(),
-                text: ""
+                content: ""
             }
         })
         res.status(200).json(postDatas)

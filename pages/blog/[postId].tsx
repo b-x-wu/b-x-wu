@@ -1,10 +1,10 @@
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, Redirect } from "next"
 import Head from "next/head"
 import Image from "next/image"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { BASE_URL } from "../../constants"
-import { Post } from "../../types/types"
+import { ApiFailResponse, Post } from "../../types/types"
 import Link from "next/link"
 
 interface MarkdownJSXProps {
@@ -94,13 +94,25 @@ export const getStaticProps: GetStaticProps<BlogPostProps> = async ({ params }) 
     }
 
     const res = await fetch(BASE_URL + '/api/posts/' + params.postId)
+
+    if (res.status >= 500) {
+        const error: ApiFailResponse = await res.json()
+        console.log(error)
+        return {
+            redirect: {
+                permanent: false,
+                destination: BASE_URL + '/blog'
+            }
+        }
+    }
+
     const postData: Post = await res.json()
 
     return {
         props: {
             title: postData.title,
-            datePublished: (postData.datePublished).toString(),
-            text: postData.text
+            datePublished: postData.datePublished.toString(),
+            text: postData.content
         }
     }
 }

@@ -8,7 +8,8 @@ export interface Post {
     title: string
     datePublished: Date
     description?: string
-    text: string
+    coverImageSrc?: string
+    content: string
 }
 
 export class Markdown {
