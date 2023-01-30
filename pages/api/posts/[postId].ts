@@ -1,29 +1,7 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Post, ApiFailResponse, MarkdownData } from '../../..'
-
-// returns an object with the metadata and the text (without the metadata)
-function getMarkdownData(fileText: string): MarkdownData {
-    const metadataHeaderText = fileText.match(/^---\s([\s\S]*\s)---\s([\s\S]*)$/)
-
-    if (metadataHeaderText === null) {
-        return {text: fileText} // no metadata
-    }
-
-    const metadataMatch = /(.*): (.*)/g
-    const metadata: {[field: string]: string} = {}
-
-    let match
-    while ((match = metadataMatch.exec(metadataHeaderText[1])) !== null) {
-        metadata[match[1]] = match[2]
-    }
-
-    return {
-        ...metadata,
-        text: metadataHeaderText[2].trim()
-    }
-}
+import { Post, ApiFailResponse, Markdown } from '../../../types/types'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Post | ApiFailResponse>) {
     if (req.method !== 'GET') {
@@ -35,13 +13,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const blogPostDirectory = path.join(process.cwd(), 'blog_posts')
     try {
         const fileContents = await fs.readFile(`${blogPostDirectory}/${postId}.md`, 'utf-8')
-        const markdownData = getMarkdownData(fileContents)
+        const markdownData = new Markdown(fileContents)
+
+        const requiredMetadataFields = ['title', 'datePublished']
+        const missingMetadataFields = markdownData.missingMetadataFields(requiredMetadataFields)
+        if (missingMetadataFields.length > 0) {
+            res.status(500).json({ message: "Markdown is missing necessary metadata.", data: { postId, missingFields: missingMetadataFields } })
+            return
+        }
 
         res.status(200).json({
             id: postId as string,
-            title: markdownData['title'], // will be undefined if the field is not defined in metadata
-            datePublished: new Date(markdownData['datePublished']),
-            text: markdownData.text
+            title: markdownData.metadata.title, // will be undefined if the field is not defined in metadata
+            datePublished: new Date(markdownData.metadata.datePublished),
+            text: markdownData.content
         })
     } catch (error: any) {
         if (error.errno === -4058) {
@@ -50,7 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
 
         console.error(error)
-        res.status(500).json({ message: "Unknwon error.", data: { details: error.toString() }})
+        res.status(500).json({ message: "Unknwon error.", data: { details: error.toString() } })
     }
-
 }

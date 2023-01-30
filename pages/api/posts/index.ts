@@ -1,7 +1,7 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Post, ApiFailResponse } from '../../..'
+import { Post, ApiFailResponse } from '../../../types/types'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Post[] | ApiFailResponse>) {
     if (req.method !== 'GET') {

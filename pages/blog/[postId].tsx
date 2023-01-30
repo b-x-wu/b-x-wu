@@ -4,7 +4,7 @@ import Image from "next/image"
 import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { BASE_URL } from "../../constants"
-import { Post } from "../.."
+import { Post } from "../../types/types"
 import Link from "next/link"
 
 interface MarkdownJSXProps {
