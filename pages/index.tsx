@@ -14,8 +14,8 @@ function FeaturedProject({name, description, imagePath, url}: FeaturedProjectPro
     <Link
       href={url ?? "#"}
       className={
-        "transition-all ease-in-out duration-300 relative group h-48 rounded-xl ring ring-0 " +
-        "hover:ring hover:ring-4"
+        "transition-all ease-in-out duration-300 relative group h-48 rounded-xl ring-0 " +
+        "hover:ring-4"
       }
     >
       {/* TODO: if we're using gifs, change it so that the gif only starts playing on hover */}

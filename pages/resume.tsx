@@ -85,7 +85,7 @@ export default function Resume() {
                             aria-label="Download Resume"
                             target={"_blank"}
                             rel={"noreferrer noopener"}
-                            className="transition-all duration-300 w-7 h-7 p-1 bg-gray-200 rounded-md ring ring-0 hover:ring hover:ring-2"
+                            className="transition-all duration-300 w-7 h-7 p-1 bg-gray-200 rounded-md ring-0 hover:ring-2"
                         >
                             <Image
                                 src={"https://www.svgrepo.com/show/488905/download-2.svg"}

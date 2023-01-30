@@ -6,6 +6,10 @@ datePublished: 2023-01-29
 
 ## This is an h2
 
+### This is an h3
+
+#### Lastly an h4
+
 *(This is italicised) He he he he*
 
 **(This is bolded)**

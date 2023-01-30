@@ -25,9 +25,11 @@ function MarkdownJSX({ text }: MarkdownJSXProps) {
             children={text}
             components={{
                 h1: ({ children }) => <h1 className="text-2xl font-bold py-2">{children}</h1>,
-                h2: ({ children }) => <h2 className="text-xl fond-semibold py-1">{children}</h2>,
+                h2: ({ children }) => <h2 className="text-xl font-semibold py-1">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-lg font-medium py-1">{children}</h3>,
+                h4: ({ children }) => <h4 className="text-lg py-1">{children}</h4>,
                 p: ({ children }) => <p>{children}</p>,
-                img: ({ src, alt }) => <Image src={src ?? ''} alt={alt ?? ''} width={100} height={100} className="w-full max-h-48 p-3 justify-self-center" />,
+                img: ({ src, alt }) => <Image src={src ?? ''} alt={alt ?? ''} width={100} height={100} className="w-full max-h-64 p-3 justify-self-center" />,
                 ul: ({ children }) => <ul className="list-square pl-4">{children}</ul>,
                 ol: ({ children }) => <ol className="list-decimal pl-4">{children}</ol>,
                 a: ({ href, children }) => <Link href={href ?? '#'} className="hover:underline text-sky-700" target={"_blank"} rel={"noreferrer noopener"}>{children}</Link>,
