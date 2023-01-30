@@ -20,7 +20,7 @@ function ResumeItem({ title, subtitle, titleHref, subtitleHref, location, dateDe
     }
 
     const bulletList = bullets == null ? <></> :
-        <ul className="list-[square] list-outside pl-4 pt-2 font-light">
+        <ul className="list-square list-outside pl-4 pt-2 font-light">
             {bullets.map((bullet, idx) =>
                 <li key={idx}>
                     {bullet}

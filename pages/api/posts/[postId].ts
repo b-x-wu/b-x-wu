@@ -18,7 +18,6 @@ function getMarkdownData(fileText: string): MarkdownData {
     while ((match = metadataMatch.exec(metadataHeaderText[1])) !== null) {
         metadata[match[1]] = match[2]
     }
-    console.log(metadata)
 
     return {
         ...metadata,
@@ -45,12 +44,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             text: markdownData.text
         })
     } catch (error: any) {
-        console.log(error)
         if (error.errno === -4058) {
             res.status(404).json({ message: "Could not find blog post.", data: { postId } })
             return
         }
 
+        console.error(error)
         res.status(500).json({ message: "Unknwon error.", data: { details: error.toString() }})
     }
 

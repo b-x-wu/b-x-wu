@@ -13,6 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const blogPostDirectory = path.join(process.cwd(), 'blog_posts')
     try {
         const postFiles = await fs.readdir(blogPostDirectory)
+        // TODO: change this so that the metadata is gotten from the files
+        //       i don't want to run the get metadata file on everything though
+        //       so there might have to be some pagination put in place
         const postDatas: Post[] = postFiles.map((postFile: string) => {
             return {
                 id: postFile.split('.')[0],
@@ -22,8 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             }
         })
         res.status(200).json(postDatas)
-    } catch (error) {
-        res.status(500).json({ message: "Error getting blog posts." })
+    } catch (error: any) {
+        console.error(error)
+        res.status(500).json({ message: "Error getting blog posts.", data: { details: error.toString() }})
     }
 
 }

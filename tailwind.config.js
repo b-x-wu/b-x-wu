@@ -6,6 +6,10 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    listStyleType: {
+      decimal: 'decimal',
+      square: 'square'
+    }
   },
   plugins: [],
 }
