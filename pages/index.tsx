@@ -1,4 +1,3 @@
-import React from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -26,7 +25,7 @@ function FeaturedProject ({ name, description, imagePath, url }: FeaturedProject
           width={100}
           height={100}
           alt={description}
-          className={'object-cover h-full w-full rounded-xl'}
+          className="h-full w-full rounded-xl object-cover"
         />
         : <></>
       }
@@ -36,9 +35,9 @@ function FeaturedProject ({ name, description, imagePath, url }: FeaturedProject
         'xl:w-1/3 xl:inset-y-0 xl:inset-x-auto xl:h-full xl:bottom-auto xl:right-0 xl:rounded-r-lg xl:rounded-bl-none ' +
         'group-hover:w-full group-hover:h-full group-hover:rounded-xl'
       }>
-        <div className={'px-3'}>
-          <h1 className={'text-center align-middle text-lg'}>{name}</h1>
-          <p className={'text-center sm:hidden sm:group-hover:block xl:block'}>{description}</p>
+        <div className="px-3">
+          <h1 className="text-center align-middle text-lg">{name}</h1>
+          <p className="text-center sm:hidden sm:group-hover:block xl:block">{description}</p>
         </div>
       </div>
     </Link>
@@ -54,32 +53,32 @@ export default function Home (): JSX.Element {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={'min-h-screen'}>
-        <section className={'mx-12 p-6'}>
+      <main className="min-h-screen">
+        <section className="mx-12 p-6">
           { /* Introduction */ }
-          <div className={'mx-auto py-6'}>
+          <div className="mx-auto py-6">
             <Image
-              src={'/me_grinning.jpg'}
-              alt={'Picture of me'}
+              src="/me_grinning.jpg"
+              alt="Picture of me"
               width={100}
               height={100}
-              className={'mx-auto object-cover h-48 w-48 rounded-full xl:h-64 xl:w-64'}
+              className="mx-auto h-48 w-48 rounded-full object-cover xl:h-64 xl:w-64"
             />
           </div>
-          <h1 className={'text-center text-2xl'}>
+          <h1 className="text-center text-2xl">
             Hello, I&apos;m B! <span role="img" aria-label="waving hand">&#x1F44B;</span>
             {/* IDEA: have this typed out as user enters the site? */}
           </h1>
-          <h2 className={'text-center text-lg'}>
+          <h2 className="text-center text-lg">
             I&apos;m a silly lil guy.
           </h2>
         </section>
-        <section className={'mx-auto p-6'}>
+        <section className="mx-auto p-6">
           {/* Featured Projects */}
-          <h1 className={'text-center text-2xl'}>
+          <h1 className="text-center text-2xl">
             Featured Projects
           </h1>
-          <div className={'grid grid-cols-1 gap-6 py-6 sm:grid-cols-3'}>
+          <div className="grid grid-cols-1 gap-6 py-6 sm:grid-cols-3">
             <FeaturedProject
               name="Project 1"
               description="This is the first project"

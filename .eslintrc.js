@@ -5,8 +5,15 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard-with-typescript'
+    'standard-with-typescript',
+    'plugin:react/jsx-runtime',
+    'plugin:tailwindcss/recommended'
   ],
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  },
   overrides: [
   ],
   parserOptions: {
@@ -17,6 +24,12 @@ module.exports = {
   plugins: [
     'react'
   ],
+  ignorePatterns: [
+    '.eslintrc.js',
+    '*.config.js',
+    'next-env.d.ts'
+  ],
   rules: {
+    "react/jsx-curly-brace-presence": [2, "never"]
   }
 }

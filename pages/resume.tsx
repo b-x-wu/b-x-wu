@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 interface ResumeItemProps {
   title: string
@@ -21,7 +21,7 @@ function ResumeItem ({ title, subtitle, titleHref, subtitleHref, location, dateD
 
   const bulletList = bullets == null
     ? <></>
-    : <ul className="list-square list-outside pl-4 pt-2 font-light">
+    : <ul className="list-outside list-square pl-4 pt-2 font-light">
             {bullets.map((bullet, idx) =>
                 <li key={idx}>
                     {bullet}
@@ -32,9 +32,9 @@ function ResumeItem ({ title, subtitle, titleHref, subtitleHref, location, dateD
   const titleLinkElement = (title: string, href: string): JSX.Element =>
         <Link
             href={href}
-            className="hover:underline content-end group"
-            target={'_blank'}
-            rel={'noreferrer noopener'}
+            className="group content-end hover:underline"
+            target="_blank"
+            rel="noreferrer noopener"
         >
             <span className="text-sky-700 sm:text-current">{title}</span>
             <Image
@@ -42,7 +42,7 @@ function ResumeItem ({ title, subtitle, titleHref, subtitleHref, location, dateD
                 height={100}
                 width={100}
                 alt="Link"
-                className="hidden sm:inline sm:h-6 sm:w-7 sm:rotate-90 sm:opacity-10 sm:align-text-bottom sm:group-hover:opacity-30"
+                className="hidden sm:inline sm:h-6 sm:w-7 sm:rotate-90 sm:align-text-bottom sm:opacity-10 sm:group-hover:opacity-30"
             >
             </Image>
         </Link>
@@ -53,13 +53,13 @@ function ResumeItem ({ title, subtitle, titleHref, subtitleHref, location, dateD
 
   return (
         <div className="flex flex-col py-4">
-            <div className="flex flex-wrap justify-between items-baseline gap-x-6">
-                <h3 className="font-medium text-lg">{titleElement}</h3>
-                <span className="hidden sm:inline sm:font-light sm:text-right">{location}</span>
+            <div className="flex flex-wrap items-baseline justify-between gap-x-6">
+                <h3 className="text-lg font-medium">{titleElement}</h3>
+                <span className="hidden sm:inline sm:text-right sm:font-light">{location}</span>
             </div>
-            <div className="flex flex-wrap justify-between items-baseline gap-x-6">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-6">
                 <h4 className="text-lg">{subtitleElement}</h4>
-                <span className="inline font-light text-right">{dateDescription}</span>
+                <span className="inline text-right font-light">{dateDescription}</span>
             </div>
             {bulletList}
         </div>
@@ -78,38 +78,38 @@ export default function Resume (): JSX.Element {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className="min-h-screen">
-                <div className="flex flex-col m-6 gap-y-4">
-                    <section className="flex justify-between content-center">
+                <div className="m-6 flex flex-col gap-y-4">
+                    <section className="flex content-center justify-between">
                         {/* Controls */}
                         <Link
-                            href={'/resume.pdf'}
+                            href="/resume.pdf"
                             aria-label="Download Resume"
-                            target={'_blank'}
-                            rel={'noreferrer noopener'}
-                            className="transition-all duration-300 w-7 h-7 p-1 bg-gray-200 rounded-md ring-0 hover:ring-2"
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="h-7 w-7 rounded-md bg-gray-200 p-1 ring-0 transition-all duration-300 hover:ring-2"
                         >
                             <Image
-                                src={'https://www.svgrepo.com/show/488905/download-2.svg'}
+                                src="https://www.svgrepo.com/show/488905/download-2.svg"
                                 width={100}
                                 height={100}
                                 className=""
                                 alt="Download Resume"
                             />
                         </Link>
-                        <div className="justify-self-end pt-2 sm:pt-1 sm:self-center">
-                            <label className="flex relative cursor-pointer gap-x-1">
-                                <input type="checkbox" checked={full} onChange={(event) => { setFull(!full) }} className="sr-only peer"></input>
-                                <div className="transition-all duration-300 w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
-                                <div className="transition-opacity duration-300 font-semibold opacity-10 peer-checked:opacity-70">Full</div>
+                        <div className="justify-self-end pt-2 sm:self-center sm:pt-1">
+                            <label className="relative flex cursor-pointer gap-x-1">
+                                <input type="checkbox" checked={full} onChange={(event) => { setFull(!full) }} className="peer sr-only"></input>
+                                <div className="peer h-6 w-11 rounded-full bg-gray-200 transition-all duration-300 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all peer-checked:bg-sky-500 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+                                <div className="font-semibold opacity-10 transition-opacity duration-300 peer-checked:opacity-70">Full</div>
                             </label>
                         </div>
                     </section>
-                    <div className="flex flex-col p-6 gap-y-4 bg-gray-100 rounded-md">
+                    <div className="flex flex-col gap-y-4 rounded-md bg-gray-100 p-6">
                         <section className="flex justify-between">
                             {/* Introduction */}
                             <div className="flex flex-wrap gap-y-1 gap-x-2">
                                 <h1 className="text-3xl font-bold">Bruce X. Wu</h1>
-                                <span className="inline-block font-light self-end">(he/they)</span>
+                                <span className="inline-block self-end font-light">(he/they)</span>
                             </div>
                         </section>
                         <section>
@@ -230,17 +230,17 @@ export default function Resume (): JSX.Element {
                         <section>
                             {/* Skills */}
                             <h2 className="text-2xl font-semibold">Skills</h2>
-                            <div className="flex flex-col py-4 gap-y-2">
-                                <div className="flex flex-col md:flex-row gap-x-2 items-baseline">
-                                    <h3 className="font-medium text-lg">Programming:</h3>
+                            <div className="flex flex-col gap-y-2 py-4">
+                                <div className="flex flex-col items-baseline gap-x-2 md:flex-row">
+                                    <h3 className="text-lg font-medium">Programming:</h3>
                                     <span className="font-light">JavaScript, TypeScript, Java, Python, C, C++, Bash</span>
                                 </div>
-                                <div className="flex flex-col md:flex-row gap-x-2 items-baseline">
-                                    <h3 className="font-medium text-lg">Frameworks and Software:</h3>
+                                <div className="flex flex-col items-baseline gap-x-2 md:flex-row">
+                                    <h3 className="text-lg font-medium">Frameworks and Software:</h3>
                                     <span className="font-light">Node.js, React, MongoDB, AWS, Docker, NumPy, SciPy, Figma, Git</span>
                                 </div>
-                                <div className="flex flex-col md:flex-row gap-x-2 items-baseline">
-                                    <h3 className="font-medium text-lg">Foreign Language:</h3>
+                                <div className="flex flex-col items-baseline gap-x-2 md:flex-row">
+                                    <h3 className="text-lg font-medium">Foreign Language:</h3>
                                     <span className="font-light">Conversant Fluency in Mandarin, Basic Knowledge of French</span>
                                 </div>
                             </div>

@@ -1,4 +1,3 @@
-import React from 'react'
 import Head from 'next/head'
 import { type Dispatch, type SetStateAction, useState } from 'react'
 import useSWR from 'swr'
@@ -54,7 +53,7 @@ export default function Home (): JSX.Element {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={'min-h-screen'}>
+      <main className="min-h-screen">
         This is the blog homescreen
         <div>
           {JSON.stringify(data)}
