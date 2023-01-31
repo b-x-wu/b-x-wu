@@ -3,11 +3,13 @@ export interface ApiFailResponse {
     data?: any
 }
 
+export interface PaginationLinks {
+    prev?: string // endpoint of the previous <limit> results. will not exist if there are no previous results
+    next?: string // endpoint of the next <limit> results
+}
+
 export interface ApiPaginationResponse<T> {
-    links: {
-        prev?: string // endpoint of the previous <limit> results. will not exist if there are no previous results
-        next?: string // endpoint of the next <limit> results
-    },
+    links: PaginationLinks,
     limit: number // the user specified limit
     size: number // the number of results (may be less than limit)
     start: number // the index of the first result

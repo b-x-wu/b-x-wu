@@ -1,7 +1,7 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Post, ApiFailResponse, ApiPaginationResponse, Markdown } from '../../../types/types'
+import { Post, ApiFailResponse, ApiPaginationResponse, Markdown, PaginationLinks } from '../../../types/types'
 
 // Returns a paginated array of blog post metadata including the postId, title, date published, description, and cover image (if applicable)
 // Note that the post content will not be returned, but will be present in the response as an empty string
@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             }
         })
         const returnedPosts: Post[] = await Promise.all(returnedPostPromises)
-        const links: {prev?: string, next?: string} = { prev: undefined, next: undefined }
+        const links: PaginationLinks = { prev: undefined, next: undefined }
         if (start > 0) {
             links.prev = `/api/posts?start=${Math.max(0, start - limit)}&limit=${limit}`
         }

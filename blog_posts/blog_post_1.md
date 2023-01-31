@@ -1,6 +1,7 @@
 ---
 title: The FIRST Blog Post
 datePublished: 2023-01-29
+description: This is the first blog post's description. Wild, right?
 ---
 # This is an h1
 
