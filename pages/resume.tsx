@@ -1,26 +1,27 @@
-import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
+import Head from 'next/head'
+import Link from 'next/link'
+import Image from 'next/image'
+import React, { useState } from 'react'
 
 interface ResumeItemProps {
-    title: string
-    subtitle: string
-    titleHref?: string
-    subtitleHref?: string
-    location?: string
-    dateDescription?: string
-    bullets?: readonly string[]
-    hidden?: boolean
+  title: string
+  subtitle: string
+  titleHref?: string
+  subtitleHref?: string
+  location?: string
+  dateDescription?: string
+  bullets?: readonly string[]
+  hidden?: boolean
 }
 
-function ResumeItem({ title, subtitle, titleHref, subtitleHref, location, dateDescription, bullets, hidden }: ResumeItemProps) {
-    if (hidden) {
-        return (<></>)
-    }
+function ResumeItem ({ title, subtitle, titleHref, subtitleHref, location, dateDescription, bullets, hidden }: ResumeItemProps): JSX.Element {
+  if (hidden != null && hidden) {
+    return (<></>)
+  }
 
-    const bulletList = bullets == null ? <></> :
-        <ul className="list-square list-outside pl-4 pt-2 font-light">
+  const bulletList = bullets == null
+    ? <></>
+    : <ul className="list-square list-outside pl-4 pt-2 font-light">
             {bullets.map((bullet, idx) =>
                 <li key={idx}>
                     {bullet}
@@ -28,12 +29,12 @@ function ResumeItem({ title, subtitle, titleHref, subtitleHref, location, dateDe
             )}
         </ul>
 
-    const titleLinkElement = (title: string, href: string) =>
+  const titleLinkElement = (title: string, href: string): JSX.Element =>
         <Link
             href={href}
             className="hover:underline content-end group"
-            target={"_blank"}
-            rel={"noreferrer noopener"}
+            target={'_blank'}
+            rel={'noreferrer noopener'}
         >
             <span className="text-sky-700 sm:text-current">{title}</span>
             <Image
@@ -46,11 +47,11 @@ function ResumeItem({ title, subtitle, titleHref, subtitleHref, location, dateDe
             </Image>
         </Link>
 
-    const titleElement = titleHref == null ? title : titleLinkElement(title, titleHref)
+  const titleElement = titleHref == null ? title : titleLinkElement(title, titleHref)
 
-    const subtitleElement = subtitleHref == null ? subtitle : titleLinkElement(subtitle, subtitleHref)
+  const subtitleElement = subtitleHref == null ? subtitle : titleLinkElement(subtitle, subtitleHref)
 
-    return (
+  return (
         <div className="flex flex-col py-4">
             <div className="flex flex-wrap justify-between items-baseline gap-x-6">
                 <h3 className="font-medium text-lg">{titleElement}</h3>
@@ -62,13 +63,13 @@ function ResumeItem({ title, subtitle, titleHref, subtitleHref, location, dateDe
             </div>
             {bulletList}
         </div>
-    )
+  )
 }
 
-export default function Resume() {
-    const [full, setFull] = useState(false)
+export default function Resume (): JSX.Element {
+  const [full, setFull] = useState(false)
 
-    return (
+  return (
         <>
             <Head>
                 <title>Resume | brucexwu</title>
@@ -81,14 +82,14 @@ export default function Resume() {
                     <section className="flex justify-between content-center">
                         {/* Controls */}
                         <Link
-                            href={"/resume.pdf"}
+                            href={'/resume.pdf'}
                             aria-label="Download Resume"
-                            target={"_blank"}
-                            rel={"noreferrer noopener"}
+                            target={'_blank'}
+                            rel={'noreferrer noopener'}
                             className="transition-all duration-300 w-7 h-7 p-1 bg-gray-200 rounded-md ring-0 hover:ring-2"
                         >
                             <Image
-                                src={"https://www.svgrepo.com/show/488905/download-2.svg"}
+                                src={'https://www.svgrepo.com/show/488905/download-2.svg'}
                                 width={100}
                                 height={100}
                                 className=""
@@ -97,7 +98,7 @@ export default function Resume() {
                         </Link>
                         <div className="justify-self-end pt-2 sm:pt-1 sm:self-center">
                             <label className="flex relative cursor-pointer gap-x-1">
-                                <input type="checkbox" checked={full} onChange={(event) => setFull(!full)} className="sr-only peer"></input>
+                                <input type="checkbox" checked={full} onChange={(event) => { setFull(!full) }} className="sr-only peer"></input>
                                 <div className="transition-all duration-300 w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
                                 <div className="transition-opacity duration-300 font-semibold opacity-10 peer-checked:opacity-70">Full</div>
                             </label>
@@ -121,8 +122,8 @@ export default function Resume() {
                                 location="Tempe, AZ"
                                 dateDescription="June 2022 - Aug. 2022"
                                 bullets={[
-                                    "Created a web app with a back end written in Java and a front-end written in React using Typescript all served with AWS CloudWatch",
-                                    "Delivered a 30-minute demo presentation to 20 clients and composed a three-page wiki article detailing the service for future developers"
+                                  'Created a web app with a back end written in Java and a front-end written in React using Typescript all served with AWS CloudWatch',
+                                  'Delivered a 30-minute demo presentation to 20 clients and composed a three-page wiki article detailing the service for future developers'
                                 ]}
                             />
                             <ResumeItem
@@ -132,8 +133,8 @@ export default function Resume() {
                                 location="New York, NY"
                                 dateDescription="Jan. 2021 - Dec. 2022"
                                 bullets={[
-                                    "Instructed 260 students per semester in one-on-one and group sessions in topics such as algorithms, data structures, mathematical logic, and linear algebra",
-                                    "Developed internal tooling with a team of 4 in an Agile workflow and composed 12 pages of documentation on API usage and further development steps"
+                                  'Instructed 260 students per semester in one-on-one and group sessions in topics such as algorithms, data structures, mathematical logic, and linear algebra',
+                                  'Developed internal tooling with a team of 4 in an Agile workflow and composed 12 pages of documentation on API usage and further development steps'
                                 ]}
                             />
                             <ResumeItem
@@ -143,8 +144,8 @@ export default function Resume() {
                                 location="New York, NY"
                                 dateDescription="Aug. 2021 - Dec. 2022"
                                 bullets={[
-                                    "Evaluated 110 assignments per week per semester with detailed feedback in the subjects of calculus, mathematical logic, and statistical analysis",
-                                    "Compiled monthly reports on student performance based on aggregated grading data and presented trends in understanding to professors and peers"
+                                  'Evaluated 110 assignments per week per semester with detailed feedback in the subjects of calculus, mathematical logic, and statistical analysis',
+                                  'Compiled monthly reports on student performance based on aggregated grading data and presented trends in understanding to professors and peers'
                                 ]}
                                 hidden={!full}
                             />
@@ -155,8 +156,8 @@ export default function Resume() {
                                 location="New York, NY"
                                 dateDescription="Aug. 2021 - Dec. 2022"
                                 bullets={[
-                                    "Managed a floor of 40 residents with biweekly reports on community development and floor security",
-                                    "Planned and hosted two events a month with an average turnout of 10 residents managing a budget of $400 per semester"
+                                  'Managed a floor of 40 residents with biweekly reports on community development and floor security',
+                                  'Planned and hosted two events a month with an average turnout of 10 residents managing a budget of $400 per semester'
                                 ]}
                                 hidden={!full}
                             />
@@ -167,8 +168,8 @@ export default function Resume() {
                                 location="Remote"
                                 dateDescription="Feb. 2021 - July 2021"
                                 bullets={[
-                                    "Oversaw a 5-person team through the development of a 9 week-long undergraduate level data science curriculum about applying NumPy, Pandas, and Scikit-learn to digital humanities",
-                                    "Directed a 5 week-long, 6-person focus group on the curriculum and converted collected feedback into deliverables"
+                                  'Oversaw a 5-person team through the development of a 9 week-long undergraduate level data science curriculum about applying NumPy, Pandas, and Scikit-learn to digital humanities',
+                                  'Directed a 5 week-long, 6-person focus group on the curriculum and converted collected feedback into deliverables'
                                 ]}
                             />
                             <ResumeItem
@@ -178,8 +179,8 @@ export default function Resume() {
                                 dateDescription="Aug. 2018 - May 2019"
                                 titleHref="https://www.hxcs.org/HX_Branches/LehighValley/index.html"
                                 bullets={[
-                                    "Developed a curriculum of weekly classes preparing middle schoolers for math competitions resulting in 12% of students receiving recognition at loocal events",
-                                    "Corresponded with parents through weekly newsletters about class logistics and class materials and through individual communication about student performance"
+                                  'Developed a curriculum of weekly classes preparing middle schoolers for math competitions resulting in 12% of students receiving recognition at loocal events',
+                                  'Corresponded with parents through weekly newsletters about class logistics and class materials and through individual communication about student performance'
                                 ]}
                                 hidden={!full}
                             />
@@ -193,10 +194,12 @@ export default function Resume() {
                                 subtitle="BA in Mathematics and Computer Science, Minor in Data Science"
                                 location="New York, NY"
                                 dateDescription="Dec. 2022"
-                                bullets={full ? [
-                                    "GPA: 3.99",
-                                    "Coursework: Causal Inference, Theory of Probability, Linear and Nonlinear Optimization, Applied Internet Technology, Operating Systems, Artificial Intelligence"
-                                ] : undefined}
+                                bullets={full
+                                  ? [
+                                      'GPA: 3.99',
+                                      'Coursework: Causal Inference, Theory of Probability, Linear and Nonlinear Optimization, Applied Internet Technology, Operating Systems, Artificial Intelligence'
+                                    ]
+                                  : undefined}
                             />
                         </section>
                         <section>
@@ -207,17 +210,21 @@ export default function Resume() {
                                 title="ULC Schedule Maker V2"
                                 subtitle="A web app that aggregates tutoring schedules"
                                 titleHref="https://ulc-schedule-maker-v2-production.up.railway.app/login"
-                                bullets={full ? [
-                                    "Technologies used: Node.js, Express, React, MongoDB, TypeScript, Tailwind CSS, Google API, Next.js"
-                                ] : undefined}
+                                bullets={full
+                                  ? [
+                                      'Technologies used: Node.js, Express, React, MongoDB, TypeScript, Tailwind CSS, Google API, Next.js'
+                                    ]
+                                  : undefined}
                             />
                             <ResumeItem
                                 title="Create React Sandbox"
                                 subtitle="A command-line tool to create lightweight React environments"
                                 titleHref="https://www.npmjs.com/package/create-react-sandbox"
-                                bullets={full ? [
-                                    "Technologies used: Node.js, Webpack, Babel, React"
-                                ] : undefined}
+                                bullets={full
+                                  ? [
+                                      'Technologies used: Node.js, Webpack, Babel, React'
+                                    ]
+                                  : undefined}
                             />
                         </section>
                         <section>
@@ -242,5 +249,5 @@ export default function Resume() {
                 </div>
             </main>
         </>
-    )
+  )
 }

@@ -1,6 +1,7 @@
-import { Html, Head, Main, NextScript } from "next/document";
-import Link from "next/link";
-import Image from "next/image";
+import React from 'react'
+import { Html, Head, Main, NextScript } from 'next/document'
+import Link from 'next/link'
+import Image from 'next/image'
 
 interface ContactButtonProps {
   platform: string
@@ -8,13 +9,13 @@ interface ContactButtonProps {
   imageSrc: string
 }
 
-function ContactButton({platform, href, imageSrc}: ContactButtonProps) {
+function ContactButton ({ platform, href, imageSrc }: ContactButtonProps): JSX.Element {
   return (
     <Link
       href={href}
       aria-label={platform}
-      target={"_blank"}
-      rel={"noreferrer noopener"}
+      target={'_blank'}
+      rel={'noreferrer noopener'}
       className="h-6 w-6"
     >
       <Image
@@ -22,31 +23,31 @@ function ContactButton({platform, href, imageSrc}: ContactButtonProps) {
         width={100}
         height={100}
         alt={platform}
-        className={"object-contain h-full w-full brightness-0"}
+        className={'object-contain h-full w-full brightness-0'}
       />
     </Link>
   )
 }
 
-export default function Document() {
+export default function Document (): JSX.Element {
   return (
     <Html lang="en">
       <Head />
       <body>
-        <header className={"sticky top-0 z-10"}>
-          <nav className={"mx-auto p-6 bg-gray-100"}>
-            <div className={"flex flex-row justify-between items-center flex-wrap"}>
+        <header className={'sticky top-0 z-10'}>
+          <nav className={'mx-auto p-6 bg-gray-100'}>
+            <div className={'flex flex-row justify-between items-center flex-wrap'}>
               {/* The logo */}
-              <Link 
-                href={"/"}
-                className={"text-2xl"}
+              <Link
+                href={'/'}
+                className={'text-2xl'}
               >
                 brucexwu
               </Link>
               {/* The hidden checkbox to open the menu with the links for smaller screens */}
               <input
-                type={"checkbox"}
-                className={"sr-only peer"}
+                type={'checkbox'}
+                className={'sr-only peer'}
                 id="nav-hamburger"
               ></input>
               {/* The visible hamburger menu to open the menu for smaller screens */}
@@ -54,15 +55,15 @@ export default function Document() {
               <label
                 htmlFor="nav-hamburger"
                 className={
-                  "inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg " +
-                  "sm:hidden " +
-                  "hover:bg-gray-300 " +
-                  "peer-checked:outline-none peer-checked:ring-2"
+                  'inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg ' +
+                  'sm:hidden ' +
+                  'hover:bg-gray-300 ' +
+                  'peer-checked:outline-none peer-checked:ring-2'
                 }
               >
-                <span className={"sr-only"}>Open main menu</span>
+                <span className={'sr-only'}>Open main menu</span>
                 <svg
-                  className={"w-6 h-6"}
+                  className={'w-6 h-6'}
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 20 20"
@@ -77,27 +78,27 @@ export default function Document() {
               </label>
               {/* The links to other pages */}
               <div className={
-                "hidden " +
-                "sm:flex sm:flex-row sm:gap-x-4 sm:items-center " +
-                "sm:peer-checked:flex-row sm:peer-checked:basis-0 " +
-                "peer-checked:flex peer-checked:flex-col peer-checked:basis-full "}>
+                'hidden ' +
+                'sm:flex sm:flex-row sm:gap-x-4 sm:items-center ' +
+                'sm:peer-checked:flex-row sm:peer-checked:basis-0 ' +
+                'peer-checked:flex peer-checked:flex-col peer-checked:basis-full '}>
                 <div>
                   <Link
-                    href={"/"}
+                    href={'/'}
                   >
                     Home
                   </Link>
                 </div>
                 <div>
                   <Link
-                    href={"/blog"}
+                    href={'/blog'}
                   >
                     Blog
                   </Link>
                 </div>
                 <div>
                   <Link
-                    href={"/resume"}
+                    href={'/resume'}
                   >
                     Resume/CV
                   </Link>
@@ -111,7 +112,7 @@ export default function Document() {
         <footer className="bg-gray-100 bottom-0 h-36 flex mt-auto">
           <div className="m-auto p-6">
             <div className="text-center">
-              Let's chat!
+              Let&apos;s chat!
             </div>
             <div className="grid grid-cols-3 justify-items-center w-64 mx-auto p-4">
               <ContactButton
@@ -131,11 +132,11 @@ export default function Document() {
               />
             </div>
             <p className="text-center text-xs opacity-50">
-              <Link 
+              <Link
                 href="mailto:wu.bruce.x@gmail.com"
-                aria-label={"Email"}
-                target={"_blank"}
-                rel={"noreferrer noopener"}
+                aria-label={'Email'}
+                target={'_blank'}
+                rel={'noreferrer noopener'}
               >
                 wu.bruce.x@gmail.com
               </Link> © Bruce Wu. All rights reserved.
@@ -144,5 +145,5 @@ export default function Document() {
         </footer>
       </body>
     </Html>
-  );
+  )
 }
