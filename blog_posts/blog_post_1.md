@@ -1,5 +1,5 @@
 ---
-title: The First Blog Post
+title: The FIRST Blog Post
 datePublished: 2023-01-29
 ---
 # This is an h1

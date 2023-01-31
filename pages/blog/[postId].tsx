@@ -75,7 +75,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     try {
         const res = await fetch(BASE_URL + '/api/posts')
         const postDatas: Post[] = await res.json()
-        const paths = postDatas.map((postData) => ({ params: { postId: postData.id } }))
+        const paths = postDatas.map((postData) => ({ params: { postId: postData.postId } }))
         return {
             paths: paths,
             fallback: false
@@ -106,13 +106,13 @@ export const getStaticProps: GetStaticProps<BlogPostProps> = async ({ params }) 
         }
     }
 
-    const postData: Post = await res.json()
+    const post: Post = await res.json()
 
     return {
         props: {
-            title: postData.title,
-            datePublished: postData.datePublished.toString(),
-            text: postData.content
+            title: post.title,
+            datePublished: post.datePublished.toString(),
+            text: post.content
         }
     }
 }

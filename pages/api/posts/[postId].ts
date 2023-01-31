@@ -3,6 +3,10 @@ import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Post, ApiFailResponse, Markdown } from '../../../types/types'
 
+// Returns information about a singular blog post specified by postId supplied in the endpoint url
+// If no blog post with the given id is found, 404 will be returned
+// The given post must have the title and date published metadata available in the markdown
+// or else the server will send back a 500 result
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Post | ApiFailResponse>) {
     if (req.method !== 'GET') {
         res.status(404).json({ message: "Incorrect method. Must use 'GET'." })
@@ -23,8 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
 
         res.status(200).json({
-            id: postId as string,
-            title: markdownData.metadata.title, // will be undefined if the field is not defined in metadata
+            postId: postId as string,
+            title: markdownData.metadata.title,
             datePublished: new Date(markdownData.metadata.datePublished),
             content: markdownData.content
         })
