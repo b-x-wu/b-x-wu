@@ -1,7 +1,8 @@
 ---
 title: The FIRST Blog Post
 datePublished: 2023-01-29
-description: This is the first blog post's description. Wild, right?
+description: This is the first blog post's description. Wild, right? This is just some more stuff to pad out the description.
+coverImageSrc: https://raw.githubusercontent.com/remarkjs/remark/1f338e72/logo.svg
 ---
 # This is an h1
 
