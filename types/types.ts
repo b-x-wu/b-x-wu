@@ -16,12 +16,16 @@ export interface ApiPaginationResponse<T> {
   results: T[]
 }
 
-export interface Post {
+export interface PostMetadata {
   postId: string
   title: string
   datePublished: Date
   description?: string
   coverImageSrc?: string
+}
+
+export interface Post {
+  metadata: PostMetadata
   content: string
 }
 

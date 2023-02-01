@@ -14,7 +14,7 @@ function FeaturedProject ({ name, description, imagePath, url }: FeaturedProject
     <Link
       href={url ?? '#'}
       className={
-        'transition-all ease-in-out duration-300 relative group h-48 rounded-xl ring-0 ' +
+        'transition-all duration-300 relative group h-48 rounded-xl ring-0 ' +
         'hover:ring-4'
       }
     >
@@ -30,7 +30,7 @@ function FeaturedProject ({ name, description, imagePath, url }: FeaturedProject
         : <></>
       }
       <div className={
-        'transition-all ease-in duration-300 bg-gray-100 bg-opacity-80 absolute inset-y-0 right-0 w-1/3 flex items-center justify-center rounded-r-lg backdrop-blur ' +
+        'transition-all duration-300 bg-gray-100 bg-opacity-80 absolute inset-y-0 right-0 w-1/3 flex items-center justify-center rounded-r-lg backdrop-blur ' +
         'sm:w-full sm:h-9 sm:bottom-0 sm:inset-x-0 sm:inset-y-auto sm:rounded-tr-none sm:rounded-b-lg ' +
         'xl:w-1/3 xl:inset-y-0 xl:inset-x-auto xl:h-full xl:bottom-auto xl:right-0 xl:rounded-r-lg xl:rounded-bl-none ' +
         'group-hover:w-full group-hover:h-full group-hover:rounded-xl'

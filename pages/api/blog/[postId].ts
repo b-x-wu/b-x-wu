@@ -33,9 +33,11 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     }
 
     res.status(200).json({
-      postId,
-      title: markdownData.metadata.title,
-      datePublished: new Date(markdownData.metadata.datePublished),
+      metadata: {
+        postId,
+        title: markdownData.metadata.title,
+        datePublished: new Date(markdownData.metadata.datePublished)
+      },
       content: markdownData.content
     })
   } catch (error: any) {
@@ -45,6 +47,6 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     }
 
     console.error(error)
-    res.status(500).json({ message: 'Unknwon error.', data: { details: error.toString() } })
+    res.status(500).json({ message: 'Unknown error.', data: { details: error.toString() } })
   }
 }

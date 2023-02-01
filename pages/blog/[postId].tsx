@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { BASE_URL } from '../../constants'
-import { type ApiFailResponse, type Post } from '../../types/types'
+import { type ApiPaginationResponse, type ApiFailResponse, type Post, type PostMetadata } from '../../types/types'
 import Link from 'next/link'
 
 interface MarkdownJSXProps {
@@ -35,7 +35,7 @@ function MarkdownJSX ({ text }: MarkdownJSXProps): JSX.Element {
               // Taken from https://github.com/remarkjs/react-markdown#use-custom-components-syntax-highlight
               code: ({ node, inline, className, children, ...props }) => {
                 const match = /language-(\w+)/.exec(className ?? '')
-                return inline != null && inline && (match != null)
+                return (inline == null || !inline) && (match != null)
                   ? (
                         <SyntaxHighlighter
                             language={match[1]}
@@ -77,9 +77,9 @@ export default function BlogPost ({ title, datePublished, text }: InferGetStatic
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const res = await fetch(`${BASE_URL}/api/posts`)
-    const postDatas: Post[] = await res.json()
-    const paths = postDatas.map((postData) => ({ params: { postId: postData.postId } }))
+    const res = await fetch(`${BASE_URL}/api/blog?limit=${Number.MAX_SAFE_INTEGER}`)
+    const paginationResponse: ApiPaginationResponse<PostMetadata> = await res.json()
+    const paths = paginationResponse.results.map((postMetadata) => ({ params: { postId: postMetadata.postId } }))
     return {
       paths,
       fallback: false
@@ -112,7 +112,7 @@ export const getStaticProps: GetStaticProps<BlogPostProps> = async ({ params }) 
   }
 
   const postId: string = Array.isArray(params.postId) ? params.postId[0] : params.postId
-  const res = await fetch(`${BASE_URL}/api/posts/${postId}`)
+  const res = await fetch(`${BASE_URL}/api/blog/${postId}`)
 
   if (res.status >= 500) {
     const error: ApiFailResponse = await res.json()
@@ -129,8 +129,8 @@ export const getStaticProps: GetStaticProps<BlogPostProps> = async ({ params }) 
 
   return {
     props: {
-      title: post.title,
-      datePublished: post.datePublished.toString(),
+      title: post.metadata.title,
+      datePublished: post.metadata.datePublished.toString(),
       text: post.content
     }
   }
