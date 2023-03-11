@@ -2,6 +2,7 @@ import { type GetStaticPaths, type GetStaticProps, type InferGetStaticPropsType 
 import Head from 'next/head'
 import Image from 'next/image'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { BASE_URL } from '../../constants'
 import { type ApiPaginationResponse, type ApiFailResponse, type Post, type PostMetadata } from '../../types/types'
 import Link from 'next/link'
@@ -18,7 +19,6 @@ interface BlogPostProps {
 
 // TODO: move this to a components folder
 function MarkdownJSX ({ text }: MarkdownJSXProps): JSX.Element {
-  console.log(text)
   return (
         <ReactMarkdown
             components={{
@@ -30,8 +30,25 @@ function MarkdownJSX ({ text }: MarkdownJSXProps): JSX.Element {
               img: ({ src, alt }) => <Image src={src ?? ''} alt={alt ?? ''} width={100} height={100} className="max-h-64 w-full justify-self-center p-3" />,
               ul: ({ children }) => <ul className="list-square pl-4">{children}</ul>,
               ol: ({ children }) => <ol className="list-decimal pl-4">{children}</ol>,
-              a: ({ href, children }) => <Link href={href ?? '#'} className="text-sky-700 hover:underline" target="_blank" rel="noreferrer noopener">{children}</Link>
+              a: ({ href, children }) => <Link href={href ?? '#'} className="text-sky-700 hover:underline" target="_blank" rel="noreferrer noopener">{children}</Link>,
               // TODO: currently there is no syntax highlighting. react-syntax-highlighter proved slow
+              code: ({ node, inline, className, children, ...props }) => {
+                const match = /language-(\w+)/.exec(className ?? '')
+                return (inline == null || !inline) && (match != null)
+                  ? (
+                        <SyntaxHighlighter
+                            language={match[1]}
+                            PreTag="div"
+                        >
+                            {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                    )
+                  : (
+                        <code className={className} {...props}>
+                            {children}
+                        </code>
+                    )
+              }
             }}
         >
             {text}
@@ -59,7 +76,7 @@ export default function BlogPost ({ title, datePublished, text }: InferGetStatic
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const res = await fetch(`${BASE_URL}/api/blog?limit=${Number.MAX_SAFE_INTEGER}`)
+    const res = await fetch(`${BASE_URL}/api/blog`)
     const paginationResponse: ApiPaginationResponse<PostMetadata> = await res.json()
     const paths = paginationResponse.results.map((postMetadata) => ({ params: { postId: postMetadata.postId } }))
     return {

@@ -32,6 +32,15 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
       return
     }
 
+    if (markdownData.metadata.isPublished != null && markdownData.metadata.isPublished === 'false') {
+      res.status(403).json({
+        message: 'Post is not published',
+        data: {
+          postId
+        }
+      })
+    }
+
     res.status(200).json({
       metadata: {
         postId,

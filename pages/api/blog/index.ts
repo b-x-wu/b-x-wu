@@ -7,8 +7,7 @@ import { type ApiFailResponse, type ApiPaginationResponse, Markdown, type Pagina
 // Note that the post content will not be returned, but will be present in the response as an empty string
 // The endpoint optionally supports query parameters defining the limit of the number of responses and the start of the responses
 // ie /api/blog?start=0&limit=10
-// if no start query parameter is supplied, it will be assumed to be zero
-// if no limit query parameter is supplied, it will be assumed to be ten
+// if no start query parameter is supplied, it will be assumed to be zero// if no limit query parameter is supplied, it will be assumed to be infinite
 // the response will contain information about the endpoints to call for the next or previous page in the links field,
 // the specified limit, the start, and the actual number of results returned, as well as the actual posts
 export default async function handler (req: NextApiRequest, res: NextApiResponse<ApiPaginationResponse<PostMetadata> | ApiFailResponse>): Promise<void> {
@@ -17,31 +16,46 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     return
   }
 
-  const limit = req.query.limit == null ? 10 : (Array.isArray(req.query.limit) ? parseInt(req.query.limit[0]) : parseInt(req.query.limit))
-  const start = req.query.start == null ? 0 : (Array.isArray(req.query.start) ? parseInt(req.query.start[0]) : parseInt(req.query.start))
+  const limit: number | undefined = req.query.limit == null ? undefined : (Array.isArray(req.query.limit) ? parseInt(req.query.limit[0]) : parseInt(req.query.limit))
+  const start: number = req.query.start == null ? 0 : (Array.isArray(req.query.start) ? parseInt(req.query.start[0]) : parseInt(req.query.start))
 
   const blogPostDirectory = path.join(process.cwd(), 'blog_posts')
   try {
     const postFileNames = await fs.readdir(blogPostDirectory)
-    const returnedFileNames = postFileNames.slice(parseInt(start?.toString() ?? '0'), parseInt(start?.toString() ?? '0') + parseInt(limit?.toString() ?? '10'))
-    const returnedPostMetadataPromises: Array<Promise<PostMetadata>> = returnedFileNames.map(async (returnedFileName) => {
-      const fileContents = await fs.readFile(`${blogPostDirectory}/${returnedFileName}`, 'utf-8')
+    const postMetadataPromises: Array<Promise<PostMetadata>> = postFileNames.map(async (postFileName) => {
+      const fileContents = await fs.readFile(`${blogPostDirectory}/${postFileName}`, 'utf-8')
       const markdown = new Markdown(fileContents)
+      if (markdown.metadata.isPublished != null && markdown.metadata.isPublished === 'false') {
+        return {
+          postId: '',
+          title: '',
+          datePublished: new Date()
+        }
+      }
+
       return {
-        postId: returnedFileName.split('.')[0],
+        postId: postFileName.split('.')[0],
         title: markdown.metadata.title,
         datePublished: new Date(markdown.metadata.datePublished),
         description: markdown.metadata.description,
         coverImageSrc: markdown.metadata.coverImageSrc
       }
     })
-    const returnedPostMetadatas: PostMetadata[] = await Promise.all(returnedPostMetadataPromises)
+
+    const publishedPostMetadatas: PostMetadata[] = (await Promise.all(postMetadataPromises))
+      .filter((metadata) => metadata.postId !== '')
+    const returnedPostMetadatas = publishedPostMetadatas.slice(start, limit == null ? publishedPostMetadatas.length : start + limit)
+
     const links: PaginationLinks = { prev: undefined, next: undefined }
     if (start > 0) {
-      links.prev = `/api/blog?start=${Math.max(0, start - limit)}&limit=${limit}`
+      if (limit == null) {
+        links.prev = '/api/blog?start=0'
+      } else {
+        links.prev = `/api/blog?start=${Math.max(0, start - limit)}&limit=${limit}`
+      }
     }
-    if (start + limit < postFileNames.length) {
-      links.next = `/api/blog?start=${Math.min(postFileNames.length - 1, start + limit)}&limit=${limit}`
+    if (limit != null && start + limit < publishedPostMetadatas.length) {
+      links.next = `/api/blog?start=${Math.min(publishedPostMetadatas.length - 1, start + limit)}&limit=${limit}`
     }
 
     res.status(200).json({

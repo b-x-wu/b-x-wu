@@ -10,7 +10,7 @@ export interface PaginationLinks {
 
 export interface ApiPaginationResponse<T> {
   links: PaginationLinks
-  limit: number // the user specified limit
+  limit?: number // the user specified limit
   size: number // the number of results (may be less than limit)
   start: number // the index of the first result
   results: T[]
