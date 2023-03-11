@@ -21,7 +21,7 @@ function BlogPostPreview (postMetadata: PostMetadata): JSX.Element {
         <div className={`flex basis-full flex-col gap-y-2 p-6 ${postMetadata.coverImageSrc != null ? 'sm:basis-3/4' : ''}`}>
           <h1 className='text-xl font-semibold'>{postMetadata.title}</h1>
           <h3 className='text-sm font-light'>{`Published on ${(new Date(postMetadata.datePublished)).toDateString()}`}</h3>
-          {postMetadata.description == null ? <></> : <p>{postMetadata.description}</p>}
+          {postMetadata.description == null ? <></> : <p className='text-ellipsis'>{postMetadata.description}</p>}
         </div>
         {
           postMetadata.coverImageSrc != null

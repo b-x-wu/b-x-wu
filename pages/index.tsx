@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 interface FeaturedProjectProps {
   name: string
-  description: string
+  description?: string
   imagePath?: string
   url?: string
 }
@@ -13,10 +13,7 @@ function FeaturedProject ({ name, description, imagePath, url }: FeaturedProject
   return (
     <Link
       href={url ?? '#'}
-      className={
-        'transition-all duration-300 relative group h-48 rounded-xl ring-0 ' +
-        'hover:ring-4'
-      }
+      className='group relative h-48 rounded-xl ring-0 transition-all duration-300 hover:ring-4'
     >
       {/* TODO: if we're using gifs, change it so that the gif only starts playing on hover */}
       {imagePath != null
@@ -24,20 +21,20 @@ function FeaturedProject ({ name, description, imagePath, url }: FeaturedProject
           src={imagePath}
           width={100}
           height={100}
-          alt={description}
+          alt={description ?? `Image for ${name}`}
           className="h-full w-full rounded-xl object-cover"
         />
         : <></>
       }
       <div className={
         'transition-all duration-300 bg-gray-100 bg-opacity-80 absolute inset-y-0 right-0 w-1/3 flex items-center justify-center rounded-r-lg backdrop-blur ' +
-        'sm:w-full sm:h-9 sm:bottom-0 sm:inset-x-0 sm:inset-y-auto sm:rounded-tr-none sm:rounded-b-lg ' +
+        'sm:w-full sm:h-16 sm:bottom-0 sm:inset-x-0 sm:inset-y-auto sm:rounded-tr-none sm:rounded-b-lg ' +
         'xl:w-1/3 xl:inset-y-0 xl:inset-x-auto xl:h-full xl:bottom-auto xl:right-0 xl:rounded-r-lg xl:rounded-bl-none ' +
         'group-hover:w-full group-hover:h-full group-hover:rounded-xl'
       }>
-        <div className="px-3">
-          <h1 className="text-center align-middle text-lg">{name}</h1>
-          <p className="text-center sm:hidden sm:group-hover:block xl:block">{description}</p>
+        <div className="flex flex-col px-2">
+          <h1 className="text-center text-lg">{name}</h1>
+          {description != null ? <p className="text-center text-sm font-light sm:group-hover:block xl:block">{description}</p> : <></>}
         </div>
       </div>
     </Link>
@@ -91,7 +88,6 @@ export default function Home (): JSX.Element {
             />
             <FeaturedProject
               name="Project 3"
-              description="This is the third project"
               imagePath="/photo_of_me_sweating.jpg"
             />
             <FeaturedProject
@@ -101,7 +97,6 @@ export default function Home (): JSX.Element {
             />
             <FeaturedProject
               name="Project 5"
-              description="This is the fifth project"
               imagePath="/photo_of_me_sweating.jpg"
             />
             <FeaturedProject
