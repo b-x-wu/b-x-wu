@@ -3,13 +3,6 @@ import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { type ApiFailResponse, type ApiPaginationResponse, Markdown, type PaginationLinks, type PostMetadata } from '../../../types/types'
 
-// Returns a paginated array of blog post metadata including the postId, title, date published, description, and cover image (if applicable)
-// Note that the post content will not be returned, but will be present in the response as an empty string
-// The endpoint optionally supports query parameters defining the limit of the number of responses and the start of the responses
-// ie /api/blog?start=0&limit=10
-// if no start query parameter is supplied, it will be assumed to be zero// if no limit query parameter is supplied, it will be assumed to be infinite
-// the response will contain information about the endpoints to call for the next or previous page in the links field,
-// the specified limit, the start, and the actual number of results returned, as well as the actual posts
 export default async function handler (req: NextApiRequest, res: NextApiResponse<ApiPaginationResponse<PostMetadata> | ApiFailResponse>): Promise<void> {
   if (req.method !== 'GET') {
     res.status(404).json({ message: "Incorrect method. Must use 'GET'.", data: { method: req.method } })

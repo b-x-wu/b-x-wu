@@ -8,17 +8,17 @@ import { type ApiPaginationResponse, type ApiFailResponse, type Post, type PostM
 import Link from 'next/link'
 
 interface MarkdownJSXProps {
-  text: string
+  content: string
 }
 
 interface BlogPostProps {
   title: string
   datePublished: string
-  text: string
+  content: string
 }
 
 // TODO: move this to a components folder
-function MarkdownJSX ({ text }: MarkdownJSXProps): JSX.Element {
+function MarkdownJSX ({ content }: MarkdownJSXProps): JSX.Element {
   return (
         <ReactMarkdown
             components={{
@@ -28,10 +28,10 @@ function MarkdownJSX ({ text }: MarkdownJSXProps): JSX.Element {
               h4: ({ children }) => <h4 className="py-1 text-lg">{children}</h4>,
               p: ({ children }) => <p>{children}</p>,
               img: ({ src, alt }) => <Image src={src ?? ''} alt={alt ?? ''} width={100} height={100} className="max-h-64 w-full justify-self-center p-3" />,
-              ul: ({ children }) => <ul className="list-square pl-4">{children}</ul>,
-              ol: ({ children }) => <ol className="list-decimal pl-4">{children}</ol>,
+              ul: ({ children }) => <ul className="list-square pl-12">{children}</ul>,
+              ol: ({ children }) => <ol className="list-decimal pl-12">{children}</ol>,
               a: ({ href, children }) => <Link href={href ?? '#'} className="text-sky-700 hover:underline" target="_blank" rel="noreferrer noopener">{children}</Link>,
-              // TODO: currently there is no syntax highlighting. react-syntax-highlighter proved slow
+              // FIXME: SyntaxHighlighter is slow in dev. Hopefully it's faster in prod? Yet to see.
               code: ({ node, inline, className, children, ...props }) => {
                 const match = /language-(\w+)/.exec(className ?? '')
                 return (inline == null || !inline) && (match != null)
@@ -51,12 +51,12 @@ function MarkdownJSX ({ text }: MarkdownJSXProps): JSX.Element {
               }
             }}
         >
-            {text}
+            {content}
         </ReactMarkdown>
   )
 }
 
-export default function BlogPost ({ title, datePublished, text }: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
+export default function BlogPost ({ title, datePublished, content }: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
   return (
         <>
             <Head>
@@ -67,7 +67,7 @@ export default function BlogPost ({ title, datePublished, text }: InferGetStatic
             </Head>
             <main className="min-h-screen">
                 <div className="m-6 flex flex-col gap-y-2 rounded-lg bg-gray-200 p-6">
-                    {MarkdownJSX({ text })}
+                    {MarkdownJSX({ content })}
                 </div>
             </main>
         </>
@@ -130,7 +130,7 @@ export const getStaticProps: GetStaticProps<BlogPostProps> = async ({ params }) 
     props: {
       title: post.metadata.title,
       datePublished: post.metadata.datePublished.toString(),
-      text: post.content
+      content: post.content
     }
   }
 }

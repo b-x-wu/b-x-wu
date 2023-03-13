@@ -33,13 +33,13 @@ export default function Document (): JSX.Element {
     <Html lang="en">
       <Head />
       <body>
-        <header className="sticky top-0 z-10">
-          <nav className="mx-auto bg-gray-100 p-6">
+        <header className="sticky top-0 z-10 bg-gray-100">
+          <nav className="mx-auto max-w-6xl p-6">
             <div className="flex flex-row flex-wrap items-center justify-between">
               {/* The logo */}
               <Link
                 href="/"
-                className="text-2xl"
+                className="text-3xl"
               >
                 brucexwu
               </Link>
@@ -106,7 +106,9 @@ export default function Document (): JSX.Element {
             </div>
           </nav>
         </header>
-        <Main />
+        <div className='mx-auto max-w-6xl'>
+          <Main />
+        </div>
         <NextScript />
         <footer className="bottom-0 mt-auto flex h-36 bg-gray-100">
           <div className="m-auto p-6">
