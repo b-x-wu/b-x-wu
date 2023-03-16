@@ -5,7 +5,7 @@ import { type Dispatch, type SetStateAction, useState } from 'react'
 import useSWR from 'swr'
 import { type PostMetadata, type ApiFailResponse, type ApiPaginationResponse, type PaginationLinks } from '../../types/types'
 
-const LIMIT = 2
+const LIMIT = 10
 interface PaginationControlsProps {
   links: PaginationLinks
   setEndpoint: Dispatch<SetStateAction<string>>
@@ -16,12 +16,18 @@ function BlogPostPreview (postMetadata: PostMetadata): JSX.Element {
     <div key={postMetadata.postId}>
       <Link
         href={`/blog/${postMetadata.postId}`}
-        className='flex flex-row justify-between rounded-lg bg-gray-200 transition-all duration-300 hover:ring-4'
+        className='group flex flex-row justify-between rounded-lg bg-lighter-blue ring-4 ring-lighter-blue transition-all duration-300'
       >
         <div className={`flex basis-full flex-col gap-y-2 p-6 ${postMetadata.coverImageSrc != null ? 'sm:basis-3/4' : ''}`}>
-          <h1 className='text-xl font-semibold'>{postMetadata.title}</h1>
+          <h1 className='text-xl font-semibold underline decoration-lighter-blue group-hover:decoration-dim-gray'>{postMetadata.title}</h1>
           <h3 className='text-sm font-light'>{`Published on ${(new Date(postMetadata.datePublished)).toDateString()}`}</h3>
           {postMetadata.description == null ? <></> : <p className='text-ellipsis'>{postMetadata.description}</p>}
+          <div>
+            Read more
+            <span className='opacity-0 transition-opacity duration-100 ease-linear group-hover:opacity-100'>.</span>
+            <span className='opacity-0 transition-opacity duration-200 ease-linear group-hover:opacity-100'>.</span>
+            <span className='opacity-0 transition-opacity duration-300 ease-linear group-hover:opacity-100'>.</span>
+          </div>
         </div>
         {
           postMetadata.coverImageSrc != null
@@ -43,7 +49,7 @@ function PaginationControls ({ links, setEndpoint }: PaginationControlsProps): J
   const nextButton = links.next != null
     ? <button
       onClick={() => { setEndpoint(links.next ?? '') }}
-      className='rounded-lg bg-gray-200 py-1 pl-2 transition-all duration-300 hover:ring-2'
+      className='rounded-lg bg-lighter-blue py-1 pl-2'
     >
       <span className='hidden sm:inline'>Next</span>
       <Image
@@ -58,7 +64,7 @@ function PaginationControls ({ links, setEndpoint }: PaginationControlsProps): J
   const prevButton = links.prev != null
     ? <button
       onClick={() => { setEndpoint(links.prev ?? '') }}
-      className='rounded-lg bg-gray-200 py-1 pr-2 transition-all duration-300 hover:ring-2'
+      className='rounded-lg bg-lighter-blue py-1 pr-2'
     >
       <Image
         src='https://upload.wikimedia.org/wikipedia/commons/5/58/Map_arrow_black_w.svg'
@@ -111,8 +117,8 @@ export default function Home (): JSX.Element {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="min-h-screen p-6">
-        <div className='flex flex-col gap-y-4'>
+      <main className="p-6 pb-36">
+        <div className='flex flex-col gap-y-8'>
           {data.results.map((postMetadata: PostMetadata) => BlogPostPreview(postMetadata))}
           <PaginationControls
             links={data.links}

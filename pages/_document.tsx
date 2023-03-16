@@ -22,7 +22,7 @@ function ContactButton ({ platform, href, imageSrc }: ContactButtonProps): JSX.E
         width={100}
         height={100}
         alt={platform}
-        className="h-full w-full object-contain brightness-0"
+        className="h-full w-full object-contain"
       />
     </Link>
   )
@@ -32,14 +32,14 @@ export default function Document (): JSX.Element {
   return (
     <Html lang="en">
       <Head />
-      <body>
-        <header className="sticky top-0 z-10 bg-gray-100">
+      <body className='relative min-h-screen bg-light-blue'>
+        <header className="sticky top-0 z-10 bg-blue">
           <nav className="mx-auto max-w-6xl p-6">
             <div className="flex flex-row flex-wrap items-center justify-between">
               {/* The logo */}
               <Link
                 href="/"
-                className="text-3xl"
+                className="text-2xl"
               >
                 brucexwu
               </Link>
@@ -81,21 +81,21 @@ export default function Document (): JSX.Element {
                 'sm:flex sm:flex-row sm:gap-x-4 sm:items-center ' +
                 'sm:peer-checked:flex-row sm:peer-checked:basis-0 ' +
                 'peer-checked:flex peer-checked:flex-col peer-checked:basis-full '}>
-                <div>
+                <div className='hover:underline'>
                   <Link
                     href="/"
                   >
                     Home
                   </Link>
                 </div>
-                <div>
+                <div className='hover:underline'>
                   <Link
                     href="/blog"
                   >
                     Blog
                   </Link>
                 </div>
-                <div>
+                <div className='hover:underline'>
                   <Link
                     href="/resume"
                   >
@@ -110,8 +110,8 @@ export default function Document (): JSX.Element {
           <Main />
         </div>
         <NextScript />
-        <footer className="bottom-0 mt-auto flex h-36 bg-gray-100">
-          <div className="m-auto p-6">
+        <footer className="absolute bottom-0 h-36 w-full bg-blue">
+          <div className="mx-auto p-6">
             <div className="text-center">
               Let&apos;s chat!
             </div>
@@ -119,17 +119,17 @@ export default function Document (): JSX.Element {
               <ContactButton
                 platform="Twitter"
                 href="https://twitter.com/bruce_x_wu"
-                imageSrc="https://upload.wikimedia.org/wikipedia/commons/4/4f/Twitter-logo.svg"
+                imageSrc="twitter-logo.svg"
               />
               <ContactButton
-                platform="GitHub"
                 href="https://github.com/bruce-x-wu"
-                imageSrc="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"
+                platform="GitHub"
+                imageSrc='github-logo.svg'
               />
               <ContactButton
                 platform="LinkedIn"
                 href="https://www.linkedin.com/in/bruce-x-wu/"
-                imageSrc="https://raw.githubusercontent.com/uditkumar489/Icon-pack/44e9bfd92c879c063dadb83851aef6b347ea0ce8/Social%20media/Die%20cut%20-%20transparent/svg/027-linkedin.svg"
+                imageSrc="linkedin-logo.svg"
               />
             </div>
             <p className="text-center text-xs opacity-50">
