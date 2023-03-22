@@ -31,6 +31,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
     const publishedPostMetadatas: PostMetadata[] = (await Promise.all(postMetadataPromises))
       .filter((metadata) => metadata.isPublished == null || metadata.isPublished)
+      .sort((metadata1, metadata2) => metadata2.datePublished.valueOf() - metadata1.datePublished.valueOf())
     const returnedPostMetadatas = publishedPostMetadatas.slice(start, limit == null ? publishedPostMetadatas.length : start + limit)
 
     const links: PaginationLinks = { prev: undefined, next: undefined }
