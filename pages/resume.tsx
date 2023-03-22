@@ -77,7 +77,7 @@ export default function Resume (): JSX.Element {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main className="pb-36">
+            <main className="mx-auto max-w-6xl pb-36">
                 <div className="m-6 flex flex-col gap-y-4">
                     <section className="flex content-center justify-between">
                         {/* Controls */}

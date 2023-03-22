@@ -117,7 +117,7 @@ export default function Home (): JSX.Element {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="p-6 pb-36">
+      <main className="mx-auto max-w-6xl p-6 pb-36">
         <div className='flex flex-col gap-y-8'>
           {data.results.map((postMetadata: PostMetadata) => BlogPostPreview(postMetadata))}
           <PaginationControls

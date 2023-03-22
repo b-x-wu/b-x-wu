@@ -106,9 +106,7 @@ export default function Document (): JSX.Element {
             </div>
           </nav>
         </header>
-        <div className='mx-auto max-w-6xl'>
-          <Main />
-        </div>
+        <Main />
         <NextScript />
         <footer className="absolute bottom-0 h-36 w-full bg-blue">
           <div className="mx-auto p-6">
@@ -119,17 +117,17 @@ export default function Document (): JSX.Element {
               <ContactButton
                 platform="Twitter"
                 href="https://twitter.com/bruce_x_wu"
-                imageSrc="twitter-logo.svg"
+                imageSrc="/twitter-logo.svg"
               />
               <ContactButton
                 href="https://github.com/bruce-x-wu"
                 platform="GitHub"
-                imageSrc='github-logo.svg'
+                imageSrc='/github-logo.svg'
               />
               <ContactButton
                 platform="LinkedIn"
                 href="https://www.linkedin.com/in/bruce-x-wu/"
-                imageSrc="linkedin-logo.svg"
+                imageSrc="/linkedin-logo.svg"
               />
             </div>
             <p className="text-center text-xs opacity-50">

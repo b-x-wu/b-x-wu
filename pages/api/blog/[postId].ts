@@ -45,7 +45,8 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
       metadata: {
         postId,
         title: markdownData.metadata.title,
-        datePublished: new Date(markdownData.metadata.datePublished)
+        datePublished: new Date(markdownData.metadata.datePublished),
+        description: markdownData.metadata.description ?? null
       },
       content: markdownData.content
     })

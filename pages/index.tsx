@@ -16,6 +16,7 @@ function FeaturedProject ({ name, description, imagePath, url }: FeaturedProject
       className='group relative h-48 rounded-xl ring-4 ring-lighter-blue transition-all duration-300'
     >
       {/* TODO: if we're using gifs, change it so that the gif only starts playing on hover */}
+      {/* TODO: figure out how to make descriptions not look bad */}
       {imagePath != null
         ? <Image
           src={imagePath}
@@ -50,7 +51,7 @@ export default function Home (): JSX.Element {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="pb-36">
+      <main className="mx-auto max-w-6xl pb-36">
         <section className="mx-12 p-6">
           { /* Introduction */ }
           <div className="mx-auto py-6">
@@ -78,12 +79,10 @@ export default function Home (): JSX.Element {
           <div className="grid grid-cols-1 gap-6 py-6 sm:grid-cols-3">
             <FeaturedProject
               name="Project 1"
-              description="This is the first project"
               imagePath="/photo_of_me_sweating.jpg"
             />
             <FeaturedProject
               name="Project 2"
-              description="This is the second project"
               imagePath="/giphy.gif"
             />
             <FeaturedProject
@@ -92,7 +91,6 @@ export default function Home (): JSX.Element {
             />
             <FeaturedProject
               name="Project 4"
-              description="This is the fourth project"
               imagePath="/photo_of_me_sweating.jpg"
             />
             <FeaturedProject
@@ -101,7 +99,6 @@ export default function Home (): JSX.Element {
             />
             <FeaturedProject
               name="Project 6"
-              description="This is the sixth project"
               imagePath="/photo_of_me_sweating.jpg"
             />
           </div>

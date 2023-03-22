@@ -22,6 +22,7 @@ export interface PostMetadata {
   datePublished: Date
   description?: string
   coverImageSrc?: string
+  isPublished?: boolean
 }
 
 export interface Post {

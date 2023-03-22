@@ -18,25 +18,19 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     const postMetadataPromises: Array<Promise<PostMetadata>> = postFileNames.map(async (postFileName) => {
       const fileContents = await fs.readFile(`${blogPostDirectory}/${postFileName}`, 'utf-8')
       const markdown = new Markdown(fileContents)
-      if (markdown.metadata.isPublished != null && markdown.metadata.isPublished === 'false') {
-        return {
-          postId: '',
-          title: '',
-          datePublished: new Date()
-        }
-      }
 
       return {
         postId: postFileName.split('.')[0],
         title: markdown.metadata.title,
         datePublished: new Date(markdown.metadata.datePublished),
         description: markdown.metadata.description,
-        coverImageSrc: markdown.metadata.coverImageSrc
+        coverImageSrc: markdown.metadata.coverImageSrc,
+        isPublished: markdown.metadata.isPublished === 'true'
       }
     })
 
     const publishedPostMetadatas: PostMetadata[] = (await Promise.all(postMetadataPromises))
-      .filter((metadata) => metadata.postId !== '')
+      .filter((metadata) => metadata.isPublished == null || metadata.isPublished)
     const returnedPostMetadatas = publishedPostMetadatas.slice(start, limit == null ? publishedPostMetadatas.length : start + limit)
 
     const links: PaginationLinks = { prev: undefined, next: undefined }
