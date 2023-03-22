@@ -86,7 +86,7 @@ function PaginationControls ({ links, setEndpoint }: PaginationControlsProps): J
 
 export default function Home (): JSX.Element {
   const [endpoint, setEndpoint] = useState(`/api/blog?start=0&limit=${LIMIT}`)
-  const { data, error } = useSWR<ApiPaginationResponse<PostMetadata>, ApiFailResponse, string>(endpoint, async (url) => {
+  const { data } = useSWR<ApiPaginationResponse<PostMetadata>, ApiFailResponse, string>(endpoint, async (url) => {
     const res = await fetch(url)
     if (res.status >= 400) {
       throw await res.json()
@@ -94,18 +94,11 @@ export default function Home (): JSX.Element {
     return await res.json()
   })
 
-  if (error != null) {
-    return (
-      <>
-        <div>WE HAVE ERROR</div>
-        <div>{JSON.stringify(error)}</div>
-      </>
-    )
-  }
-
   if (data == null) {
     return (
-      <div>WE ARE LOADING</div>
+      <div>
+        Loading...
+      </div>
     )
   }
 
