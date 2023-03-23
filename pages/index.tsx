@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import FeaturedProject from '../components/featuredProject'
+import TypedTextAnimation from '../components/typedTextAnimation'
 
 export default function Home (): JSX.Element {
   return (
@@ -23,9 +24,35 @@ export default function Home (): JSX.Element {
               className="mx-auto h-48 w-48 rounded-full object-cover xl:h-64 xl:w-64"
             />
           </div>
-          <h1 className="text-center text-2xl">
-            Hello, I&apos;m B! <span role="img" aria-label="waving hand">&#x1F44B;</span>
-            {/* IDEA: have this typed out as user enters the site? */}
+          <h1 className='text-center text-2xl'>
+            <TypedTextAnimation
+              frames={[
+                'H', 'Hi', 'Hi,', 'Hi, ', 'Hi, I', "Hi, I'", "Hi, I'm", "Hi, I'm ",
+                "Hi, I'm B", "Hi, I'm Br", "Hi, I'm Bru", "Hi, I'm Bruc", "Hi, I'm Bruce", "Hi, I'm Bruce!",
+                "Hi, I'm Bruce! ", "Hi, I'm Bruce! :", "Hi, I'm Bruce! :w", "Hi, I'm Bruce! :wa", "Hi, I'm Bruce! :wav",
+                "Hi, I'm Bruce! :wave", "Hi, I'm Bruce!"
+              ]}
+              frameRate={75}
+              tag="span"
+            />
+            <TypedTextAnimation
+              props={{
+                role: 'img',
+                'aria-label': 'waving hand'
+              }}
+              tag="span"
+              frameRate={75}
+              frames={[
+                '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '👋'
+              ]}
+            />
+            <TypedTextAnimation
+              tag="span"
+              frameRate={75}
+              frames={[
+                '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', ''
+              ]}
+            />
           </h1>
           <h2 className="text-center text-lg">
             I&apos;m a silly lil guy.
