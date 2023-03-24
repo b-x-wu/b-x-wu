@@ -4,6 +4,8 @@ import FeaturedProject from '../components/featuredProject'
 import TypedTextAnimation from '../components/typedTextAnimation'
 
 export default function Home (): JSX.Element {
+  const FRAME_RATE = 100
+
   return (
     <>
       <Head>
@@ -32,7 +34,7 @@ export default function Home (): JSX.Element {
                 "Hi, I'm Bruce!", "Hi, I'm Bruce! ", "Hi, I'm Bruce! :", "Hi, I'm Bruce! :w", "Hi, I'm Bruce! :wa", "Hi, I'm Bruce! :wav",
                 "Hi, I'm Bruce! :wave", "Hi, I'm Bruce! :wave:", "Hi, I'm Bruce!"
               ]}
-              frameRate={100}
+              frameRate={FRAME_RATE}
               tag="span"
             />
             <span className='relative'>
@@ -42,14 +44,14 @@ export default function Home (): JSX.Element {
                   'aria-label': 'waving hand'
                 }}
                 tag="span"
-                frameRate={100}
+                frameRate={FRAME_RATE}
                 frames={[
                   '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '👋'
                 ]}
               />
               <TypedTextAnimation
                 tag="span"
-                frameRate={100}
+                frameRate={FRAME_RATE}
                 frames={[
                   '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸',
                   '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', '‸', ' ', ' ', ' ', ' ', ' '
@@ -71,37 +73,37 @@ export default function Home (): JSX.Element {
           <div className="grid grid-cols-1 gap-6 py-6 sm:grid-cols-3">
             <FeaturedProject
               name="ULC Schedule Maker V2"
-              imagePath="/photo_of_me_sweating.jpg"
+              imagePath="/project_images/usm.png"
               url='https://github.com/ulcnyu/ulc-schedule-maker-v2/tree/polish'
               description='Schedule consolidation web app'
             />
             <FeaturedProject
               name="Twit-Scraper"
-              imagePath='/giphy.gif'
+              imagePath='/project_images/twit_scraper.png'
               url="https://github.com/bruce-x-wu/twit-scraper"
               description='Twitter API alternative'
             />
             <FeaturedProject
               name="Create React Sandbox"
-              imagePath='/photo_of_me_sweating.jpg'
+              imagePath='/project_images/create_react_sandbox.gif'
               url="https://www.npmjs.com/package/create-react-sandbox"
               description='React environment generating CLI tool'
             />
             <FeaturedProject
               name="Palette Hacker"
-              imagePath="/photo_of_me_sweating.jpg"
+              imagePath="/project_images/palette_hacker.gif"
               url="https://github.com/bruce-x-wu/palette-hacker"
               description='Color swapping Chrome extension'
             />
             <FeaturedProject
               name="Web Effect Rack"
-              imagePath="/photo_of_me_sweating.jpg"
+              imagePath="/project_images/web_effect_rack.png"
               url='https://github.com/bruce-x-wu/web-effect-rack'
               description='Web based Pure Data effect interface'
             />
             <FeaturedProject
               name="brucexwu.com"
-              imagePath="/photo_of_me_sweating.jpg"
+              imagePath="/me_grinning.jpg"
               url='/'
               description='This website'
             />

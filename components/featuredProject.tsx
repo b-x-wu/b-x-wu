@@ -19,16 +19,16 @@ export default function FeaturedProject ({ name, description, imagePath, url }: 
       {/* TODO: if we're using gifs, change it so that the gif only starts playing on hover */}
       {imagePath != null
         ? <Image
-          src={imagePath}
-          width={100}
-          height={100}
-          alt={description ?? `Image for ${name}`}
-          className="h-full w-full rounded-xl object-cover"
-        />
+            src={imagePath}
+            width={1000}
+            height={1000}
+            alt={description ?? `Image for ${name}`}
+            className="h-full w-full rounded-xl object-cover"
+          />
         : <></>
       }
-      <div className='absolute inset-0 h-full w-full rounded-xl bg-lighter-blue opacity-[85%] transition-all duration-300 group-hover:opacity-0'>
-        <div className="flex h-full flex-col justify-center gap-y-1 transition-all duration-300 group-hover:opacity-0">
+      <div className='absolute inset-0 h-full w-full rounded-xl bg-lighter-blue opacity-90 transition-all duration-300 group-hover:opacity-0'>
+        <div className="mx-4 flex h-full flex-col justify-center gap-y-1 transition-all duration-300 group-hover:opacity-0">
           <h1 className="text-center text-xl font-bold">{name}</h1>
           {description != null ? <p className="text-center sm:group-hover:block xl:block">{description}</p> : <></>}
         </div>

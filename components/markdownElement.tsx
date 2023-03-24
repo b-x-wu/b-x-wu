@@ -25,7 +25,7 @@ export default function MarkdownElement ({ content }: MarkdownElementProps): JSX
                 const match = /language-(\w+)/.exec(className ?? '')
                 return (inline == null || !inline) && (match != null)
                   ? (
-                    <div className='flex-col'>
+                    <div className='my-2 flex flex-col'>
                       <div className='flex flex-row justify-between'>
                         <div></div>
                         <div className='rounded-t-md bg-glacier px-4 py-2 text-sm'>
