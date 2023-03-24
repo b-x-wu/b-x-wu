@@ -12,10 +12,11 @@ export default function FeaturedProject ({ name, description, imagePath, url }: 
   return (
     <Link
       href={url ?? '#'}
+      target='_blank'
+      rel='noopener noreferrer'
       className='group relative h-48 rounded-xl ring-4 ring-lighter-blue transition-all duration-300'
     >
       {/* TODO: if we're using gifs, change it so that the gif only starts playing on hover */}
-      {/* TODO: figure out how to make descriptions not look bad */}
       {imagePath != null
         ? <Image
           src={imagePath}
@@ -26,15 +27,10 @@ export default function FeaturedProject ({ name, description, imagePath, url }: 
         />
         : <></>
       }
-      <div className={
-        'transition-all ease-linear duration-300 bg-lighter-blue bg-opacity-100 absolute inset-y-0 right-0 w-1/3 flex items-center justify-center rounded-r-lg backdrop-blur ' +
-        'sm:w-full sm:h-16 sm:bottom-0 sm:inset-x-0 sm:inset-y-auto sm:rounded-tr-none sm:rounded-b-lg ' +
-        'xl:w-1/3 xl:inset-y-0 xl:inset-x-auto xl:h-full xl:bottom-auto xl:right-0 xl:rounded-r-lg xl:rounded-bl-none ' +
-        'group-hover:w-full group-hover:h-full group-hover:rounded-xl group-hover:bg-opacity-80'
-      }>
-        <div className="flex flex-col px-2">
-          <h1 className="text-center text-lg">{name}</h1>
-          {description != null ? <p className="text-center text-sm font-light sm:group-hover:block xl:block">{description}</p> : <></>}
+      <div className='absolute inset-0 h-full w-full rounded-xl bg-lighter-blue opacity-[85%] transition-all duration-300 group-hover:opacity-0'>
+        <div className="flex h-full flex-col justify-center gap-y-1 transition-all duration-300 group-hover:opacity-0">
+          <h1 className="text-center text-xl font-bold">{name}</h1>
+          {description != null ? <p className="text-center sm:group-hover:block xl:block">{description}</p> : <></>}
         </div>
       </div>
     </Link>

@@ -70,28 +70,40 @@ export default function Home (): JSX.Element {
           </h1>
           <div className="grid grid-cols-1 gap-6 py-6 sm:grid-cols-3">
             <FeaturedProject
-              name="Project 1"
+              name="ULC Schedule Maker V2"
               imagePath="/photo_of_me_sweating.jpg"
+              url='https://github.com/ulcnyu/ulc-schedule-maker-v2/tree/polish'
+              description='Schedule consolidation web app'
             />
             <FeaturedProject
-              name="Project 2"
-              imagePath="/giphy.gif"
+              name="Twit-Scraper"
+              imagePath='/giphy.gif'
+              url="https://github.com/bruce-x-wu/twit-scraper"
+              description='Twitter API alternative'
             />
             <FeaturedProject
-              name="Project 3"
-              imagePath="/photo_of_me_sweating.jpg"
+              name="Create React Sandbox"
+              imagePath='/photo_of_me_sweating.jpg'
+              url="https://www.npmjs.com/package/create-react-sandbox"
+              description='React environment generating CLI tool'
             />
             <FeaturedProject
-              name="Project 4"
+              name="Palette Hacker"
               imagePath="/photo_of_me_sweating.jpg"
+              url="https://github.com/bruce-x-wu/palette-hacker"
+              description='Color swapping Chrome extension'
             />
             <FeaturedProject
-              name="Project 5"
+              name="Web Effect Rack"
               imagePath="/photo_of_me_sweating.jpg"
+              url='https://github.com/bruce-x-wu/web-effect-rack'
+              description='Web based Pure Data effect interface'
             />
             <FeaturedProject
-              name="Project 6"
+              name="brucexwu.com"
               imagePath="/photo_of_me_sweating.jpg"
+              url='/'
+              description='This website'
             />
           </div>
         </section>
