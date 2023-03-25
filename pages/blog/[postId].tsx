@@ -35,7 +35,7 @@ export default function BlogPost ({ postId, title, datePublished, content, descr
                 </div>
                 <div className='mx-auto max-w-6xl'>
                   <div className="my-6 max-w-[calc(100vw_-_1.5rem)] lg:flex lg:flex-row">
-                    <div className="mx-6 rounded-lg bg-lighter-blue p-6 lg:ml-6 lg:mr-3 lg:flex lg:basis-3/4 lg:flex-col lg:gap-y-2">
+                    <div className="mx-6 flex flex-col gap-y-4 rounded-lg bg-lighter-blue p-6 lg:ml-6 lg:mr-3 lg:flex lg:basis-3/4">
                         {MarkdownElement({ content })}
                     </div>
                     <div className='sticky top-24 mr-6 ml-3 hidden h-fit rounded-lg bg-lighter-blue p-6 lg:block lg:basis-1/4'>

@@ -143,16 +143,29 @@ export default function Resume (): JSX.Element {
                         <section>
                             {/* Projects */}
                             <h2 className="text-2xl font-semibold">Projects</h2>
-                            {/* TODO: eventually these will link to blog posts */}
+                            <ResumeItem
+                                title="brucexwu.com"
+                                subtitle="This website"
+                                titleHref='/'
+                                bullets={['Technologies used: Next.js Express, TypeScript, React, Tailwind CSS']}
+                                hidden={!full}
+                            />
                             <ResumeItem
                                 title="ULC Schedule Maker V2"
                                 subtitle="A web app that aggregates tutoring schedules"
-                                titleHref="https://ulc-schedule-maker-v2-production.up.railway.app/login"
+                                titleHref='https://github.com/ulcnyu/ulc-schedule-maker-v2/tree/polish'
                                 bullets={full
                                   ? [
                                       'Technologies used: Node.js, Express, React, MongoDB, TypeScript, Tailwind CSS, Google API, Next.js'
                                     ]
                                   : undefined}
+                            />
+                            <ResumeItem
+                                title="Twit-Scraper"
+                                subtitle="A free, open-source Twitter API alternative"
+                                titleHref='https://github.com/bruce-x-wu/twit-scraper'
+                                bullets={['Technologies used: Node.js Express, TypeScript, Pupetteer, Jest, GitHub Actions, Railway, Nixpacks']}
+                                hidden={!full}
                             />
                             <ResumeItem
                                 title="Create React Sandbox"
@@ -163,6 +176,20 @@ export default function Resume (): JSX.Element {
                                       'Technologies used: Node.js, Webpack, Babel, React'
                                     ]
                                   : undefined}
+                            />
+                            <ResumeItem
+                                title="Palette Hacker"
+                                subtitle="A Chrome extension for swapping website color palettes"
+                                titleHref='https://github.com/bruce-x-wu/twit-scraper'
+                                bullets={['Technologies used: Chrome Content Scripts, MongoDB, Express']}
+                                hidden={!full}
+                            />
+                            <ResumeItem
+                                title="Web Effect Rack"
+                                subtitle="A web-based Pure Data effect interface"
+                                titleHref='https://github.com/bruce-x-wu/twit-scraper'
+                                bullets={['Technologies used: Node.js, Express, Pure Data']}
+                                hidden={!full}
                             />
                         </section>
                         <section>

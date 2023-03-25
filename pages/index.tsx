@@ -75,31 +75,31 @@ export default function Home (): JSX.Element {
               name="ULC Schedule Maker V2"
               imagePath="/project_images/usm.png"
               url='https://github.com/ulcnyu/ulc-schedule-maker-v2/tree/polish'
-              description='Schedule consolidation web app'
+              description='A web app that aggregates tutoring schedules'
             />
             <FeaturedProject
               name="Twit-Scraper"
               imagePath='/project_images/twit_scraper.png'
               url="https://github.com/bruce-x-wu/twit-scraper"
-              description='Twitter API alternative'
+              description='A free, open-source Twitter API alternative'
             />
             <FeaturedProject
               name="Create React Sandbox"
               imagePath='/project_images/create_react_sandbox.gif'
               url="https://www.npmjs.com/package/create-react-sandbox"
-              description='React environment generating CLI tool'
+              description='A command-line tool to create lightweight React environments'
             />
             <FeaturedProject
               name="Palette Hacker"
               imagePath="/project_images/palette_hacker.gif"
               url="https://github.com/bruce-x-wu/palette-hacker"
-              description='Color swapping Chrome extension'
+              description='A Chrome extension for swapping website color palettes'
             />
             <FeaturedProject
               name="Web Effect Rack"
               imagePath="/project_images/web_effect_rack.png"
               url='https://github.com/bruce-x-wu/web-effect-rack'
-              description='Web based Pure Data effect interface'
+              description='A web-based Pure Data effect interface'
             />
             <FeaturedProject
               name="brucexwu.com"
