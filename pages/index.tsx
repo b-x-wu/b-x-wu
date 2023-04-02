@@ -21,8 +21,8 @@ export default function Home (): JSX.Element {
             <Image
               src="/pfp.jpg"
               alt="Picture of me"
-              width={100}
-              height={100}
+              width={1000}
+              height={1000}
               className="mx-auto h-64 w-64 rounded-full object-cover"
             />
           </div>
