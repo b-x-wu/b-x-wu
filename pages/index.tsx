@@ -19,7 +19,7 @@ export default function Home (): JSX.Element {
           { /* Introduction */ }
           <div className="mx-auto py-4">
             <Image
-              src="/me_grinning.jpg"
+              src="/pfp.jpg"
               alt="Picture of me"
               width={100}
               height={100}
@@ -103,7 +103,7 @@ export default function Home (): JSX.Element {
             />
             <FeaturedProject
               name="brucexwu.com"
-              imagePath="/me_grinning.jpg"
+              imagePath="/project_images/brucexwu.png"
               url='/'
               description='This website'
             />
