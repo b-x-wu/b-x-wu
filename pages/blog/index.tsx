@@ -112,7 +112,11 @@ export default function Home (): JSX.Element {
       </Head>
       <main className="mx-auto max-w-6xl p-6 pb-36">
         <div className='flex flex-col gap-y-8'>
-          {data.results.map((postMetadata: PostMetadata) => BlogPostPreview(postMetadata))}
+          {
+            data.results.length === 0
+              ? <div className='w-full p-6 text-center text-lg'>Working on blog posts now. Come back soon!</div>
+              : data.results.map((postMetadata: PostMetadata) => BlogPostPreview(postMetadata))
+          }
           <PaginationControls
             links={data.links}
             setEndpoint={setEndpoint}
