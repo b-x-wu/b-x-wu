@@ -12,7 +12,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   const limit: number | undefined = req.query.limit == null ? undefined : (Array.isArray(req.query.limit) ? parseInt(req.query.limit[0]) : parseInt(req.query.limit))
   const start: number = req.query.start == null ? 0 : (Array.isArray(req.query.start) ? parseInt(req.query.start[0]) : parseInt(req.query.start))
 
-  const blogPostDirectory = path.join(process.cwd(), 'blog_posts')
+  const blogPostDirectory = path.join(process.env.NODE_ENV === 'development' ? process.cwd() : __dirname, 'blog_posts')
   try {
     const postFileNames = await fs.readdir(blogPostDirectory)
     const postMetadataPromises: Array<Promise<PostMetadata>> = postFileNames.map(async (postFileName) => {

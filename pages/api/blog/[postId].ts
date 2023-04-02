@@ -20,7 +20,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
   const postId: string = Array.isArray(req.query.postId) ? req.query.postId[0] : req.query.postId
 
-  const blogPostDirectory = path.join(process.cwd(), 'blog_posts')
+  const blogPostDirectory = path.join(process.env.NODE_ENV === 'development' ? process.cwd() : __dirname, 'blog_posts')
   try {
     const fileContents = await fs.readFile(`${blogPostDirectory}/${postId}.md`, 'utf-8')
     const markdownData = new Markdown(fileContents)
