@@ -96,7 +96,7 @@ export default function Home (): JSX.Element {
 
   if (data == null) {
     return (
-      <div>
+      <div className='w-full p-6 text-center text-lg'>
         Loading...
       </div>
     )
