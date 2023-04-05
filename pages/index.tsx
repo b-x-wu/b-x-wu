@@ -24,6 +24,7 @@ export default function Home (): JSX.Element {
               width={1000}
               height={1000}
               className="mx-auto h-64 w-64 rounded-full object-cover"
+              priority={true}
             />
           </div>
           <h1 className='text-center text-4xl'>
