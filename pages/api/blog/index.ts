@@ -1,5 +1,3 @@
-// import path from 'path'
-// import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Markdown, type ApiFailResponse, type ApiPaginationResponse, type PostMetadata, type PaginationLinks } from '../../../types/types'
 
@@ -12,7 +10,6 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   const limit: number | undefined = req.query.limit == null ? undefined : (Array.isArray(req.query.limit) ? parseInt(req.query.limit[0]) : parseInt(req.query.limit))
   const start: number = req.query.start == null ? 0 : (Array.isArray(req.query.start) ? parseInt(req.query.start[0]) : parseInt(req.query.start))
 
-  // const blogPostDirectory = path.join(process.env.NODE_ENV === 'development' ? process.cwd() : __dirname, 'blog_posts')
   const blogPostDirectoryUrl = 'https://api.github.com/repos/bruce-x-wu/bruce-x-wu/contents/blog_posts'
   try {
     const directoryFetchResponse = await fetch(blogPostDirectoryUrl, {
@@ -23,18 +20,16 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     })
     if (!directoryFetchResponse.ok) { throw new Error('Error fetching directory information.') }
     const directoryFetchResponseData: any[] = await directoryFetchResponse.json()
-    // directoryFetchResponseData.map(async (fileData) => {
-    //   const downloadUrl = fileData.download_url
-    //   const fileFetchResponse = await fetch(downloadUrl)
-    //   return await fileFetchResponse.text()
-    // })
     const postMetadataPromises: Array<Promise<PostMetadata>> = directoryFetchResponseData.map(async (fileData) => {
       const fileFetchResponse = await fetch(fileData.download_url)
       const fileContents = await fileFetchResponse.text()
       const markdown = new Markdown(fileContents)
+      const postIdMatch = fileData.download_url.match(/https:\/\/raw\.githubusercontent\.com\/bruce-x-wu\/bruce-x-wu\/main\/blog_posts\/(.*?)\.md/)
+      if (postIdMatch == null) { throw new Error(`Could not find post id from url: ${fileData.download_url as string}`) }
+      const postId = postIdMatch[1]
 
       return {
-        postId: fileData.download_url.split('.')[0],
+        postId,
         title: markdown.metadata.title,
         datePublished: new Date(markdown.metadata.datePublished),
         description: markdown.metadata.description,
@@ -43,7 +38,9 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
       }
     })
 
-    const publishedPostMetadatas: PostMetadata[] = (await Promise.all(postMetadataPromises))
+    const publishedPostMetadatas: PostMetadata[] = (await Promise.allSettled(postMetadataPromises))
+      .filter((resolveRejected) => resolveRejected.status === 'fulfilled')
+      .map((promiseSettledResult) => (promiseSettledResult as PromiseFulfilledResult<PostMetadata>).value)
       .filter((metadata) => metadata.isPublished == null || metadata.isPublished)
       .sort((metadata1, metadata2) => metadata2.datePublished.valueOf() - metadata1.datePublished.valueOf())
     const returnedPostMetadatas = publishedPostMetadatas.slice(start, limit == null ? publishedPostMetadatas.length : start + limit)

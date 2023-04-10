@@ -1,5 +1,3 @@
-import path from 'path'
-import { promises as fs } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { type Post, type ApiFailResponse, Markdown } from '../../../types/types'
 
@@ -20,9 +18,11 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
   const postId: string = Array.isArray(req.query.postId) ? req.query.postId[0] : req.query.postId
 
-  const blogPostDirectory = path.join(process.env.NODE_ENV === 'development' ? process.cwd() : __dirname, 'blog_posts')
+  const blogPostUrl = `https://raw.githubusercontent.com/bruce-x-wu/bruce-x-wu/main/blog_posts/${postId}.md`
   try {
-    const fileContents = await fs.readFile(`${blogPostDirectory}/${postId}.md`, 'utf-8')
+    const fetchResponse = await fetch(blogPostUrl)
+    if (!fetchResponse.ok) { throw new Error('Error fetching blog post.') }
+    const fileContents = await fetchResponse.text()
     const markdownData = new Markdown(fileContents)
 
     const requiredMetadataFields = ['title', 'datePublished']
