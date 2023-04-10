@@ -18,7 +18,19 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
         'X-GitHub-Api-Version': '2022-11-28'
       }
     })
-    if (!directoryFetchResponse.ok) { throw new Error('Error fetching directory information.') }
+    if (!directoryFetchResponse.ok) {
+      if (directoryFetchResponse.status === 404) {
+        res.status(200).json({
+          links: {},
+          limit: 0,
+          start: 0,
+          size: 0,
+          results: []
+        })
+        return
+      }
+      throw new Error('Error fetching directory information.')
+    }
     const directoryFetchResponseData: any[] = await directoryFetchResponse.json()
     const postMetadataPromises: Array<Promise<PostMetadata>> = directoryFetchResponseData.map(async (fileData) => {
       const fileFetchResponse = await fetch(fileData.download_url)
