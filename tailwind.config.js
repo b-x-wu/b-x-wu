@@ -20,5 +20,6 @@ module.exports = {
       'light-gray': '#E1EDF8'
     }
   },
+  darkMode: 'class',
   plugins: [],
 }

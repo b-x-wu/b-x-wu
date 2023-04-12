@@ -23,7 +23,7 @@ export default function Home (): JSX.Element {
               alt="Picture of me"
               width={1000}
               height={1000}
-              className="mx-auto h-64 w-64 rounded-full object-cover"
+              className="mx-auto h-64 w-64 rounded-full object-cover ring-4 ring-lighter-blue"
               priority={true}
             />
           </div>

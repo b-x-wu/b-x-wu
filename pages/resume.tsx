@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 import ResumeItem from '../components/resumeItem'
+import { Toggle } from '../components/toggle'
 
 export default function Resume (): JSX.Element {
   const [full, setFull] = useState(false)
@@ -35,11 +36,12 @@ export default function Resume (): JSX.Element {
                             />
                         </Link>
                         <div className="justify-self-end pt-2 sm:self-center sm:pt-1">
-                            <label className="relative flex cursor-pointer gap-x-1">
-                                <input type="checkbox" checked={full} onChange={(event) => { setFull(!full) }} className="peer sr-only"></input>
-                                <div className="peer h-6 w-11 rounded-full bg-lighter-blue transition-all duration-300 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-light-blue after:transition-all peer-checked:after:translate-x-full peer-checked:after:bg-blue"></div>
-                                <div className="font-semibold opacity-30 transition-opacity duration-300 peer-checked:opacity-80">Full</div>
-                            </label>
+                            <Toggle
+                                toggleCondition={full}
+                                handleToggle={(event) => { setFull(!full) }}
+                                untoggledSymbol={{ type: 'text', text: 'Condensed' }}
+                                toggledSymbol={{ type: 'text', text: 'Full' }}
+                            />
                         </div>
                     </section>
                     <div className="flex flex-col gap-y-4 rounded-md bg-lighter-blue p-6">

@@ -1,14 +1,20 @@
 import Link from 'next/link'
+import { Toggle } from './toggle'
 
-export default function NavBar (): JSX.Element {
+interface NavBarProps {
+  handleToggleDarkMode: React.MouseEventHandler
+  isDarkMode: boolean
+}
+
+export default function NavBar ({ handleToggleDarkMode, isDarkMode }: NavBarProps): JSX.Element {
   return (
         <header className="sticky top-0 z-10 bg-blue">
           <nav className="mx-auto max-w-6xl p-6">
-            <div className="flex flex-row flex-wrap items-center justify-between">
+            <div className="flex h-10 flex-row flex-wrap items-center justify-between gap-x-6">
               {/* The logo */}
               <Link
                 href="/"
-                className="text-2xl"
+                className="h-full text-2xl"
               >
                 brucexwu
               </Link>
@@ -48,7 +54,7 @@ export default function NavBar (): JSX.Element {
               <div className={
                 'hidden ' +
                 'sm:flex sm:flex-row sm:gap-x-4 sm:items-center ' +
-                'sm:peer-checked:flex-row sm:peer-checked:basis-0 ' +
+                'sm:peer-checked:flex-row sm:peer-checked:basis-0 sm:flex-grow sm:h-full ' +
                 'peer-checked:flex peer-checked:flex-col peer-checked:basis-full '}>
                 <div className='hover:underline'>
                   <Link
@@ -72,6 +78,12 @@ export default function NavBar (): JSX.Element {
                   </Link>
                 </div>
               </div>
+              <Toggle
+                handleToggle={handleToggleDarkMode}
+                toggleCondition={isDarkMode}
+                untoggledSymbol={{ type: 'text', text: 'Light' }}
+                toggledSymbol={{ type: 'text', text: 'Dark' }}
+              />
             </div>
           </nav>
         </header>
