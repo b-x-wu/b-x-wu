@@ -96,8 +96,12 @@ export default function Home (): JSX.Element {
 
   if (data == null) {
     return (
-      <div className='w-full p-6 text-center text-lg'>
-        Loading...
+      <div className="p-6">
+        <div className='flex flex-col gap-y-8'>
+          <div className='w-full p-6 text-center text-lg'>
+            Loading...
+          </div>
+        </div>
       </div>
     )
   }
@@ -110,7 +114,7 @@ export default function Home (): JSX.Element {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="mx-auto max-w-6xl p-6 pb-36">
+      <div className="p-6">
         <div className='flex flex-col gap-y-8'>
           {
             data.results.length === 0
@@ -122,8 +126,7 @@ export default function Home (): JSX.Element {
             setEndpoint={setEndpoint}
           />
         </div>
-
-      </main>
+      </div>
     </>
   )
 }

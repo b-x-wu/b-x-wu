@@ -22,7 +22,7 @@ export default function BlogPost ({ postId, title, datePublished, content, descr
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main className="pb-36">
+            <div className="pb-36">
               <div className='flex flex-col'>
                 <div className='flex h-72 min-h-fit items-center justify-center bg-blue text-center'>
                   <div className='m-6 flex flex-col gap-y-6'>
@@ -45,7 +45,7 @@ export default function BlogPost ({ postId, title, datePublished, content, descr
                   </div>
                 </div>
               </div>
-            </main>
+            </div>
         </>
   )
 }
