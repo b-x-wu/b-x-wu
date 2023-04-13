@@ -21,7 +21,7 @@ export default function ContactButton ({ platform, href, imageSrc }: ContactButt
         width={100}
         height={100}
         alt={platform}
-        className="h-full w-full object-contain"
+        className="h-full w-full object-contain opacity-70 transition-all duration-300 dark:invert"
       />
     </Link>
   )

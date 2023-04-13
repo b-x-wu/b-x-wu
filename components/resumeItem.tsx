@@ -20,7 +20,7 @@ function TitleLink ({ title, href }: TitleLinkProps): JSX.Element {
                 height={100}
                 width={100}
                 alt="Link"
-                className="hidden sm:inline sm:h-6 sm:w-7 sm:rotate-90 sm:align-text-bottom sm:opacity-10 sm:group-hover:opacity-30"
+                className="hidden duration-300 [transition-property:filter] dark:invert sm:inline sm:h-6 sm:w-7 sm:rotate-90 sm:align-text-bottom sm:opacity-10 sm:group-hover:opacity-30"
             >
             </Image>
         </Link>

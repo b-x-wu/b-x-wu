@@ -3,7 +3,7 @@ import ContactButton from './contactButton'
 
 export default function Footer (): JSX.Element {
   return (
-        <footer className="absolute bottom-0 h-36 w-full bg-blue">
+        <footer className="absolute bottom-0 h-36 w-full bg-blue text-dim-gray transition-all duration-300 dark:bg-darkest-blue dark:text-light-gray">
           <div className="mx-auto p-6">
             <div className="text-center">
               Let&apos;s chat!
@@ -25,7 +25,7 @@ export default function Footer (): JSX.Element {
                 imageSrc="/linkedin-logo.svg"
               />
             </div>
-            <p className="text-center text-xs opacity-50">
+            <p className="text-center text-xs">
               <Link
                 href="mailto:wu.bruce.x@gmail.com"
                 aria-label="Email"

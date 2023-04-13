@@ -1,14 +1,20 @@
 import Link from 'next/link'
+import { Toggle } from './toggle'
 
-export default function NavBar (): JSX.Element {
+interface NavBarProps {
+  handleToggleDarkMode: React.MouseEventHandler
+  isDarkMode: boolean
+}
+
+export default function NavBar ({ handleToggleDarkMode, isDarkMode }: NavBarProps): JSX.Element {
   return (
-        <header className="sticky top-0 z-10 bg-blue">
+        <header className="sticky top-0 z-10 bg-blue text-dim-gray transition-all duration-300 dark:bg-darkest-blue dark:text-light-gray">
           <nav className="mx-auto max-w-6xl p-6">
-            <div className="flex flex-row flex-wrap items-center justify-between">
+            <div className="flex flex-row flex-wrap items-center justify-between gap-x-6 sm:h-10">
               {/* The logo */}
               <Link
                 href="/"
-                className="text-2xl"
+                className="h-full text-2xl"
               >
                 brucexwu
               </Link>
@@ -48,7 +54,7 @@ export default function NavBar (): JSX.Element {
               <div className={
                 'hidden ' +
                 'sm:flex sm:flex-row sm:gap-x-4 sm:items-center ' +
-                'sm:peer-checked:flex-row sm:peer-checked:basis-0 ' +
+                'sm:peer-checked:flex-row sm:peer-checked:basis-0 sm:flex-grow sm:h-full ' +
                 'peer-checked:flex peer-checked:flex-col peer-checked:basis-full '}>
                 <div className='hover:underline'>
                   <Link
@@ -71,6 +77,15 @@ export default function NavBar (): JSX.Element {
                     Resume/CV
                   </Link>
                 </div>
+              </div>
+              <div className='hidden sm:block'>
+                <Toggle
+                  handleToggle={handleToggleDarkMode}
+                  toggleCondition={isDarkMode}
+                  // untoggledSymbol={{ type: 'text', text: 'Light' }}
+                  untoggledSymbol={{ type: 'image', src: '/sun.svg', alt: 'Toggle Light Mode' }}
+                  toggledSymbol={{ type: 'image', src: '/moon.svg', alt: 'Toggle Dark Mode' }}
+                />
               </div>
             </div>
           </nav>
