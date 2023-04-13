@@ -24,13 +24,13 @@ export default function Resume (): JSX.Element {
                         aria-label="Download Resume"
                         target="_blank"
                         rel="noreferrer noopener"
-                        className="h-7 w-7 rounded-md bg-lighter-blue p-1 ring-0 transition-all duration-300 hover:ring-2"
+                        className="h-7 w-7 rounded-md bg-lighter-blue p-1 ring-0 transition-all duration-300 hover:ring-2 dark:bg-darkest-blue"
                     >
                         <Image
                             src="https://www.svgrepo.com/show/488905/download-2.svg"
                             width={100}
                             height={100}
-                            className=""
+                            className="transition-all duration-300 dark:invert"
                             alt="Download Resume"
                         />
                     </Link>
@@ -43,7 +43,7 @@ export default function Resume (): JSX.Element {
                         />
                     </div>
                 </section>
-                <div className="flex flex-col gap-y-4 rounded-md bg-lighter-blue p-6">
+                <div className="flex flex-col gap-y-4 rounded-md bg-lighter-blue p-6 text-dim-gray transition-all duration-300 dark:bg-darkest-blue dark:text-light-gray">
                     <section className="flex justify-between">
                         {/* Introduction */}
                         <div className="flex flex-wrap gap-y-1 gap-x-2">

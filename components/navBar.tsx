@@ -10,7 +10,7 @@ export default function NavBar ({ handleToggleDarkMode, isDarkMode }: NavBarProp
   return (
         <header className="sticky top-0 z-10 bg-blue text-dim-gray transition-all duration-300 dark:bg-darkest-blue dark:text-light-gray">
           <nav className="mx-auto max-w-6xl p-6">
-            <div className="flex h-10 flex-row flex-wrap items-center justify-between gap-x-6">
+            <div className="flex flex-row flex-wrap items-center justify-between gap-x-6 sm:h-10">
               {/* The logo */}
               <Link
                 href="/"
@@ -78,12 +78,14 @@ export default function NavBar ({ handleToggleDarkMode, isDarkMode }: NavBarProp
                   </Link>
                 </div>
               </div>
-              <Toggle
-                handleToggle={handleToggleDarkMode}
-                toggleCondition={isDarkMode}
-                untoggledSymbol={{ type: 'text', text: 'Light' }}
-                toggledSymbol={{ type: 'text', text: 'Dark' }}
-              />
+              <div className='hidden sm:block'>
+                <Toggle
+                  handleToggle={handleToggleDarkMode}
+                  toggleCondition={isDarkMode}
+                  untoggledSymbol={{ type: 'text', text: 'Light' }}
+                  toggledSymbol={{ type: 'text', text: 'Dark' }}
+                />
+              </div>
             </div>
           </nav>
         </header>
