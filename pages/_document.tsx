@@ -4,8 +4,11 @@ export default function Document (): JSX.Element {
   return (
     <Html lang="en">
       <Head />
-      <Main />
-      <NextScript />
+      <body>
+        <script src='/noflash.js' />
+        <Main />
+        <NextScript />
+      </body>
     </Html>
   )
 }
