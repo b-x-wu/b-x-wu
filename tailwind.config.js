@@ -11,6 +11,8 @@ module.exports = {
       square: 'square'
     },
     colors: {
+      'darkest-blue': '#000E14',
+      'darker-blue': '#001520',
       'dark-blue': '#0077B6',
       'blue': '#90E0EF',
       'light-blue': '#ADE8F4',

@@ -26,7 +26,7 @@ export const Toggle = ({ handleToggle, toggleCondition, untoggledSymbol, toggled
     if (symbol == null) { return <></> }
 
     if (symbol.type === 'text') {
-      return <div className={`font-semibold transition-opacity duration-300 ${conditionMet ? 'opacity-80' : 'opacity-30'}`}>{symbol.text}</div>
+      return <div className={`font-semibold text-dim-gray transition-all duration-300 dark:text-light-gray ${conditionMet ? 'opacity-80' : 'opacity-30'}`}>{symbol.text}</div>
     }
 
     return (
@@ -43,8 +43,8 @@ export const Toggle = ({ handleToggle, toggleCondition, untoggledSymbol, toggled
   return (
     <div className='flex cursor-pointer gap-x-2' onClick={handleToggle}>
       {symbolToHTML(untoggledSymbol, !toggleCondition)}
-      <div className='relative h-6 w-11 rounded-full bg-lighter-blue'>
-        <div className={`absolute top-[2px] left-[2px] h-5 w-5 rounded-full transition-all duration-300 ${toggleCondition ? 'translate-x-full bg-blue' : 'bg-light-blue'}`}></div>
+      <div className='relative h-6 w-11 rounded-full bg-lighter-blue transition-all duration-300 dark:bg-darker-blue dark:ring-1 dark:ring-lighter-blue'>
+        <div className={`absolute top-[2px] left-[2px] h-5 w-5 rounded-full bg-blue transition-all duration-300 ${toggleCondition ? 'translate-x-full opacity-100' : 'opacity-40'}`}></div>
       </div>
       {symbolToHTML(toggledSymbol, toggleCondition)}
     </div>

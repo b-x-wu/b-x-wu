@@ -16,15 +16,22 @@ export default function Home (): JSX.Element {
       </Head>
       <section className="mx-12 flex flex-col gap-y-4 p-6">
         { /* Introduction */ }
-        <div className="mx-auto py-4">
+        <div className="relative mx-auto py-4">
           <Image
             src="/pfp.jpg"
             alt="Picture of me"
             width={1000}
             height={1000}
-            className="mx-auto h-64 w-64 rounded-full object-cover ring-4 ring-lighter-blue"
+            className="mx-auto h-64 w-64 rounded-full object-cover ring-4 ring-lighter-blue transition-all duration-300 dark:ring-darkest-blue"
             priority={true}
           />
+          <div
+            role='img'
+            aria-label='sunglasses'
+            className='absolute top-[80px] left-[83px] text-6xl opacity-0 transition-all duration-300 dark:opacity-100'
+          >
+            😎
+          </div>
         </div>
         <h1 className='text-center text-4xl'>
           <TypedTextAnimation
