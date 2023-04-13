@@ -82,8 +82,9 @@ export default function NavBar ({ handleToggleDarkMode, isDarkMode }: NavBarProp
                 <Toggle
                   handleToggle={handleToggleDarkMode}
                   toggleCondition={isDarkMode}
-                  untoggledSymbol={{ type: 'text', text: 'Light' }}
-                  toggledSymbol={{ type: 'text', text: 'Dark' }}
+                  // untoggledSymbol={{ type: 'text', text: 'Light' }}
+                  untoggledSymbol={{ type: 'image', src: '/sun.svg', alt: 'Toggle Light Mode' }}
+                  toggledSymbol={{ type: 'image', src: '/moon.svg', alt: 'Toggle Dark Mode' }}
                 />
               </div>
             </div>
