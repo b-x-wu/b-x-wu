@@ -69,7 +69,7 @@ export default function Home (): JSX.Element {
           </span>
         </h1>
         <h2 className="text-center text-lg">
-          I&apos;m a software dev working on data and development accessibility for everyone.
+          I&apos;m a software dev interested in data and development accessibility for everyone.
         </h2>
       </section>
       <section className="mx-auto p-6">
@@ -103,10 +103,10 @@ export default function Home (): JSX.Element {
             description='A Chrome extension for swapping website color palettes'
           />
           <FeaturedProject
-            name="Web Effect Rack"
-            imagePath="/project_images/web_effect_rack.png"
-            url='https://github.com/bruce-x-wu/web-effect-rack'
-            description='A web-based Pure Data effect interface'
+            name="Graphics Engine"
+            imagePath="/project_images/graphics_engine.bmp"
+            url='https://github.com/bruce-x-wu/graphics-engine'
+            description='A 3D graphics renderer built from scratch'
           />
           <FeaturedProject
             name="brucexwu.com"
