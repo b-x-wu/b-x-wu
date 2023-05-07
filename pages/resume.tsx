@@ -192,6 +192,13 @@ export default function Resume (): JSX.Element {
                             bullets={['Technologies used: Node.js, Express, Pure Data']}
                             hidden={!full}
                         />
+                        <ResumeItem
+                            title="Graphics Engine"
+                            subtitle="A 3D graphics renderer built from scratch"
+                            titleHref='https://github.com/bruce-x-wu/graphics-engine'
+                            bullets={['Technologies used: C++']}
+                            hidden={!full}
+                        />
                     </section>
                     <section>
                         {/* Skills */}
