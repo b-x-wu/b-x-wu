@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ComponentDisplay } from '../../components/hyperplexed-components/componentDisplay'
 
 export default function HyperplexedComponents (): JSX.Element {
   return (
@@ -12,6 +13,17 @@ export default function HyperplexedComponents (): JSX.Element {
                     this project aims to convert these visual effects into <span className='font-bold'>reusable and customizable React components</span> that leverage <Link href='https://www.typescriptlang.org/' target="_blank" rel='noreferrer' className='font-bold hover:underline'>TypeScript</Link>
                     &nbsp;and <Link href='https://tailwindcss.com/' target="_blank" rel='noreferrer' className='font-bold hover:underline'>Tailwind CSS</Link>.
                 </p>
+                <ComponentDisplay
+                    width={600}
+                    height={300}
+                    codeText='import React from "react"\n\nexport const Home = ():JSX.Element => {\n\treturn <></>\n}'
+                    containerStyle={{ borderWidth: '1px', maxWidth: '100%', borderRadius: '6px' }}
+                    title='Fancy Gradient Hover Links'
+                    titleHref='https://www.youtube.com/watch?v=oJYFRZ4cj2Q'
+                    titleStyle={{ fontSize: '1.5rem', lineHeight: '2rem', fontWeight: 'bold' }}
+                >
+
+                </ComponentDisplay>
             </div>
         </div>
   )
