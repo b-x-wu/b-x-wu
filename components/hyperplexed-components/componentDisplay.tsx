@@ -1,8 +1,8 @@
 /* eslint-disable tailwindcss/no-custom-classname */
 import type React from 'react'
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import tsx from 'react-syntax-highlighter/dist/esm/languages/prism/tsx'
+import { materialDark } from 'react-syntax-highlighter/dist/cjs/styles/prism'
+import tsx from 'react-syntax-highlighter/dist/cjs/languages/prism/tsx'
 
 SyntaxHighlighter.registerLanguage('tsx', tsx)
 

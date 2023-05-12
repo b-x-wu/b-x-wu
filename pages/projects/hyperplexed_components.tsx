@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ComponentDisplay } from '../../components/hyperplexed-components/componentDisplay'
+import { FancyGradientHoverLinks } from '../../components/hyperplexed-components/fancyGradientHoverLinks'
 
 export default function HyperplexedComponents (): JSX.Element {
   return (
@@ -17,12 +18,29 @@ export default function HyperplexedComponents (): JSX.Element {
                     width={600}
                     height={300}
                     codeText='import React from "react"\n\nexport const Home = ():JSX.Element => {\n\treturn <></>\n}'
-                    containerStyle={{ borderWidth: '1px', maxWidth: '100%', borderRadius: '6px' }}
+                    containerStyle={{ borderWidth: '1px', maxWidth: '100%' }}
                     title='Fancy Gradient Hover Links'
                     titleHref='https://www.youtube.com/watch?v=oJYFRZ4cj2Q'
-                    titleStyle={{ fontSize: '1.5rem', lineHeight: '2rem', fontWeight: 'bold' }}
+                    titleStyle={{ fontSize: '1.5rem', lineHeight: '2rem', fontWeight: 'bold', maxWidth: '100%' }}
                 >
-
+                    <div className='flex h-full flex-col justify-center bg-[#101020] text-2xl font-bold'>
+                        <FancyGradientHoverLinks
+                            linkInfos={[
+                              {
+                                text: 'Video',
+                                href: 'https://www.youtube.com/watch?v=oJYFRZ4cj2Q'
+                              },
+                              {
+                                text: 'Channel',
+                                href: 'https://www.youtube.com/@Hyperplexed'
+                              },
+                              {
+                                text: 'CodePen',
+                                href: 'https://codepen.io/Hyperplexed/pen/wvmvqmx'
+                              }
+                            ]}
+                        />
+                    </div>
                 </ComponentDisplay>
             </div>
         </div>
