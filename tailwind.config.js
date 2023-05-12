@@ -19,7 +19,8 @@ module.exports = {
       'lighter-blue': '#E8FBFF',
       'glacier': '#EBF4FF',
       'dim-gray': '#454545',
-      'light-gray': '#DBE9F4'
+      'light-gray': '#DBE9F4',
+      'transparent': '#0000'
     }
   },
   darkMode: 'class',

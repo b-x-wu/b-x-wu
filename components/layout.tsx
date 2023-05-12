@@ -1,6 +1,6 @@
 import NavBar from './navBar'
 import Footer from './footer'
-// import { useState } from 'react'
+// @ts-expect-error use dark mode has no declared types
 import useDarkMode from '@fisch0920/use-dark-mode'
 
 interface LayoutProps {
