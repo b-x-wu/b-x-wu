@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ComponentDisplay } from '../../components/hyperplexed-components/componentDisplay'
 import { FancyGradientHoverLinks } from '../../components/hyperplexed-components/fancyGradientHoverLinks'
 import { MagicalText } from '../../components/hyperplexed-components/magicalText'
+import { SuperHeaderSlider } from '../../components/hyperplexed-components/superHeaderSlider'
 
 export default function HyperplexedComponents (): JSX.Element {
   return (
@@ -49,13 +50,42 @@ export default function HyperplexedComponents (): JSX.Element {
                     codeText='import React from "react"\n\nexport const Home = ():JSX.Element => {\n\treturn <></>\n}'
                     containerStyle={{ borderWidth: '1px', maxWidth: '100%' }}
                     title='Magical Text Effect'
-                    titleHref='https://www.youtube.com/watch?v=yu0Cm4BqQv0&t=103s'
+                    titleHref='https://www.youtube.com/watch?v=yu0Cm4BqQv0'
                     titleStyle={{ fontSize: '1.5rem', lineHeight: '2rem', fontWeight: 'bold', maxWidth: '100%' }}
                 >
                     <div className='flex h-full flex-col justify-center bg-[#101010] p-10 text-center text-2xl font-medium'>
                         <div>
                             Maybe the real React components were the <MagicalText>friends</MagicalText> we made along the way.
                         </div>
+                    </div>
+                </ComponentDisplay>
+                <ComponentDisplay
+                    width={600}
+                    height={300}
+                    codeText='import React from "react"\n\nexport const Home = ():JSX.Element => {\n\treturn <></>\n}'
+                    containerStyle={{ borderWidth: '1px', maxWidth: '100%' }}
+                    title='Super Header Slider'
+                    titleHref='https://www.youtube.com/watch?v=zGKNMm4L-r4'
+                    titleStyle={{ fontSize: '1.5rem', lineHeight: '2rem', fontWeight: 'bold', maxWidth: '100%' }}
+                >
+                    <div className='flex h-full flex-col justify-center bg-[#101010] text-4xl'>
+                        <SuperHeaderSlider
+                            leftChildren={
+                                <h2 className='w-full pl-2'>
+                                    Good luck,&nbsp;
+                                    <span className='font-bold'>high five!</span>
+                                    &nbsp;
+                                    <span role='img' aria-label='high five'>✋</span>
+                                </h2>
+                            }
+                            rightChildren={
+                                <h2 className='w-full pl-2'>
+                                    Good luck,&nbsp;
+                                    <span className='font-bold'>have fun!</span>
+                                </h2>
+                            }
+                            fullWidth='100%'
+                        />
                     </div>
                 </ComponentDisplay>
             </div>
