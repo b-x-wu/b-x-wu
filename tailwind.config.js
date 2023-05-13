@@ -5,7 +5,22 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+          'magicalText-background-pan': {
+              '0%': { backgroundPosition: '0% center' },
+              '100%': { backgroundPosition: '-200% center' },
+          },
+          'magicalText-scale': {
+              '0%,100%': { 'transform': 'scale(0)' },
+              '50%': { 'transform': 'scale(1)' }
+          },
+          'magicalText-rotate': {
+              '0%': { 'transform': 'rotate(0deg)' },
+              '100%': { 'transform': 'rotate(180deg)' }
+          }
+      }
+    },
     listStyleType: {
       decimal: 'decimal',
       square: 'square'

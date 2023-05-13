@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { ComponentDisplay } from '../../components/hyperplexed-components/componentDisplay'
 import { FancyGradientHoverLinks } from '../../components/hyperplexed-components/fancyGradientHoverLinks'
+import { MagicalText } from '../../components/hyperplexed-components/magicalText'
 
 export default function HyperplexedComponents (): JSX.Element {
   return (
-        <div className="mx-auto flex flex-col items-center gap-y-8">
+        <div className="mx-auto flex flex-col items-center gap-y-8 pb-10">
             <div className='flex w-[60%] flex-col gap-y-10 pt-10 pb-0'>
                 <h1 className='w-full text-center text-4xl font-bold'><span className='bg-gradient-to-t from-[#28cdbb] to-[#2576de] bg-clip-text text-transparent'>Hyperplexed</span> Components</h1>
                 <p className='leading-loose'>
@@ -40,6 +41,21 @@ export default function HyperplexedComponents (): JSX.Element {
                               }
                             ]}
                         />
+                    </div>
+                </ComponentDisplay>
+                <ComponentDisplay
+                    width={600}
+                    height={300}
+                    codeText='import React from "react"\n\nexport const Home = ():JSX.Element => {\n\treturn <></>\n}'
+                    containerStyle={{ borderWidth: '1px', maxWidth: '100%' }}
+                    title='Magical Text Effect'
+                    titleHref='https://www.youtube.com/watch?v=yu0Cm4BqQv0&t=103s'
+                    titleStyle={{ fontSize: '1.5rem', lineHeight: '2rem', fontWeight: 'bold', maxWidth: '100%' }}
+                >
+                    <div className='flex h-full flex-col justify-center bg-[#101010] p-10 text-center text-2xl font-medium'>
+                        <div>
+                            Maybe the real React components were the <MagicalText>friends</MagicalText> we made along the way.
+                        </div>
                     </div>
                 </ComponentDisplay>
             </div>
