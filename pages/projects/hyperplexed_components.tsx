@@ -25,7 +25,7 @@ export default function HyperplexedComponents (): JSX.Element {
                     titleHref='https://www.youtube.com/watch?v=oJYFRZ4cj2Q'
                     titleStyle={{ fontSize: '1.5rem', lineHeight: '2rem', fontWeight: 'bold', maxWidth: '100%' }}
                 >
-                    <div className='flex h-full flex-col justify-center bg-[#101020] text-2xl font-bold'>
+                    <div className='flex h-full flex-col justify-center bg-[#101020] font-titanOne text-2xl'>
                         <FancyGradientHoverLinks
                             linkInfos={[
                               {

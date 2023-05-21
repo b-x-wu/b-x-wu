@@ -19,6 +19,10 @@ module.exports = {
               '0%': { 'transform': 'rotate(0deg)' },
               '100%': { 'transform': 'rotate(180deg)' }
           }
+      },
+      fontFamily: {
+        titanOne: ['var(--font-titan-one)'],
+        shareTechMono: ['var(--font-share-tech-mono)']
       }
     },
     listStyleType: {
