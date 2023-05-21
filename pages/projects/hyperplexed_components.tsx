@@ -19,7 +19,26 @@ export default function HyperplexedComponents (): JSX.Element {
                 <ComponentDisplay
                     width={600}
                     height={300}
-                    codeText='import React from "react"\n\nexport const Home = ():JSX.Element => {\n\treturn <></>\n}'
+                    codeText={
+`<div className='flex h-full flex-col justify-center bg-[#101020] font-titanOne text-2xl'>
+  <FancyGradientHoverLinks
+    linkInfos={[
+    {
+      text: 'Video',
+      href: 'https://www.youtube.com/watch?v=oJYFRZ4cj2Q'
+    },
+    {
+      text: 'Channel',
+      href: 'https://www.youtube.com/@Hyperplexed'
+    },
+    {
+      text: 'CodePen',
+      href: 'https://codepen.io/Hyperplexed/pen/wvmvqmx'
+    }
+    ]}
+  />
+</div>`
+                    }
                     containerStyle={{ borderWidth: '1px', maxWidth: '100%' }}
                     title='Fancy Gradient Hover Links'
                     titleHref='https://www.youtube.com/watch?v=oJYFRZ4cj2Q'
@@ -47,7 +66,13 @@ export default function HyperplexedComponents (): JSX.Element {
                 <ComponentDisplay
                     width={600}
                     height={300}
-                    codeText='import React from "react"\n\nexport const Home = ():JSX.Element => {\n\treturn <></>\n}'
+                    codeText={
+`<div className='flex h-full flex-col justify-center bg-[#101010] p-10 text-center text-2xl font-medium'>
+  <div>
+    Maybe the real React components were the <MagicalText>friends</MagicalText> we made along the way.
+  </div>
+</div>`
+                    }
                     containerStyle={{ borderWidth: '1px', maxWidth: '100%' }}
                     title='Magical Text Effect'
                     titleHref='https://www.youtube.com/watch?v=yu0Cm4BqQv0'
@@ -62,7 +87,27 @@ export default function HyperplexedComponents (): JSX.Element {
                 <ComponentDisplay
                     width={600}
                     height={300}
-                    codeText='import React from "react"\n\nexport const Home = ():JSX.Element => {\n\treturn <></>\n}'
+                    codeText={
+`<div className='flex h-full flex-col justify-center bg-[#101010] text-4xl'>
+  <SuperHeaderSlider
+    leftChildren={
+      <h2 className='w-full pl-2'>
+        Good luck,&nbsp;
+        <span className='font-bold'>high five!</span>
+        &nbsp;
+        <span role='img' aria-label='high five'>✋</span>
+      </h2>
+    }
+    rightChildren={
+      <h2 className='w-full pl-2'>
+        Good luck,&nbsp;
+        <span className='font-bold'>have fun!</span>
+      </h2>
+    }
+    fullWidth='100%'
+  />
+</div>`
+                    }
                     containerStyle={{ borderWidth: '1px', maxWidth: '100%' }}
                     title='Super Header Slider'
                     titleHref='https://www.youtube.com/watch?v=zGKNMm4L-r4'
