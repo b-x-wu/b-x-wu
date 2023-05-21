@@ -20,7 +20,7 @@ export default function HyperplexedComponents (): JSX.Element {
                     width={600}
                     height={300}
                     codeText={
-`<div className='flex h-full flex-col justify-center bg-[#101020] font-titanOne text-2xl'>
+`<div className='flex h-full flex-col justify-center bg-[#101020] font-shareTechMono text-2xl'>
   <FancyGradientHoverLinks
     linkInfos={[
     {
@@ -44,7 +44,7 @@ export default function HyperplexedComponents (): JSX.Element {
                     titleHref='https://www.youtube.com/watch?v=oJYFRZ4cj2Q'
                     titleStyle={{ fontSize: '1.5rem', lineHeight: '2rem', fontWeight: 'bold', maxWidth: '100%' }}
                 >
-                    <div className='flex h-full flex-col justify-center bg-[#101020] font-titanOne text-2xl'>
+                    <div className='flex h-full flex-col justify-center bg-[#101020] font-shareTechMono text-2xl font-bold'>
                         <FancyGradientHoverLinks
                             linkInfos={[
                               {
@@ -93,7 +93,7 @@ export default function HyperplexedComponents (): JSX.Element {
     leftChildren={
       <h2 className='w-full pl-2'>
         Good luck,&nbsp;
-        <span className='font-bold'>high five!</span>
+        <span className='font-titanOne'>high five!</span>
         &nbsp;
         <span role='img' aria-label='high five'>✋</span>
       </h2>
@@ -101,7 +101,7 @@ export default function HyperplexedComponents (): JSX.Element {
     rightChildren={
       <h2 className='w-full pl-2'>
         Good luck,&nbsp;
-        <span className='font-bold'>have fun!</span>
+        <span className='font-titanOne'>have fun!</span>
       </h2>
     }
     fullWidth='100%'
@@ -118,7 +118,7 @@ export default function HyperplexedComponents (): JSX.Element {
                             leftChildren={
                                 <h2 className='w-full pl-2'>
                                     Good luck,&nbsp;
-                                    <span className='font-bold'>high five!</span>
+                                    <span className='font-titanOne'>high five!</span>
                                     &nbsp;
                                     <span role='img' aria-label='high five'>✋</span>
                                 </h2>
@@ -126,7 +126,7 @@ export default function HyperplexedComponents (): JSX.Element {
                             rightChildren={
                                 <h2 className='w-full pl-2'>
                                     Good luck,&nbsp;
-                                    <span className='font-bold'>have fun!</span>
+                                    <span className='font-titanOne'>have fun!</span>
                                 </h2>
                             }
                             fullWidth='100%'

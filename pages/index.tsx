@@ -79,10 +79,10 @@ export default function Home (): JSX.Element {
         </h1>
         <div className="grid grid-cols-1 gap-6 py-6 sm:grid-cols-3">
           <FeaturedProject
-            name="ULC Schedule Maker V2"
-            imagePath="/project_images/usm.png"
-            url='https://github.com/ulcnyu/ulc-schedule-maker-v2/tree/polish'
-            description='A web app that aggregates tutoring schedules'
+            name="Hyperplexed Components"
+            imagePath="/project_images/hyperplexed_components.gif"
+            url='/projects/hyperplexed_components'
+            description='Customizable front-end visual effects with React and Tailwind CSS'
           />
           <FeaturedProject
             name="Twit-Scraper"
