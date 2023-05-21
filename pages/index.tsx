@@ -28,7 +28,7 @@ export default function Home (): JSX.Element {
           <div
             role='img'
             aria-label='sunglasses'
-            className='absolute top-[80px] left-[83px] text-6xl opacity-0 transition-all duration-300 dark:opacity-100'
+            className='absolute top-[80px] left-[83px] hidden text-6xl opacity-0 transition-all duration-300 dark:opacity-100 sm:block'
           >
             😎
           </div>
