@@ -3,14 +3,12 @@ import { SquareValue, squareValueToString } from '../../types/crossword-helper/t
 
 export interface SquareComponentProps {
   squareValue: SquareValue
-  width?: string | number
-  height?: string | number
   handleClick?: React.MouseEventHandler<HTMLDivElement>
   isSelected: boolean
   isInSelectedWord: boolean
 }
 
-export const SquareComponent = ({ squareValue, width, height, handleClick, isSelected, isInSelectedWord }: SquareComponentProps): JSX.Element => {
+export const SquareComponent = ({ squareValue, handleClick, isSelected, isInSelectedWord }: SquareComponentProps): JSX.Element => {
   const style: React.CSSProperties = {}
 
   // TODO: this is definitely a comically bad way to do this
@@ -22,13 +20,11 @@ export const SquareComponent = ({ squareValue, width, height, handleClick, isSel
     style.backgroundColor = 'rgb(186 230 253)'
   } else if (squareValue === SquareValue.DARK_SQUARE) {
     style.backgroundColor = 'rgb(8 47 73)'
-  } else {
-    style.backgroundColor = 'rgb(243 244 246)'
   }
 
   return (
         <div
-            className="flex h-full w-full items-center justify-center border-2 border-[#000] text-center"
+            className="flex h-full w-full items-center justify-center bg-glacier text-center text-darkest-blue"
             onClick={handleClick}
             style={style}
         >

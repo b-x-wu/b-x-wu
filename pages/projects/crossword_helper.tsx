@@ -2,7 +2,7 @@ import { CrosswordComponent } from '../../components/crossword-helper/crosswordC
 import Crossword from '../../types/crossword-helper/crossword'
 
 export default function CrosswordHelper (): JSX.Element {
-  const crossword: Crossword = new Crossword(16, 16)
+  const crossword: Crossword = new Crossword(5, 5)
 
   return (
     <div className='py-12'>

@@ -67,52 +67,58 @@ export const WordMenuComponent = ({ horizontalWord, verticalWord, squareValue, h
     const changeClueHandler = orientation === Orientation.HORIZONTAL ? handleChangeHorizontalClue : handleChangeVerticalClue
     const wordString = word.squareValues.map((squareValue) => squareValueToString(squareValue)).join('')
     return (
-            <div className="flex flex-col gap-y-2 bg-[rgb(243,244,246)] p-4">
+            <div className="flex flex-col gap-y-8 bg-lighter-blue p-4 transition-colors duration-300 dark:bg-darkest-blue">
                 <h2 className="text-lg">{orientationString} Word: {wordString}</h2>
                 <form className="flex flex-col gap-y-2">
                     <label
                         htmlFor={`${orientationString}-clue-input`}
                     >{orientationString} Clue:</label>
                     <input
-                        className="h-8 w-full rounded-md border border-[rgb(107,114,128)] bg-[#FFF] p-2"
+                        className="h-8 w-full border-2 border-darkest-blue bg-[#FFF] p-2"
                         value={clueInForm}
                         onChange={changeClueHandler}
                     ></input>
-                    <HintComponent
-                        word={wordString}
-                        clue={word.clue}
-                        squarePosition={squarePosition}
-                        orientation={orientation}
-                        handleWordHintSelect={handleWordHintSelect}
-                        handleClueHintSelect={handleClueHintSelect}
-                    />
                 </form>
+                <HintComponent
+                    word={wordString}
+                    clue={word.clue}
+                    squarePosition={squarePosition}
+                    orientation={orientation}
+                    handleWordHintSelect={handleWordHintSelect}
+                    handleClueHintSelect={handleClueHintSelect}
+                />
             </div>
     )
   }
 
   return (
-        <div className="m-6 flex flex-col gap-y-6">
-            <form className="flex flex-col gap-y-6 bg-[rgb(243,244,246)] p-4">
-                <div className="flex flex-col gap-y-1">
+        <div className="m-6 flex flex-col gap-y-6 text-darkest-blue dark:text-glacier">
+            <form className="flex flex-col gap-y-6 bg-lighter-blue p-4 transition-colors duration-300 dark:bg-darkest-blue">
+                <div className="flex flex-col gap-y-2">
                     <label
                         htmlFor="square-value-input"
-                    >Square Value</label>
+                        className='text-xl'
+                    >
+                        Square Value
+                    </label>
                     <input
                         id="square-value-input"
-                        className="h-10 w-10 rounded-md border border-[rgb(107,114,128)] bg-[#FFF] p-2 text-center text-lg"
+                        className="h-10 w-10 border-2 border-darkest-blue bg-[#FFF] p-2 text-center text-lg text-darkest-blue"
                         value={squareValueInForm}
                         disabled={isDarkSquareInForm}
                         type="text"
                         onChange={handleSquareValueInFormChange}
                     ></input>
                 </div>
-                <div className="flex flex-col gap-y-1">
+                <div className="flex flex-col gap-y-2">
                     <label
                         htmlFor="is-dark-square-checkbox"
-                    >Toggle Dark Square</label>
+                        className='text-lg'
+                    >
+                        Toggle Dark Square
+                    </label>
                     <input
-                        className="h-6 w-6 border border-[rgb(209,213,219)] bg-[rgb(243,244,246)]"
+                        className="h-6 w-6"
                         id="is-dark-square-checkbox"
                         type="checkbox"
                         checked={isDarkSquareInForm}

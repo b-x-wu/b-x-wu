@@ -3,7 +3,6 @@ import type React from 'react'
 import { SquareComponent, type SquareComponentProps } from './squareComponent'
 import Crossword from '../../types/crossword-helper/crossword'
 import { type Square, type WordPosition } from '../../types/crossword-helper/types'
-import { useState } from 'react'
 
 interface BoardComponentProps {
   width: number
@@ -17,10 +16,6 @@ interface BoardComponentProps {
 }
 
 export const BoardComponent = ({ width, height, squares, selectedHorizontalWordPosition, selectedVerticalWordPosition, selectedSquare, handleClickSquare, componentWidth }: BoardComponentProps): JSX.Element => {
-  const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null)
-
-  //   const containerRef = useRef<HTMLDivElement | null>(null)
-
   const squarePositionsInSelectedHorizontalWord = selectedHorizontalWordPosition == null ? [] : Crossword.wordPositionToSquarePositions(selectedHorizontalWordPosition)
   const squarePositionsInSelectedVerticalWord = selectedVerticalWordPosition == null ? [] : Crossword.wordPositionToSquarePositions(selectedVerticalWordPosition)
   const squarePositionsInSelectedWords = [...squarePositionsInSelectedHorizontalWord, ...squarePositionsInSelectedVerticalWord]
@@ -34,8 +29,6 @@ export const BoardComponent = ({ width, height, squares, selectedHorizontalWordP
         <SquareComponent
             key={(square.position.x << 13) + square.position.y}
             squareValue={square.value}
-            width={containerRef == null ? 0 : `calc(${containerRef.clientWidth}px/${width})`}
-            height={containerRef == null ? 0 : `calc(${containerRef.clientHeight}px/${width})`}
             handleClick={handleClickSquare(square)}
             isSelected={selectedSquare != null && selectedSquare.position.x === square.position.x && selectedSquare.position.y === square.position.y}
             isInSelectedWord={isInSelectedWord}
@@ -52,7 +45,7 @@ export const BoardComponent = ({ width, height, squares, selectedHorizontalWordP
 
   return (
         <>
-            <div className='mx-auto grid aspect-square' style={styles} ref={newRef => { setContainerRef(newRef) }}>
+            <div className='mx-auto grid aspect-square gap-0.5 bg-darkest-blue p-0.5 transition-colors duration-300' style={styles} >
                 {squareComponents}
             </div>
         </>

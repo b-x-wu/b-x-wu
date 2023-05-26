@@ -58,7 +58,7 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
       return (
                 <div
                     key={clueIdx}
-                    className='cursor-pointer border-2 border-darker-blue p-1'
+                    className='cursor-pointer bg-lighter-blue p-2 text-darkest-blue transition-colors duration-300 hover:underline dark:bg-darkest-blue dark:text-glacier'
                     onClick={(event) => {
                       props.handleWordHintSelect(props.squarePosition, props.orientation, wordHint.word)(event)
                       props.handleClueHintSelect(props.squarePosition, props.orientation, clue)(event)
@@ -70,8 +70,8 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
     })
     return (
             <div className='flex flex-row gap-x-8' key={wordHintIdx}>
-                <div className='h-full w-1/6 cursor-pointer' onClick={props.handleWordHintSelect(props.squarePosition, props.orientation, wordHint.word)}>{wordHint.word}</div>
-                <div className='h-fit max-h-24 w-full overflow-auto bg-lighter-blue'>
+                <div className='h-full w-1/6 cursor-pointer hover:underline' onClick={props.handleWordHintSelect(props.squarePosition, props.orientation, wordHint.word)}>{wordHint.word}</div>
+                <div className='flex h-fit max-h-36 w-full flex-col gap-0.5 overflow-auto bg-darkest-blue p-0.5 transition-colors duration-300 dark:bg-glacier'>
                     {clueElements}
                 </div>
             </div>
@@ -80,7 +80,7 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
 
   const clueHintElements = clueHints.map((clue, clueIdx) => {
     return (
-            <div className='cursor-pointer border-2 border-darker-blue p-1' onClick={props.handleClueHintSelect(props.squarePosition, props.orientation, clue)} key={clueIdx}>{clue}</div>
+            <div className='cursor-pointer bg-lighter-blue p-2 text-darkest-blue transition-colors duration-300 hover:underline dark:bg-darkest-blue dark:text-glacier' onClick={props.handleClueHintSelect(props.squarePosition, props.orientation, clue)} key={clueIdx}>{clue}</div>
     )
   })
 
@@ -100,7 +100,7 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
               ? <></>
               : <div className='flex flex-col gap-y-4'>
                     <div>Clue Hints</div>
-                    <div className='h-fit w-full bg-lighter-blue'>
+                    <div className='flex h-fit w-full flex-col gap-0.5 overflow-auto bg-darkest-blue p-0.5 transition-colors duration-300 dark:bg-glacier'>
                         {clueHintElements}
                     </div>
                 </div>
