@@ -23,7 +23,7 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
   useEffect(() => {
     if (props.word.includes('_')) {
       // still need to finish the word. look for word hints
-      fetch(`http://localhost:3000/word_hint?word=${props.word}`).then(async (res) => {
+      fetch(`/api/crossword_helper/word_hint?word=${props.word}`).then(async (res) => {
         return await res.json()
       }).then((data: WordHint[]) => {
         setClueHints([])
@@ -39,7 +39,7 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
 
     // word is complete. look only for clues
     if (props.clue === '') {
-      fetch(`http://localhost:3000/clue_hint?word=${props.word}`).then(async (res) => {
+      fetch(`/api/crossword_helper/clue_hint?word=${props.word}`).then(async (res) => {
         return await res.json()
       }).then((data: string[]) => {
         setWordHints([])

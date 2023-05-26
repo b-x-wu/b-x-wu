@@ -11,13 +11,7 @@ export interface SquareComponentProps {
 }
 
 export const SquareComponent = ({ squareValue, width, height, handleClick, isSelected, isInSelectedWord }: SquareComponentProps): JSX.Element => {
-  const componentWidth = width == null ? '5em' : (typeof width === 'string' ? width : `${width}px`)
-  const componentHeight = height == null ? '5em' : (typeof height === 'string' ? height : `${height}px`)
-
-  const style: React.CSSProperties = {
-    width: componentWidth,
-    height: componentHeight
-  }
+  const style: React.CSSProperties = {}
 
   // TODO: this is definitely a comically bad way to do this
   if (isSelected && squareValue === SquareValue.DARK_SQUARE) {
@@ -34,8 +28,9 @@ export const SquareComponent = ({ squareValue, width, height, handleClick, isSel
 
   return (
         <div
-            className="flex items-center justify-center border-2 border-[#000] text-center"
+            className="flex h-full w-full items-center justify-center border-2 border-[#000] text-center"
             onClick={handleClick}
+            style={style}
         >
             <div>
                 {squareValue === SquareValue.DARK_SQUARE ? '' : squareValueToString(squareValue)}
