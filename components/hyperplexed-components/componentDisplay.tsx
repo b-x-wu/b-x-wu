@@ -41,15 +41,17 @@ export const ComponentDisplay = ({
             {
                 titleNode ?? <></>
             }
-            <div style={{ width: widthString, height: heightString, margin: 0, ...containerStyle }}>
+            <div style={{ width: widthString, height: heightString, margin: 0, ...containerStyle }} className='ring-4 ring-lighter-blue transition-all duration-300 dark:ring-darkest-blue'>
                 {children}
             </div>
             {
                 codeText == null
                   ? <></>
-                  : <SyntaxHighlighter language="tsx" style={materialDark} customStyle={{ width: widthString, height: heightString, margin: 0, ...containerStyle }} wrapLongLines={true}>
-                    {codeText}
-                </SyntaxHighlighter>
+                  : <div className='h-fit w-fit ring-4 ring-lighter-blue transition-all duration-300 dark:ring-darkest-blue'>
+                      <SyntaxHighlighter language="tsx" style={materialDark} customStyle={{ width: widthString, height: heightString, margin: 0, ...containerStyle }} wrapLongLines={true}>
+                        {codeText}
+                      </SyntaxHighlighter>
+                    </div>
             }
         </div>
   )

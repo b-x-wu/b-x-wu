@@ -47,9 +47,8 @@ const FancyGradientHoverLink = ({
 
   const computedLinkStyle: React.CSSProperties = {
     display: 'block',
-    borderTopWidth: '1px',
-    borderBottomWidth: isBottomLink ? '1px' : '0',
-    borderColor,
+    borderTopWidth: '2px',
+    borderBottomWidth: isBottomLink ? '2px' : '0',
     position: 'relative',
     padding: '1.5rem'
   }
@@ -70,6 +69,7 @@ const FancyGradientHoverLink = ({
                 href={linkInfo.href}
                 target="_blank"
                 rel="noreferrer"
+                className='border-lighter-blue transition-colors duration-300 dark:border-darkest-blue'
             >
                 {linkInfo.text}
             </Link>
