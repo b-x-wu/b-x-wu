@@ -23,13 +23,6 @@ const shuffle = <T,>(array: T[]): T[] => {
 }
 
 const uri = `mongodb+srv://${process.env.DB_USER ?? 'user'}:${process.env.DB_PASSWORD ?? 'pass'}@cluster0.cftdtes.mongodb.net/?retryWrites=true&w=majority`
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true
-  }
-})
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse): Promise<void> {
   if (req.method !== 'GET') {
@@ -45,6 +38,14 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   if (typeof req.query.word !== 'string') {
     req.query.word = req.query.word.join('')
   }
+
+  const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true
+    }
+  })
 
   try {
     await client.connect()
