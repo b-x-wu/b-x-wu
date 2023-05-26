@@ -8,9 +8,10 @@ import { type OrientedDictionary } from '../../types/crossword-helper/dictionary
 
 interface CrosswordComponentProps {
   crossword: Crossword
+  componentWidth: string
 }
 
-export const CrosswordComponent = ({ crossword }: CrosswordComponentProps): JSX.Element => {
+export const CrosswordComponent = ({ crossword, componentWidth }: CrosswordComponentProps): JSX.Element => {
   const [selectedSquare, setSelectedSquare] = useState<null | Square>(null)
   const [selectedHorizontalWordPosition, setSelectedHorizontalWordPosition] = useState<null | WordPosition>(null)
   const [selectedVerticalWordPosition, setSelectedVerticalWordPosition] = useState<null | WordPosition>(null)
@@ -144,6 +145,7 @@ export const CrosswordComponent = ({ crossword }: CrosswordComponentProps): JSX.
                 selectedVerticalWordPosition={selectedVerticalWordPosition}
                 selectedSquare={selectedSquare}
                 handleClickSquare={handleClickSquare}
+                componentWidth={componentWidth}
             />
             {
                 selectedSquare == null
