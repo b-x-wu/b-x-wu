@@ -67,14 +67,14 @@ export const WordMenuComponent = ({ horizontalWord, verticalWord, squareValue, h
     const changeClueHandler = orientation === Orientation.HORIZONTAL ? handleChangeHorizontalClue : handleChangeVerticalClue
     const wordString = word.squareValues.map((squareValue) => squareValueToString(squareValue)).join('')
     return (
-            <div className="flex flex-col gap-y-8 bg-lighter-blue p-4 transition-colors duration-300 dark:bg-darkest-blue">
+            <div className="flex flex-col gap-y-8 bg-lighter-blue p-4 transition-colors duration-300 dark:bg-darkest-blue xl:grow xl:basis-1/3 xl:overflow-y-scroll">
                 <h2 className="text-lg">{orientationString} Word: {wordString}</h2>
                 <form className="flex flex-col gap-y-2">
                     <label
                         htmlFor={`${orientationString}-clue-input`}
                     >{orientationString} Clue:</label>
                     <input
-                        className="h-8 w-full border-2 border-darkest-blue bg-[#FFF] p-2"
+                        className="h-8 w-full border-2 border-darkest-blue bg-[#FFF] p-2 text-darkest-blue"
                         value={clueInForm}
                         onChange={changeClueHandler}
                     ></input>
@@ -92,8 +92,8 @@ export const WordMenuComponent = ({ horizontalWord, verticalWord, squareValue, h
   }
 
   return (
-        <div className="m-6 flex flex-col gap-y-6 text-darkest-blue dark:text-glacier">
-            <form className="flex flex-col gap-y-6 bg-lighter-blue p-4 transition-colors duration-300 dark:bg-darkest-blue">
+        <div className="m-6 flex flex-col gap-y-6 text-darkest-blue dark:text-glacier xl:my-0 xl:h-[70vh] xl:w-full">
+            <form className="flex flex-col gap-y-6 bg-lighter-blue p-4 transition-colors duration-300 dark:bg-darkest-blue xl:grow-0">
                 <div className="flex flex-col gap-y-2">
                     <label
                         htmlFor="square-value-input"

@@ -8,10 +8,9 @@ import { type OrientedDictionary } from '../../types/crossword-helper/dictionary
 
 interface CrosswordComponentProps {
   crossword: Crossword
-  componentWidth: string
 }
 
-export const CrosswordComponent = ({ crossword, componentWidth }: CrosswordComponentProps): JSX.Element => {
+export const CrosswordComponent = ({ crossword }: CrosswordComponentProps): JSX.Element => {
   const [selectedSquare, setSelectedSquare] = useState<null | Square>(null)
   const [selectedHorizontalWordPosition, setSelectedHorizontalWordPosition] = useState<null | WordPosition>(null)
   const [selectedVerticalWordPosition, setSelectedVerticalWordPosition] = useState<null | WordPosition>(null)
@@ -136,7 +135,7 @@ export const CrosswordComponent = ({ crossword, componentWidth }: CrosswordCompo
   }
 
   return (
-        <>
+        <div className='flex flex-col xl:flex-row'>
             <BoardComponent
                 width={crossword.width}
                 height={crossword.height}
@@ -145,23 +144,22 @@ export const CrosswordComponent = ({ crossword, componentWidth }: CrosswordCompo
                 selectedVerticalWordPosition={selectedVerticalWordPosition}
                 selectedSquare={selectedSquare}
                 handleClickSquare={handleClickSquare}
-                componentWidth={componentWidth}
             />
             {
                 selectedSquare == null
                   ? <></>
                   : <WordMenuComponent
-                    horizontalWord={computeSelectedWord(selectedHorizontalWordPosition, Orientation.HORIZONTAL)}
-                    verticalWord={computeSelectedWord(selectedVerticalWordPosition, Orientation.VERTICAL)}
-                    handleChangeHorizontalClue={handleChangeHorizontalClue}
-                    handleChangeVerticalClue={handleChangeVerticalClue}
-                    handleMutateSquare={handleMutateSquare}
-                    squareValue={selectedSquare.value}
-                    squarePosition={selectedSquare.position}
-                    handleWordHintSelect={handleWordHintSelect}
-                    handleClueHintSelect={handleClueHintSelect}
-                />
+                      horizontalWord={computeSelectedWord(selectedHorizontalWordPosition, Orientation.HORIZONTAL)}
+                      verticalWord={computeSelectedWord(selectedVerticalWordPosition, Orientation.VERTICAL)}
+                      handleChangeHorizontalClue={handleChangeHorizontalClue}
+                      handleChangeVerticalClue={handleChangeVerticalClue}
+                      handleMutateSquare={handleMutateSquare}
+                      squareValue={selectedSquare.value}
+                      squarePosition={selectedSquare.position}
+                      handleWordHintSelect={handleWordHintSelect}
+                      handleClueHintSelect={handleClueHintSelect}
+                    />
             }
-        </>
+        </div>
   )
 }

@@ -51,7 +51,7 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
     // word is complete and clue is present. do nothing
     setWordHints([])
     setClueHints([])
-  }, [props.word, props.clue])
+  }, [props.word, props.clue, props.squarePosition])
 
   const wordHintElements = wordHints.map((wordHint, wordHintIdx) => {
     const clueElements = wordHint.clues.map((clue, clueIdx) => {
@@ -69,8 +69,8 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
       )
     })
     return (
-            <div className='flex flex-row gap-x-8' key={wordHintIdx}>
-                <div className='h-full w-1/6 cursor-pointer hover:underline' onClick={props.handleWordHintSelect(props.squarePosition, props.orientation, wordHint.word)}>{wordHint.word}</div>
+            <div className='flex flex-col gap-x-8 gap-y-2 md:flex-row xl:flex-col' key={wordHintIdx}>
+                <div className='h-full w-full cursor-pointer overflow-hidden truncate hover:underline md:w-1/3 xl:w-full' onClick={props.handleWordHintSelect(props.squarePosition, props.orientation, wordHint.word)}>{wordHint.word}</div>
                 <div className='flex h-fit max-h-36 w-full flex-col gap-0.5 overflow-auto bg-darkest-blue p-0.5 transition-colors duration-300 dark:bg-glacier'>
                     {clueElements}
                 </div>
@@ -89,8 +89,8 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
             {wordHintElements.length === 0
               ? <></>
               : <div className='flex flex-col gap-y-4'>
-                    <div className='flex flex-row gap-x-8'>
-                        <div className='h-full w-1/6'>Word Hints</div>
+                    <div className='hidden flex-row gap-x-8 md:flex xl:hidden'>
+                        <div className='h-full w-1/3'>Word Hints</div>
                         <div className='h-full w-full'>Clue Hints</div>
                     </div>
                     {wordHintElements}

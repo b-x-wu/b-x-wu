@@ -12,10 +12,9 @@ interface BoardComponentProps {
   selectedVerticalWordPosition: null | WordPosition
   selectedSquare: null | Square
   handleClickSquare: (square: Square) => React.MouseEventHandler<HTMLDivElement>
-  componentWidth: string
 }
 
-export const BoardComponent = ({ width, height, squares, selectedHorizontalWordPosition, selectedVerticalWordPosition, selectedSquare, handleClickSquare, componentWidth }: BoardComponentProps): JSX.Element => {
+export const BoardComponent = ({ width, height, squares, selectedHorizontalWordPosition, selectedVerticalWordPosition, selectedSquare, handleClickSquare }: BoardComponentProps): JSX.Element => {
   const squarePositionsInSelectedHorizontalWord = selectedHorizontalWordPosition == null ? [] : Crossword.wordPositionToSquarePositions(selectedHorizontalWordPosition)
   const squarePositionsInSelectedVerticalWord = selectedVerticalWordPosition == null ? [] : Crossword.wordPositionToSquarePositions(selectedVerticalWordPosition)
   const squarePositionsInSelectedWords = [...squarePositionsInSelectedHorizontalWord, ...squarePositionsInSelectedVerticalWord]
@@ -38,7 +37,7 @@ export const BoardComponent = ({ width, height, squares, selectedHorizontalWordP
   )
 
   const styles: React.CSSProperties = {
-    width: componentWidth,
+    height: 'min(70vh, 80vw)',
     gridTemplateRows: `repeat(${height}, minmax(0, 1fr))`,
     gridTemplateColumns: `repeat(${width}, minmax(0, 1fr))`
   }

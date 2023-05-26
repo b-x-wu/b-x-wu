@@ -24,7 +24,7 @@ export const SquareComponent = ({ squareValue, handleClick, isSelected, isInSele
 
   return (
         <div
-            className="flex h-full w-full items-center justify-center bg-glacier text-center text-darkest-blue"
+            className="flex h-full w-full items-center justify-center bg-glacier text-center text-xs text-darkest-blue md:text-base"
             onClick={handleClick}
             style={style}
         >
