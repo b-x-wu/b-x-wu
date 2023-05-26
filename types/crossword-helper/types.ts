@@ -84,7 +84,8 @@ export interface Word {
 
 export type OrientedDictionaryKey = number
 
+export type Clue = string
 export interface WordHint {
   word: string
-  clues: string[]
+  clues: Clue[]
 }
