@@ -16,7 +16,7 @@ export default function CrosswordHelper (): JSX.Element {
               comes from <Link className='font-bold hover:underline' href="https://xd.saul.pw/data/" target='_blank' rel='noreferrer'>Saul Pawnson&apos;s xd project</Link>.
             </p>
             <p className='leading-loose'>
-              Bear in mind that this is just a tech demo. The process is still a <span className='italic'>bit</span> buggy. If you&apos;re having issues with the word and clue hints, click off to other squares before returning and trying again.
+              Bear in mind that this is just a tech demo. The project is still a <span className='italic'>bit</span> buggy. If you&apos;re having issues with the word and clue hints, click off to other squares before returning and trying again.
               If you encounter any problems, submit an issue to <Link href='https://github.com/bruce-x-wu/bruce-x-wu/issues' target='_blank' rel='noreferrer' className='font-bold hover:underline'>this repository on GitHub</Link>.
             </p>
           </div>
