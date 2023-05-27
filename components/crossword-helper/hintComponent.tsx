@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { type Orientation, type SquarePosition } from '../../types/crossword-helper/types'
+import { type Clue, type Orientation, type SquarePosition } from '../../types/crossword-helper/types'
 
 interface WordHint {
   word: string
@@ -17,40 +17,40 @@ interface HintComponentProps {
 }
 
 export const HintComponent = (props: HintComponentProps): JSX.Element => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [wordHints, setWordHints] = useState<WordHint[]>([])
   const [clueHints, setClueHints] = useState<string[]>([])
 
   useEffect(() => {
-    if (props.word.includes('_')) {
-      // still need to finish the word. look for word hints
-      fetch(`/api/crossword_helper/word_hint?word=${props.word}`).then(async (res) => {
-        return await res.json()
-      }).then((data: WordHint[]) => {
-        setClueHints([])
-        setWordHints(data.map((wordHint) => {
-          return {
-            word: wordHint.word,
-            clues: wordHint.clues
-          }
-        }))
-      }).catch(console.log)
-      return
-    }
-
-    // word is complete. look only for clues
-    if (props.clue === '') {
-      fetch(`/api/crossword_helper/clue_hint?word=${props.word}`).then(async (res) => {
-        return await res.json()
-      }).then((data: string[]) => {
-        setWordHints([])
-        setClueHints(data)
-      }).catch(console.log)
-      return
-    }
-
-    // word is complete and clue is present. do nothing
+    setIsLoading(true)
     setWordHints([])
     setClueHints([])
+    fetch(`/api/crossword_helper?word=${props.word}&clue=${props.clue}`).then(async (res) => {
+      if (res.status >= 400) {
+        throw await res.json()
+      }
+      return await res.json()
+    }).then((data: WordHint[] | Clue[]) => {
+      setIsLoading(false)
+      if (data.length === 0) {
+        setWordHints(prev => [])
+        setClueHints(prev => [])
+        return
+      }
+
+      if (typeof data[0] === 'string') {
+        setWordHints(prev => [])
+        setClueHints(prev => data as Clue[])
+        return
+      }
+
+      setWordHints(prev => data as WordHint[])
+      setClueHints(prev => [])
+    }).catch((err) => {
+      console.log(err)
+      setWordHints(prev => [])
+      setClueHints(prev => [])
+    })
   }, [props.word, props.clue, props.squarePosition])
 
   const wordHintElements = wordHints.map((wordHint, wordHintIdx) => {
@@ -84,27 +84,35 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
     )
   })
 
+  const hintElements = isLoading
+    ? <div className='w-full'>Loading...</div>
+    : <>
+        {
+          wordHintElements.length === 0
+            ? <></>
+            : <div className='flex flex-col gap-y-4'>
+                  <div className='hidden flex-row gap-x-8 md:flex xl:hidden'>
+                      <div className='h-full w-1/3'>Word Hints</div>
+                      <div className='h-full w-full'>Clue Hints</div>
+                  </div>
+                  {wordHintElements}
+              </div>
+        }
+        {
+          clueHintElements.length === 0
+            ? <></>
+            : <div className='flex flex-col gap-y-4'>
+                  <div>Clue Hints</div>
+                  <div className='flex h-fit w-full flex-col gap-0.5 overflow-auto bg-darkest-blue p-0.5 transition-colors duration-300 dark:bg-glacier'>
+                      {clueHintElements}
+                  </div>
+              </div>
+        }
+      </>
+
   return (
         <div className='h-fit w-full'>
-            {wordHintElements.length === 0
-              ? <></>
-              : <div className='flex flex-col gap-y-4'>
-                    <div className='hidden flex-row gap-x-8 md:flex xl:hidden'>
-                        <div className='h-full w-1/3'>Word Hints</div>
-                        <div className='h-full w-full'>Clue Hints</div>
-                    </div>
-                    {wordHintElements}
-                </div>
-            }
-            {clueHintElements.length === 0
-              ? <></>
-              : <div className='flex flex-col gap-y-4'>
-                    <div>Clue Hints</div>
-                    <div className='flex h-fit w-full flex-col gap-0.5 overflow-auto bg-darkest-blue p-0.5 transition-colors duration-300 dark:bg-glacier'>
-                        {clueHintElements}
-                    </div>
-                </div>
-            }
+            { props.word.includes('_') || props.clue.length === 0 ? hintElements : <></> }
         </div>
   )
 }
