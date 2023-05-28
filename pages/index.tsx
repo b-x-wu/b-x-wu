@@ -85,10 +85,10 @@ export default function Home (): JSX.Element {
             description='Customizable front-end visual effects with React and Tailwind CSS'
           />
           <FeaturedProject
-            name="Twit-Scraper"
-            imagePath='/project_images/twit_scraper.png'
-            url="https://github.com/bruce-x-wu/twit-scraper"
-            description='A free, open-source Twitter API alternative'
+            name="Crossword Helper"
+            imagePath='/project_images/crossword_helper.png'
+            url="/projects/crossword_helper"
+            description='A web app for streamlined crossword puzzle creation'
           />
           <FeaturedProject
             name="Create React Sandbox"
