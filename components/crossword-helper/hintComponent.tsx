@@ -114,32 +114,6 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
     hintElements = <div className='w-full'>All set!</div>
   }
 
-  // const hintElements = isLoading
-  //   ? <div className='w-full'>Loading...</div>
-  //   : <>
-  //       {
-  //         wordHintElements.length === 0
-  //           ? <></>
-  //           : <div className='flex flex-col gap-y-4'>
-  //                 <div className='hidden flex-row gap-x-8 md:flex xl:hidden'>
-  //                     <div className='h-full w-1/3'>Word Hints</div>
-  //                     <div className='h-full w-full'>Clue Hints</div>
-  //                 </div>
-  //                 {wordHintElements}
-  //             </div>
-  //       }
-  //       {
-  //         clueHintElements.length === 0
-  //           ? <></>
-  //           : <div className='flex flex-col gap-y-4'>
-  //                 <div>Clue Hints</div>
-  //                 <div className='flex h-fit w-full flex-col gap-0.5 overflow-auto bg-darkest-blue p-0.5 transition-colors duration-300 dark:bg-glacier'>
-  //                     {clueHintElements}
-  //                 </div>
-  //             </div>
-  //       }
-  //     </>
-
   return (
         <div className='h-fit w-full'>
             {hintElements}
