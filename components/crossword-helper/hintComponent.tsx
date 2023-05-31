@@ -39,13 +39,13 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
       }
 
       if (typeof data[0] === 'string') {
-        setWordHints(prev => [])
+        // setWordHints(prev => [])
         setClueHints(prev => data as Clue[])
         return
       }
 
       setWordHints(prev => data as WordHint[])
-      setClueHints(prev => [])
+      // setClueHints(prev => [])
     }).catch((err) => {
       console.log(err)
       setWordHints(prev => [])
@@ -80,39 +80,69 @@ export const HintComponent = (props: HintComponentProps): JSX.Element => {
 
   const clueHintElements = clueHints.map((clue, clueIdx) => {
     return (
-            <div className='cursor-pointer bg-lighter-blue p-2 text-darkest-blue transition-colors duration-300 hover:underline dark:bg-darkest-blue dark:text-glacier' onClick={props.handleClueHintSelect(props.squarePosition, props.orientation, clue)} key={clueIdx}>{clue}</div>
+      <div className='cursor-pointer bg-lighter-blue p-2 text-darkest-blue transition-colors duration-300 hover:underline dark:bg-darkest-blue dark:text-glacier' onClick={props.handleClueHintSelect(props.squarePosition, props.orientation, clue)} key={clueIdx}>{clue}</div>
     )
   })
 
-  const hintElements = isLoading
-    ? <div className='w-full'>Loading...</div>
-    : <>
-        {
-          wordHintElements.length === 0
-            ? <></>
-            : <div className='flex flex-col gap-y-4'>
-                  <div className='hidden flex-row gap-x-8 md:flex xl:hidden'>
-                      <div className='h-full w-1/3'>Word Hints</div>
-                      <div className='h-full w-full'>Clue Hints</div>
-                  </div>
-                  {wordHintElements}
-              </div>
-        }
-        {
-          clueHintElements.length === 0
-            ? <></>
-            : <div className='flex flex-col gap-y-4'>
-                  <div>Clue Hints</div>
-                  <div className='flex h-fit w-full flex-col gap-0.5 overflow-auto bg-darkest-blue p-0.5 transition-colors duration-300 dark:bg-glacier'>
-                      {clueHintElements}
-                  </div>
-              </div>
-        }
-      </>
+  let hintElements: JSX.Element
+  if (isLoading) {
+    hintElements = <div className='w-full'>Loading...</div>
+  } else if (props.word.includes('_')) {
+    if (wordHintElements.length === 0) {
+      hintElements = <div className='w-full'>No matching words in the database.</div>
+    } else {
+      hintElements = <div className='flex flex-col gap-y-4'>
+                        <div className='hidden flex-row gap-x-8 md:flex xl:hidden'>
+                            <div className='h-full w-1/3'>Word Hints</div>
+                            <div className='h-full w-full'>Clue Hints</div>
+                        </div>
+                        {wordHintElements}
+                      </div>
+    }
+  } else if (props.clue === '') {
+    if (clueHintElements.length === 0) {
+      hintElements = <div className='w-full'>No matching clues in the database.</div>
+    } else {
+      hintElements = <div className='flex flex-col gap-y-4'>
+                        <div>Clue Hints</div>
+                        <div className='flex h-fit w-full flex-col gap-0.5 overflow-auto bg-darkest-blue p-0.5 transition-colors duration-300 dark:bg-glacier'>
+                            {clueHintElements}
+                        </div>
+                     </div>
+    }
+  } else {
+    hintElements = <div className='w-full'>All set!</div>
+  }
+
+  // const hintElements = isLoading
+  //   ? <div className='w-full'>Loading...</div>
+  //   : <>
+  //       {
+  //         wordHintElements.length === 0
+  //           ? <></>
+  //           : <div className='flex flex-col gap-y-4'>
+  //                 <div className='hidden flex-row gap-x-8 md:flex xl:hidden'>
+  //                     <div className='h-full w-1/3'>Word Hints</div>
+  //                     <div className='h-full w-full'>Clue Hints</div>
+  //                 </div>
+  //                 {wordHintElements}
+  //             </div>
+  //       }
+  //       {
+  //         clueHintElements.length === 0
+  //           ? <></>
+  //           : <div className='flex flex-col gap-y-4'>
+  //                 <div>Clue Hints</div>
+  //                 <div className='flex h-fit w-full flex-col gap-0.5 overflow-auto bg-darkest-blue p-0.5 transition-colors duration-300 dark:bg-glacier'>
+  //                     {clueHintElements}
+  //                 </div>
+  //             </div>
+  //       }
+  //     </>
 
   return (
         <div className='h-fit w-full'>
-            { props.word.includes('_') || props.clue.length === 0 ? hintElements : <></> }
+            {hintElements}
         </div>
   )
 }
