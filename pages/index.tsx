@@ -97,10 +97,10 @@ export default function Home (): JSX.Element {
             description='A command-line tool to create lightweight React environments'
           />
           <FeaturedProject
-            name="Palette Hacker"
-            imagePath="/project_images/palette_hacker.gif"
-            url="https://github.com/bruce-x-wu/palette-hacker"
-            description='A Chrome extension for swapping website color palettes'
+            name="Visual Novel Terminal"
+            imagePath="/project_images/vn-terminal.png"
+            url="https://bruce-x-wu.itch.io/visual-novel-terminal"
+            description='A customizable reskin for the terminal that makes it look like a visual novel.'
           />
           <FeaturedProject
             name="Graphics Engine"
