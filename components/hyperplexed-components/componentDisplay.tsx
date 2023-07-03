@@ -47,8 +47,8 @@ export const ComponentDisplay = ({
             {
                 codeText == null
                   ? <></>
-                  : <div className='h-fit w-fit ring-4 ring-lighter-blue transition-all duration-300 dark:ring-darkest-blue'>
-                      <SyntaxHighlighter language="tsx" style={materialDark} customStyle={{ width: widthString, height: heightString, margin: 0, ...containerStyle }} wrapLongLines={true}>
+                  : <div className='h-fit w-fit max-w-full ring-4 ring-lighter-blue transition-all duration-300 dark:ring-darkest-blue'>
+                      <SyntaxHighlighter language="tsx" style={materialDark} customStyle={{ maxWidth: '100%', width: widthString, height: heightString, margin: 0, ...containerStyle }} wrapLongLines={true}>
                         {codeText}
                       </SyntaxHighlighter>
                     </div>
