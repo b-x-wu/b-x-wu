@@ -2,25 +2,18 @@ import { type NextApiRequest, type NextApiResponse } from 'next'
 import sharp from 'sharp'
 import type Tone from 'tone'
 import { type ApiFailResponse } from '../../../types/types'
-import { type Pixel, type Image } from '../../../types/image_to_midi'
+import { type MidiNote } from '../../../types/image_to_midi'
 
-interface MidiNoteData {
-  start: number
-  duration: number
-  pitch: Tone.Unit.MidiNote
-  velocity: number
-}
-
-function rgbaToMidiNoteData (r: number, g: number, b: number, a: number): MidiNoteData {
+function rgbaToMidiNoteData (r: number, g: number, b: number, a: number): MidiNote {
   return {
-    start: 0,
-    duration: 0,
-    pitch: 1,
-    velocity: 1
+    start: r,
+    duration: Math.max(g, 1),
+    pitch: b as Tone.Unit.MidiNote,
+    velocity: a
   }
 }
 
-export default async function handler (req: NextApiRequest, res: NextApiResponse<Image | ApiFailResponse>): Promise<void> {
+export default async function handler (req: NextApiRequest, res: NextApiResponse<MidiNote[] | ApiFailResponse>): Promise<void> {
   if (req.query.url == null) {
     res.status(401).json({ message: 'Request query must contain a url.' })
     return
@@ -32,7 +25,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     return
   }
 
-  const sharpImage = sharp(await fetchResponse.arrayBuffer())
+  const sharpImage = sharp(await fetchResponse.arrayBuffer()) // TODO: should this be try/catch-ed?
   const sharpImageMetadata = await sharpImage.metadata()
 
   if (sharpImageMetadata.width == null || sharpImageMetadata.height == null) {
@@ -40,34 +33,36 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     return
   }
 
-  const bitmap: Pixel[][] = []
+  const midiNoteDatas: MidiNote[] = []
   const rawRedBuffer = await sharpImage.extractChannel('red').raw().toBuffer()
   const rawGreenBuffer = await sharpImage.extractChannel('green').raw().toBuffer()
   const rawBlueBuffer = await sharpImage.extractChannel('blue').raw().toBuffer()
+  const rawAlphaBuffer = sharpImageMetadata.hasAlpha != null && sharpImageMetadata.hasAlpha
+    ? await sharpImage.extractChannel('alpha').raw().toBuffer()
+    : Buffer.from(new Array(sharpImageMetadata.width * sharpImageMetadata.height).fill(1))
 
   let red: number | undefined
   let green: number | undefined
   let blue: number | undefined
+  let alpha: number | undefined
+  let idx: number
 
   for (let y = 0; y < sharpImageMetadata.height; y++) {
-    const bitmapRow: Pixel[] = []
     for (let x = 0; x < sharpImageMetadata.width; x++) {
-      // red = rawBuffer.at(y * sharpImageMetadata.width + x)
-      // green = rawBuffer.at(y * sharpImageMetadata.width + x + 1)
-      // blue = rawBuffer.at(y * sharpImageMetadata.width + x + 2)
-      red = rawRedBuffer.at(y * sharpImageMetadata.width + x)
-      green = rawGreenBuffer.at(y * sharpImageMetadata.width + x)
-      blue = rawBlueBuffer.at(y * sharpImageMetadata.width + x)
+      idx = y * sharpImageMetadata.width + x
+      red = rawRedBuffer.at(idx)
+      green = rawGreenBuffer.at(idx)
+      blue = rawBlueBuffer.at(idx)
+      alpha = rawAlphaBuffer.at(idx)
 
-      if (red == null || green == null || blue == null) {
-        console.log('r || g || b == null')
+      if (red == null || green == null || blue == null || alpha == null) {
+        console.log('r || g || b || alpha == null')
         continue
       }
 
-      bitmapRow.push({ red, green, blue })
+      midiNoteDatas.push(rgbaToMidiNoteData(red, green, blue, alpha))
     }
-    bitmap.push(bitmapRow)
-  } // TODO: catch has alpha case
+  }
 
-  res.json({ width: sharpImageMetadata.width, height: sharpImageMetadata.height, bitmap })
+  res.json(midiNoteDatas)
 }
