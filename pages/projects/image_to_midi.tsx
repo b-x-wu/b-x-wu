@@ -27,7 +27,9 @@ export default function ImageToMidi (): JSX.Element {
     )
   }
 
-  Tone.start().catch(console.log)
+  // Tone.start().then(() => {
+  //   console.log('tone started')
+  // }).catch(console.log)
 
   const synth = new Tone.PolySynth(Tone.Synth, {
     envelope: {
@@ -40,11 +42,11 @@ export default function ImageToMidi (): JSX.Element {
 
   const now = Tone.now() + 0.5
 
-  data?.forEach((midiNote) => {
-    synth.triggerAttackRelease(Tone.mtof(Math.floor(midiNote.pitch) as Tone.Unit.MidiNote), midiNote.duration, midiNote.start + now, midiNote.velocity)
+  data?.forEach((midiNote) => { // TODO: this is blocking the browser
+    synth.triggerAttackRelease(Tone.mtof(midiNote.pitch), midiNote.duration, midiNote.start + now, midiNote.velocity)
   })
 
   return (
-    <>{data == null ? 'data is null' : JSON.stringify(data)}</>
+    <>{data == null ? 'data is null' : <button onClick={() => { Tone.start().catch(console.log) }} className='h-10 w-10 bg-glacier'>Click Me</button>}</>
   )
 }

@@ -5,10 +5,41 @@ import { type ApiFailResponse } from '../../../types/types'
 import { type MidiNote } from '../../../types/image_to_midi'
 
 function rgbaToMidiNoteData (r: number, g: number, b: number, a: number): MidiNote {
+  // calculate normalized hsl
+  r /= 255; g /= 255; b /= 255
+  const max = Math.max(r, g, b)
+  const min = Math.min(r, g, b)
+  const chroma = max - min
+
+  let hue: number = 0
+  if (chroma === 0) hue = 0
+  else {
+    switch (max) {
+      case r:
+        hue = ((g - b) / chroma)
+        break
+      case g:
+        hue = (b - r) / chroma + 2
+        break
+      case b:
+        hue = (r - g) / chroma + 4
+        break
+    }
+    hue = ((hue + 6) % 6) / 6
+  }
+  if (hue < 0) { console.log(hue) }
+
+  const lightness = 0.5 * (max + min)
+  const saturation = lightness === 1 || lightness === 0 ? 0 : chroma / (1 - Math.abs(2 * lightness - 1))
+
+  const clampToMidiNote = (value: number): Tone.Unit.MidiNote => {
+    return Math.max(0, Math.min(127, Math.floor(value))) as Tone.Unit.MidiNote
+  }
+
   return {
-    start: r,
-    duration: Math.max(g, 1),
-    pitch: b as Tone.Unit.MidiNote,
+    start: hue * 300,
+    duration: Math.max(saturation, Number.MIN_VALUE),
+    pitch: clampToMidiNote(lightness * 127),
     velocity: a
   }
 }
