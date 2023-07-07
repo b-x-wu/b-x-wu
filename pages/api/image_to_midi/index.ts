@@ -76,16 +76,28 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     return
   }
 
-  const sharpImage = sharp(await fetchResponse.arrayBuffer()) // TODO: should this be try/catch-ed?
-  const sharpImageMetadata = await sharpImage.metadata()
+  let sharpImage: sharp.Sharp | undefined
+  let sharpImageMetadata: sharp.Metadata | undefined
+  try {
+    sharpImage = sharp(await fetchResponse.arrayBuffer()) // TODO: should this be try/catch-ed?
+    sharpImageMetadata = await sharpImage.metadata()
+  } catch (e) {
+    console.log(e)
+  }
+
+  if (sharpImage == null || sharpImageMetadata == null) {
+    res.status(500).json({ message: 'Unable to analyze image', data: { url: req.query.url } })
+    return
+  }
 
   if (sharpImageMetadata.width == null || sharpImageMetadata.height == null) {
-    res.status(500).json({ message: 'Unable to retrieve image dimensions' })
+    res.status(500).json({ message: 'Unable to retrieve image dimensions', data: { url: req.query.url } })
     return
   }
 
   const midi = new Midi()
   const track = midi.addTrack()
+
   const rawRedBuffer = await sharpImage.extractChannel('red').raw().toBuffer()
   const rawGreenBuffer = await sharpImage.extractChannel('green').raw().toBuffer()
   const rawBlueBuffer = await sharpImage.extractChannel('blue').raw().toBuffer()
@@ -97,7 +109,6 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   let green: number | undefined
   let blue: number | undefined
   let alpha: number | undefined
-  // let idx: number
   let midiNoteData: MidiNote | undefined
 
   generateRandomSequence(sharpImageMetadata.height * sharpImageMetadata.width - 1, MAX_NOTES).forEach((idx) => {
@@ -119,42 +130,12 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     }
   })
 
-  // for (let y = 0; y < sharpImageMetadata.height; y++) {
-  //   for (let x = 0; x < sharpImageMetadata.width; x++) {
-  //     idx = y * sharpImageMetadata.width + x
-  //     red = rawRedBuffer.at(idx)
-  //     green = rawGreenBuffer.at(idx)
-  //     blue = rawBlueBuffer.at(idx)
-  //     alpha = rawAlphaBuffer.at(idx)
-
-  //     if (red == null || green == null || blue == null || alpha == null) {
-  //       continue
-  //     }
-
-  //     const midiNoteData = rgbaToMidiNoteData(red, green, blue, alpha)
-  //     if (midiNoteData != null && midiNoteData.duration > 0) {
-  //       track.addNote({
-  //         midi: midiNoteData.pitch,
-  //         time: midiNoteData.start,
-  //         duration: midiNoteData.duration,
-  //         velocity: midiNoteData.velocity
-  //       })
-  //     }
-  //   }
-  // }
-
-  console.log('trying to encode midi to buffer')
   try {
     const midiBuffer = Buffer.from(midi.toArray())
-    console.log('Midi encoded')
     res.setHeader('Content-Type', 'audio/sp-midi')
-    // fs.writeFileSync('midi.mid', midiBuffer, 'binary')
     res.send(midiBuffer)
-    // res.send({ message: 'buffer sent' })
   } catch (e: any) {
     console.log(e.toString())
     res.status(500).json({ message: 'Error encoding midi buffer.', data: e })
   }
-
-  // res.json(midiNoteDatas)
 }
