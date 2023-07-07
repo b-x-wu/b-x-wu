@@ -1,10 +1,14 @@
 import { type NextApiRequest, type NextApiResponse } from 'next'
+import * as fs from 'fs'
 import sharp from 'sharp'
-import type Tone from 'tone'
+import type * as Tone from 'tone'
+import { Midi } from '@tonejs/midi'
 import { type ApiFailResponse } from '../../../types/types'
 import { type MidiNote } from '../../../types/image_to_midi'
 
-function rgbaToMidiNoteData (r: number, g: number, b: number, a: number): MidiNote {
+// TODO: add in x, y, width, height as an option
+function rgbaToMidiNoteData (r: number, g: number, b: number, a: number): MidiNote | undefined {
+  if (Math.random() < 0.99) return
   // calculate normalized hsl
   r /= 255; g /= 255; b /= 255
   const max = Math.max(r, g, b)
@@ -38,13 +42,13 @@ function rgbaToMidiNoteData (r: number, g: number, b: number, a: number): MidiNo
 
   return {
     start: hue * 300,
-    duration: Math.max(saturation, Number.MIN_VALUE),
+    duration: saturation,
     pitch: clampToMidiNote(lightness * 127),
     velocity: a
   }
 }
 
-export default async function handler (req: NextApiRequest, res: NextApiResponse<MidiNote[] | ApiFailResponse>): Promise<void> {
+export default async function handler (req: NextApiRequest, res: NextApiResponse<Buffer | ApiFailResponse>): Promise<void> {
   if (req.query.url == null) {
     res.status(401).json({ message: 'Request query must contain a url.' })
     return
@@ -64,7 +68,9 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     return
   }
 
-  const midiNoteDatas: MidiNote[] = []
+  // const midiNoteDatas: MidiNote[] = []
+  const midi = new Midi()
+  const track = midi.addTrack()
   const rawRedBuffer = await sharpImage.extractChannel('red').raw().toBuffer()
   const rawGreenBuffer = await sharpImage.extractChannel('green').raw().toBuffer()
   const rawBlueBuffer = await sharpImage.extractChannel('blue').raw().toBuffer()
@@ -87,13 +93,35 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
       alpha = rawAlphaBuffer.at(idx)
 
       if (red == null || green == null || blue == null || alpha == null) {
-        console.log('r || g || b || alpha == null')
         continue
       }
 
-      midiNoteDatas.push(rgbaToMidiNoteData(red, green, blue, alpha))
+      // midiNoteDatas.push(rgbaToMidiNoteData(red, green, blue, alpha))
+      const midiNoteData = rgbaToMidiNoteData(red, green, blue, alpha)
+      if (midiNoteData != null && midiNoteData.duration > 0) {
+        track.addNote({
+          midi: midiNoteData.pitch,
+          time: midiNoteData.start,
+          duration: midiNoteData.duration,
+          velocity: midiNoteData.velocity
+        })
+      }
+      // if (idx % 10 === 0) console.log(`${idx}/${sharpImageMetadata.height * sharpImageMetadata.width} complete`)
     }
   }
 
-  res.json(midiNoteDatas)
+  console.log('trying to encode midi to buffer')
+  try {
+    const midiBuffer = Buffer.from(midi.toArray())
+    console.log('Midi encoded')
+    res.setHeader('Content-Type', 'audio/sp-midi')
+    fs.writeFileSync('midi.mid', midiBuffer, 'binary')
+    // res.send(midiBuffer)
+    res.send({ message: 'buffer sent' })
+  } catch (e: any) {
+    console.log(e.toString())
+    res.status(500).json({ message: 'Error encoding midi buffer.', data: e })
+  }
+
+  // res.json(midiNoteDatas)
 }
