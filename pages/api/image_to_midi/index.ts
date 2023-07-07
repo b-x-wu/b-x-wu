@@ -1,12 +1,28 @@
 import { type NextApiRequest, type NextApiResponse } from 'next'
-import * as fs from 'fs'
 import sharp from 'sharp'
 import type * as Tone from 'tone'
 import { Midi } from '@tonejs/midi'
 import { type ApiFailResponse } from '../../../types/types'
 import { type MidiNote } from '../../../types/image_to_midi'
 
+const MAX_NOTES = 1_000_000
+
+function generateRandomSequence (maxValue: number, maxSize: number): number[] {
+  const sequence = [...Array(maxValue + 1).keys()]
+  let j: number
+  let temp: number
+  for (let i = 0; i < Math.min(maxValue - 1, maxSize); i++) {
+    j = Math.floor(Math.random() * (maxValue - i)) + i
+    temp = sequence[j]
+    sequence[j] = sequence[i]
+    sequence[i] = temp
+  }
+  if (maxSize <= maxValue) return sequence.slice(0, maxSize)
+  return sequence
+}
+
 // TODO: add in x, y, width, height as an option
+// TODO: add in track as a midinote option
 function rgbaToMidiNoteData (r: number, g: number, b: number, a: number): MidiNote | undefined {
   if (Math.random() < 0.99) return
   // calculate normalized hsl
@@ -68,7 +84,6 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     return
   }
 
-  // const midiNoteDatas: MidiNote[] = []
   const midi = new Midi()
   const track = midi.addTrack()
   const rawRedBuffer = await sharpImage.extractChannel('red').raw().toBuffer()
@@ -76,48 +91,66 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   const rawBlueBuffer = await sharpImage.extractChannel('blue').raw().toBuffer()
   const rawAlphaBuffer = sharpImageMetadata.hasAlpha != null && sharpImageMetadata.hasAlpha
     ? await sharpImage.extractChannel('alpha').raw().toBuffer()
-    : Buffer.from(new Array(sharpImageMetadata.width * sharpImageMetadata.height).fill(1))
+    : Buffer.from(new Array(sharpImageMetadata.width * sharpImageMetadata.height - 1).fill(1))
 
   let red: number | undefined
   let green: number | undefined
   let blue: number | undefined
   let alpha: number | undefined
-  let idx: number
+  // let idx: number
+  let midiNoteData: MidiNote | undefined
 
-  for (let y = 0; y < sharpImageMetadata.height; y++) {
-    for (let x = 0; x < sharpImageMetadata.width; x++) {
-      idx = y * sharpImageMetadata.width + x
-      red = rawRedBuffer.at(idx)
-      green = rawGreenBuffer.at(idx)
-      blue = rawBlueBuffer.at(idx)
-      alpha = rawAlphaBuffer.at(idx)
+  generateRandomSequence(sharpImageMetadata.height * sharpImageMetadata.width - 1, MAX_NOTES).forEach((idx) => {
+    red = rawRedBuffer.at(idx)
+    green = rawGreenBuffer.at(idx)
+    blue = rawBlueBuffer.at(idx)
+    alpha = rawAlphaBuffer.at(idx)
 
-      if (red == null || green == null || blue == null || alpha == null) {
-        continue
-      }
+    if (red == null || green == null || blue == null || alpha == null) return
 
-      // midiNoteDatas.push(rgbaToMidiNoteData(red, green, blue, alpha))
-      const midiNoteData = rgbaToMidiNoteData(red, green, blue, alpha)
-      if (midiNoteData != null && midiNoteData.duration > 0) {
-        track.addNote({
-          midi: midiNoteData.pitch,
-          time: midiNoteData.start,
-          duration: midiNoteData.duration,
-          velocity: midiNoteData.velocity
-        })
-      }
-      // if (idx % 10 === 0) console.log(`${idx}/${sharpImageMetadata.height * sharpImageMetadata.width} complete`)
+    midiNoteData = rgbaToMidiNoteData(red, green, blue, alpha)
+    if (midiNoteData != null && midiNoteData.duration > 0) {
+      track.addNote({
+        midi: midiNoteData.pitch,
+        time: midiNoteData.start,
+        duration: midiNoteData.duration,
+        velocity: midiNoteData.velocity
+      })
     }
-  }
+  })
+
+  // for (let y = 0; y < sharpImageMetadata.height; y++) {
+  //   for (let x = 0; x < sharpImageMetadata.width; x++) {
+  //     idx = y * sharpImageMetadata.width + x
+  //     red = rawRedBuffer.at(idx)
+  //     green = rawGreenBuffer.at(idx)
+  //     blue = rawBlueBuffer.at(idx)
+  //     alpha = rawAlphaBuffer.at(idx)
+
+  //     if (red == null || green == null || blue == null || alpha == null) {
+  //       continue
+  //     }
+
+  //     const midiNoteData = rgbaToMidiNoteData(red, green, blue, alpha)
+  //     if (midiNoteData != null && midiNoteData.duration > 0) {
+  //       track.addNote({
+  //         midi: midiNoteData.pitch,
+  //         time: midiNoteData.start,
+  //         duration: midiNoteData.duration,
+  //         velocity: midiNoteData.velocity
+  //       })
+  //     }
+  //   }
+  // }
 
   console.log('trying to encode midi to buffer')
   try {
     const midiBuffer = Buffer.from(midi.toArray())
     console.log('Midi encoded')
     res.setHeader('Content-Type', 'audio/sp-midi')
-    fs.writeFileSync('midi.mid', midiBuffer, 'binary')
-    // res.send(midiBuffer)
-    res.send({ message: 'buffer sent' })
+    // fs.writeFileSync('midi.mid', midiBuffer, 'binary')
+    res.send(midiBuffer)
+    // res.send({ message: 'buffer sent' })
   } catch (e: any) {
     console.log(e.toString())
     res.status(500).json({ message: 'Error encoding midi buffer.', data: e })
