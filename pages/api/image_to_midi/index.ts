@@ -51,50 +51,44 @@ function rgbaToMidiNoteData (r: number, g: number, b: number, a: number): MidiNo
   const lightness = 0.5 * (max + min)
   const saturation = lightness === 1 || lightness === 0 ? 0 : chroma / (1 - Math.abs(2 * lightness - 1))
 
-  const clampToBearableMidiNote = (value: number): Tone.Unit.MidiNote => {
-    return Math.max(30, Math.min(90, Math.floor(value))) as Tone.Unit.MidiNote
+  const lerpToBearableMidiNote = (alpha: number): Tone.Unit.MidiNote => {
+    return Math.floor(40 + alpha * (100 - 40)) as Tone.Unit.MidiNote
+    // return Math.max(40, Math.min(70, Math.floor(alpha))) as Tone.Unit.MidiNote
   }
 
   return {
     start: Math.random() * 100,
     duration: saturation * 15,
-    pitch: clampToBearableMidiNote(lightness * 127),
+    pitch: lerpToBearableMidiNote(lightness),
     velocity: a
   }
 }
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse<Buffer | ApiFailResponse>): Promise<void> {
-  if (req.query.url == null) {
-    res.status(401).json({ message: 'Request query must contain a url.' })
-    return
-  }
-
-  const fetchResponse = await fetch(typeof req.query.url === 'string' ? req.query.url : req.query.url.join(''))
-  if (fetchResponse.status >= 400) {
-    res.status(404).json({ message: 'Unable to retrieve url' })
+  req.body = JSON.parse(req.body)
+  if (req.body.image == null) {
+    res.status(400).json({ message: 'Request must include base64 encoded image' })
     return
   }
 
   let sharpImage: sharp.Sharp | undefined
   let sharpImageMetadata: sharp.Metadata | undefined
   try {
-    sharpImage = sharp(await fetchResponse.arrayBuffer()) // TODO: should this be try/catch-ed?
+    sharpImage = sharp(Buffer.from(req.body.image, 'base64'))
     sharpImageMetadata = await sharpImage.metadata()
   } catch (e) {
     console.log(e)
   }
 
   if (sharpImage == null || sharpImageMetadata == null) {
-    res.status(500).json({ message: 'Unable to analyze image', data: { url: req.query.url } })
+    res.status(500).json({ message: 'Unable to analyze image', data: { image: req.body.image } })
     return
   }
 
   if (sharpImageMetadata.width == null || sharpImageMetadata.height == null) {
-    res.status(500).json({ message: 'Unable to retrieve image dimensions', data: { url: req.query.url } })
+    res.status(500).json({ message: 'Unable to retrieve image dimensions', data: { image: req.body.image } })
     return
   }
-
-  console.log('got image')
 
   const midi = new Midi()
   const track = midi.addTrack()
@@ -108,8 +102,6 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
   let red: number | undefined; let green: number | undefined; let blue: number | undefined; let alpha: number | undefined
   let midiNoteData: MidiNote | undefined
-
-  console.log('starting midi generation')
 
   generateRandomSequence(sharpImageMetadata.height * sharpImageMetadata.width - 1, MAX_NOTES).forEach((idx, progress) => {
     red = rawRedBuffer.at(idx); green = rawGreenBuffer.at(idx); blue = rawBlueBuffer.at(idx); alpha = rawAlphaBuffer.at(idx)
@@ -129,10 +121,8 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   })
 
   try {
-    console.log('generating midi')
     const midiBuffer = Buffer.from(midi.toArray())
     res.setHeader('Content-Type', 'audio/sp-midi')
-    console.log('sending midi buffer')
     res.send(midiBuffer)
   } catch (e: any) {
     console.log(e.toString())
