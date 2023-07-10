@@ -5,46 +5,65 @@ import { type Note } from '@tonejs/midi/dist/Note'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
+type Base64String = string
 interface ImageFormComponentProps {
-  setImageUrl: (imageUrl: string) => void
-  imageUrl: string | undefined
+  setImage: (image: Base64String) => void
+  image: Base64String | undefined
+}
+
+// https://stackoverflow.com/questions/18650168/convert-blob-to-base64
+async function blobToBase64 (blob: Blob): Promise<string> {
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      if (reader.result == null) reject(new Error('reader.result is null'))
+      resolve(reader.result as string)
+    }
+    reader.readAsDataURL(blob)
+  })
 }
 
 function ImageFormComponent (props: ImageFormComponentProps): JSX.Element {
   const [currentFormValue, setCurrentFormValue] = useState<string>('')
-  const [image, setImage] = useState<string | undefined>(undefined)
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined)
+  const [imageObjectUrl, setImageObjectUrl] = useState<string | undefined>(undefined)
+
+  // TODO: let this also take in a file
 
   useEffect(() => {
     void (async () => {
-      if (props.imageUrl == null) return
+      if (imageUrl == null) return
       try {
-        const res = await fetch(props.imageUrl)
+        const res = await fetch(imageUrl)
         if (res.status >= 400) return
         const contentType = res.headers.get('Content-Type')
         if (contentType == null || !contentType.includes('image')) return
 
         const blob = await res.blob()
-        const imageBase64 = URL.createObjectURL(blob)
-        setImage(imageBase64)
+        const imageBase64 = await blobToBase64(blob)
+        props.setImage(imageBase64.replace('data:image/jpeg;base64,', ''))
+
+        const imageObjectUrl = URL.createObjectURL(blob)
+        setImageObjectUrl(imageObjectUrl)
       } catch {} // TODO: really really add error messages
     })()
-  }, [props.imageUrl])
+  }, [imageUrl])
 
   return (
     <>
       <input type="text" placeholder='Image Url' value={currentFormValue} onChange={(event) => { setCurrentFormValue(event.target.value) }}></input>
-      <button onClick={() => { props.setImageUrl(currentFormValue); console.log(currentFormValue); setCurrentFormValue('') }}>Submit</button>
-      {image == null ? <></> : <Image src={image} width={100} height={100} alt='Your image'/>}
+      <button onClick={() => { setImageUrl(currentFormValue); setCurrentFormValue('') }}>Submit</button>
+      {imageObjectUrl == null ? <></> : <Image src={imageObjectUrl} width={100} height={100} alt='Your image'/>}
     </>
   )
 }
 
 export default function ImageToMidi (): JSX.Element {
-  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined)
+  const [image, setImage] = useState<Base64String | undefined>(undefined)
 
   return (
     <>
-      <ImageFormComponent setImageUrl={setImageUrl} imageUrl={imageUrl}/>
+      <ImageFormComponent setImage={(val) => { setImage(val); console.log(val) }} image={image}/>
     </>
   )
 }
