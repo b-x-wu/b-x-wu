@@ -69,7 +69,7 @@ export default function Home (): JSX.Element {
           </span>
         </h1>
         <h2 className="text-center text-lg">
-          I&apos;m a software dev interested in data and development accessibility for everyone.
+          I&apos;m a software dev. I host all the silly little things I&apos;ve made on this website.
         </h2>
       </section>
       <section className="mx-auto p-6">
