@@ -1,9 +1,10 @@
-import useSWR from 'swr'
+// import useSWR from 'swr'
 import * as Tone from 'tone'
 import { Midi } from '@tonejs/midi'
 import { type Note } from '@tonejs/midi/dist/Note'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { type MidiNote } from '../../types/image_to_midi'
 
 type Base64String = string
 interface ImageFormComponentProps {
@@ -41,7 +42,7 @@ function ImageFormComponent (props: ImageFormComponentProps): JSX.Element {
 
         const blob = await res.blob()
         const imageBase64 = await blobToBase64(blob)
-        props.setImage(imageBase64.replace('data:image/jpeg;base64,', ''))
+        props.setImage(imageBase64.replace(/^data:image\/\w+;base64,/, ''))
 
         const imageObjectUrl = URL.createObjectURL(blob)
         setImageObjectUrl(imageObjectUrl)
@@ -62,47 +63,59 @@ interface MidiManagerProps {
   image: Base64String
 }
 
-const swrFetcher = async ([url, args]: [string, RequestInit]): Promise<ArrayBuffer> => {
-  return await fetch(url, args).then(async (res) => {
-    if (res.status >= 400) {
-      throw new Error((await res.json()).message)
-    }
-    if (res.body == null) {
-      throw new Error('Cannot retrieve response endpoint.')
-    }
-    return await res.arrayBuffer()
-  })
-}
-
 function MidiManager (props: MidiManagerProps): JSX.Element {
-  const fetchOptions: RequestInit = {
-    method: 'POST',
-    body: JSON.stringify({
-      image: props.image
-      // TODO: add pixel mapping function here too
-    })
-  }
-  const { data, error, isLoading } = useSWR(['/api/image_to_midi', fetchOptions], swrFetcher)
+  const [midiBuffer, setMidiBuffer] = useState<ArrayBuffer | undefined>(undefined)
 
-  if (error != null) {
-    return (
-      <>
-        Error: {error.toString()}
-      </>
-    )
-  }
+  useEffect(() => {
+    void (async () => {
+      const res = await fetch('/api/image_to_midi/image_processor', {
+        method: 'POST',
+        body: JSON.stringify({ image: props.image })
+      })
 
-  if (isLoading) {
-    return (
-      <>Loading</>
-    )
-  }
+      if (res.status >= 400) return
+      const data = await res.json()
+      const width = data.width
+      // const height = data.height
+      const redBuffer = Buffer.from(data.redBuffer, 'base64')
+      const greenBuffer = Buffer.from(data.greenBuffer, 'base64')
+      const blueBuffer = Buffer.from(data.blueBuffer, 'base64')
+      const alphaBuffer = Buffer.from(data.alphaBuffer, 'base64')
+      const indices = Buffer.from(data.indexBuffer, 'base64').toJSON().data
 
-  if (data == null) {
-    return (
-      <>No data returned.</>
-    )
-  }
+      const midi = new Midi()
+      const track = midi.addTrack()
+
+      let red: number | undefined; let green: number | undefined; let blue: number | undefined; let alpha: number | undefined
+      let midiNoteData: MidiNote | undefined
+
+      indices.forEach((idx, progress) => {
+        red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
+
+        if (red == null || green == null || blue == null || alpha == null) return
+
+        midiNoteData = rgbaToMidiNoteData(red, green, blue, alpha, idx % width, Math.floor(idx / width))
+        if (midiNoteData != null && midiNoteData.duration > 0) {
+          track.addNote({
+            midi: midiNoteData.pitch,
+            time: midiNoteData.start,
+            duration: midiNoteData.duration,
+            velocity: midiNoteData.velocity
+          })
+        }
+      // TODO: add a progress response
+      })
+
+      try {
+        const midiBuffer = Buffer.from(midi.toArray())
+        setMidiBuffer(midiBuffer)
+      } catch (e: any) {
+        console.log({ message: 'Error encoding midi buffer.', data: e })
+      }
+    })()
+  }, [props.image])
+
+  if (midiBuffer == null) return (<></>)
 
   const playMidi = async (): Promise<void> => {
     await Tone.start()
@@ -116,7 +129,7 @@ function MidiManager (props: MidiManagerProps): JSX.Element {
       }
     }).toDestination()
 
-    const midi = new Midi(data)
+    const midi = new Midi(midiBuffer)
     const baseStartTime = Tone.now() + 0.5
     const midiPart = new Tone.Part((time, note: Note) => {
       synth.triggerAttackRelease(note.name, note.duration, baseStartTime + note.time, note.velocity)
@@ -127,7 +140,7 @@ function MidiManager (props: MidiManagerProps): JSX.Element {
   }
 
   return (
-    <>{data == null ? 'data is null' : <button onClick={() => { void playMidi() }} className='h-20 w-20 bg-darker-blue'>Click Me</button>}</>
+    <><button onClick={() => { void playMidi() }} className='h-20 w-20 bg-darker-blue'>Click Me</button></>
   )
 }
 
@@ -140,4 +153,47 @@ export default function ImageToMidi (): JSX.Element {
       {image == null ? <></> : <MidiManager image={image} />}
     </>
   )
+}
+
+// TODO: add in x, y, width, height as an option
+// TODO: add in track as a midinote option
+function rgbaToMidiNoteData (r: number, g: number, b: number, a: number, x: number, y: number): MidiNote | undefined {
+  // calculate normalized hsl
+  r /= 255; g /= 255; b /= 255
+  const max = Math.max(r, g, b)
+  const min = Math.min(r, g, b)
+  const chroma = max - min
+
+  let hue: number = 0
+  if (chroma === 0) hue = 0
+  else {
+    switch (max) {
+      case r:
+        hue = ((g - b) / chroma)
+        break
+      case g:
+        hue = (b - r) / chroma + 2
+        break
+      case b:
+        hue = (r - g) / chroma + 4
+        break
+    }
+    hue = ((hue + 6) % 6) / 6
+  }
+  if (hue < 0) { console.log(hue) }
+
+  const lightness = 0.5 * (max + min)
+  const saturation = lightness === 1 || lightness === 0 ? 0 : chroma / (1 - Math.abs(2 * lightness - 1))
+
+  const lerpToBearableMidiNote = (alpha: number): Tone.Unit.MidiNote => {
+    return Math.floor(40 + alpha * (100 - 40)) as Tone.Unit.MidiNote
+    // return Math.max(40, Math.min(70, Math.floor(alpha))) as Tone.Unit.MidiNote
+  }
+
+  return {
+    start: Math.random() * 100,
+    duration: saturation * 15,
+    pitch: lerpToBearableMidiNote(lightness),
+    velocity: a
+  }
 }

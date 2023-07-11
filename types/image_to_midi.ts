@@ -15,7 +15,10 @@ export interface MidiNote {
 }
 
 export interface Image {
-  height: number
   width: number
-  bitmap: Pixel[][]
+  height: number
+  redBuffer: Buffer
+  greenBuffer: Buffer
+  blueBuffer: Buffer
+  indexBuffer?: Buffer
 }
