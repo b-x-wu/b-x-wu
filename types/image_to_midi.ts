@@ -4,7 +4,9 @@ export interface Pixel {
   red: number
   green: number
   blue: number
-  alpha?: number
+  alpha: number
+  x: number
+  y: number
 }
 
 export interface MidiNote {

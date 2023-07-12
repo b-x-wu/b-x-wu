@@ -4,7 +4,8 @@ import { Midi } from '@tonejs/midi'
 import { type Note } from '@tonejs/midi/dist/Note'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { type MidiNote } from '../../types/image_to_midi'
+import { type Pixel, type MidiNote } from '../../types/image_to_midi'
+import FunctionTextInput from '../../components/image-to-midi/functionTextInput'
 
 type Base64String = string
 interface ImageFormComponentProps {
@@ -51,11 +52,11 @@ function ImageFormComponent (props: ImageFormComponentProps): JSX.Element {
   }, [imageUrl])
 
   return (
-    <>
-      <input type="text" placeholder='Image Url' value={currentFormValue} onChange={(event) => { setCurrentFormValue(event.target.value) }}></input>
+    <div>
+      <input type="text" placeholder='Image Url' className='text-darkest-blue' value={currentFormValue} onChange={(event) => { setCurrentFormValue(event.target.value) }}></input>
       <button onClick={() => { setImageUrl(currentFormValue); setCurrentFormValue('') }}>Submit</button>
       {imageObjectUrl == null ? <></> : <Image src={imageObjectUrl} width={100} height={100} alt='Your image'/>}
-    </>
+    </div>
   )
 }
 
@@ -94,7 +95,7 @@ function MidiManager (props: MidiManagerProps): JSX.Element {
 
         if (red == null || green == null || blue == null || alpha == null) return
 
-        midiNoteData = rgbaToMidiNoteData(red, green, blue, alpha, idx % width, Math.floor(idx / width))
+        midiNoteData = rgbaToMidiNoteData({ red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
         if (midiNoteData != null && midiNoteData.duration > 0) {
           track.addNote({
             midi: midiNoteData.pitch,
@@ -140,7 +141,7 @@ function MidiManager (props: MidiManagerProps): JSX.Element {
   }
 
   return (
-    <><button onClick={() => { void playMidi() }} className='h-20 w-20 bg-darker-blue'>Click Me</button></>
+    <div><button onClick={() => { void playMidi() }} className='h-20 w-20 bg-darker-blue'>Click Me</button></div>
   )
 }
 
@@ -148,34 +149,37 @@ export default function ImageToMidi (): JSX.Element {
   const [image, setImage] = useState<Base64String | undefined>(undefined)
 
   return (
-    <>
+    <div className='flex flex-col space-y-5'>
+      <FunctionTextInput setFunction={function (func: (pixel: Pixel) => MidiNote | undefined): void {
+        throw new Error('Function not implemented.')
+      } } />
       <ImageFormComponent setImage={(val) => { setImage(val); console.log(val) }} image={image}/>
       {image == null ? <></> : <MidiManager image={image} />}
-    </>
+    </div>
   )
 }
 
 // TODO: add in x, y, width, height as an option
 // TODO: add in track as a midinote option
-function rgbaToMidiNoteData (r: number, g: number, b: number, a: number, x: number, y: number): MidiNote | undefined {
+function rgbaToMidiNoteData ({ red, green, blue, alpha, x, y }: Pixel): MidiNote | undefined {
   // calculate normalized hsl
-  r /= 255; g /= 255; b /= 255
-  const max = Math.max(r, g, b)
-  const min = Math.min(r, g, b)
+  red /= 255; green /= 255; blue /= 255
+  const max = Math.max(red, green, blue)
+  const min = Math.min(red, green, blue)
   const chroma = max - min
 
   let hue: number = 0
   if (chroma === 0) hue = 0
   else {
     switch (max) {
-      case r:
-        hue = ((g - b) / chroma)
+      case red:
+        hue = ((green - blue) / chroma)
         break
-      case g:
-        hue = (b - r) / chroma + 2
+      case green:
+        hue = (blue - red) / chroma + 2
         break
-      case b:
-        hue = (r - g) / chroma + 4
+      case blue:
+        hue = (red - green) / chroma + 4
         break
     }
     hue = ((hue + 6) % 6) / 6
@@ -194,6 +198,6 @@ function rgbaToMidiNoteData (r: number, g: number, b: number, a: number, x: numb
     start: Math.random() * 100,
     duration: saturation * 15,
     pitch: lerpToBearableMidiNote(lightness),
-    velocity: a
+    velocity: alpha
   }
 }
