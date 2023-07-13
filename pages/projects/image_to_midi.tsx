@@ -62,6 +62,7 @@ function ImageFormComponent (props: ImageFormComponentProps): JSX.Element {
 
 interface MidiManagerProps {
   image: Base64String
+  functionText: string
 }
 
 function MidiManager (props: MidiManagerProps): JSX.Element {
@@ -90,22 +91,50 @@ function MidiManager (props: MidiManagerProps): JSX.Element {
       let red: number | undefined; let green: number | undefined; let blue: number | undefined; let alpha: number | undefined
       let midiNoteData: MidiNote | undefined
 
-      indices.forEach((idx, progress) => {
-        red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
+      // try {
+      //   await Promise.all(indices.map(async (idx, progress) => {
+      //     red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
 
-        if (red == null || green == null || blue == null || alpha == null) return
+      //     if (red == null || green == null || blue == null || alpha == null) return
 
-        midiNoteData = rgbaToMidiNoteData({ red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
-        if (midiNoteData != null && midiNoteData.duration > 0) {
-          track.addNote({
-            midi: midiNoteData.pitch,
-            time: midiNoteData.start,
-            duration: midiNoteData.duration,
-            velocity: midiNoteData.velocity
-          })
+      //     midiNoteData = await rgbaToMidiNoteData(props.functionText, { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
+      //     if (midiNoteData != null && midiNoteData.duration > 0) {
+      //       track.addNote({
+      //         midi: midiNoteData.pitch,
+      //         time: midiNoteData.start,
+      //         duration: midiNoteData.duration,
+      //         velocity: midiNoteData.velocity
+      //       })
+      //     }
+      //     if (progress % 100 === 0) console.log(`${progress}/${indices.length}`)
+      //   }))
+      // } catch (e) {
+      //   console.log(e)
+      //   return
+      // }
+      try {
+        let idx
+        for (let progress = 0; progress < indices.length; progress++) {
+          idx = indices[progress]
+          red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
+
+          if (red == null || green == null || blue == null || alpha == null) return
+
+          midiNoteData = await rgbaToMidiNoteData(props.functionText, { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
+          if (midiNoteData != null && midiNoteData.duration > 0) {
+            track.addNote({
+              midi: midiNoteData.pitch,
+              time: midiNoteData.start,
+              duration: midiNoteData.duration,
+              velocity: midiNoteData.velocity
+            })
+          }
+          // TODO: add a progress response
+          if (progress % 100 === 0) { console.log(`${progress}/${indices.length}`) }
         }
-      // TODO: add a progress response
-      })
+      } catch (e) {
+        console.log(e)
+      }
 
       try {
         const midiBuffer = Buffer.from(midi.toArray())
@@ -133,6 +162,7 @@ function MidiManager (props: MidiManagerProps): JSX.Element {
     const midi = new Midi(midiBuffer)
     const baseStartTime = Tone.now() + 0.5
     const midiPart = new Tone.Part((time, note: Note) => {
+      console.log(note)
       synth.triggerAttackRelease(note.name, note.duration, baseStartTime + note.time, note.velocity)
     }, midi.tracks[0].notes) // TODO: add warning for max polyphony reached
 
@@ -147,57 +177,102 @@ function MidiManager (props: MidiManagerProps): JSX.Element {
 
 export default function ImageToMidi (): JSX.Element {
   const [image, setImage] = useState<Base64String | undefined>(undefined)
+  const [functionText, setFunctionText] = useState<string | undefined>(undefined)
 
   return (
     <div className='flex flex-col space-y-5'>
-      <FunctionTextInput setFunction={function (func: (pixel: Pixel) => MidiNote | undefined): void {
-        throw new Error('Function not implemented.')
-      } } />
+      <FunctionTextInput setFunctionText={setFunctionText} />
       <ImageFormComponent setImage={(val) => { setImage(val); console.log(val) }} image={image}/>
-      {image == null ? <></> : <MidiManager image={image} />}
+      {image == null || functionText == null ? <></> : <MidiManager image={image} functionText={functionText} />}
     </div>
   )
 }
 
+function isMidiNote (o: any): boolean {
+  const midiNoteKeys = ['start', 'duration', 'pitch', 'velocity']
+  if (JSON.stringify(Object.keys(o).sort()) !== JSON.stringify(midiNoteKeys.sort())) return false
+  for (const key of midiNoteKeys) {
+    if (typeof o[key] !== 'number') return false
+  }
+  return true
+}
+
+async function rgbaToMidiNoteData (functionText: string, { red, green, blue, alpha, x, y }: Pixel): Promise<MidiNote | undefined> {
+  return await new Promise((resolve, reject) => {
+    functionText += 'onmessage = (pixel) => { try { postMessage(pixelToMidiNote(pixel)); } catch (e) { console.log(e); } }'
+    const webworkerScriptUrl = URL.createObjectURL(new Blob([functionText], {
+    // const webworkerScriptUrl = URL.createObjectURL(new Blob(['console.log("inside the webworker")'], {
+      type: 'text/javascript'
+    }))
+
+    const webworker = new Worker(webworkerScriptUrl)
+    webworker.onmessage = (midiNote) => {
+      if (!(midiNote.data === undefined || isMidiNote(midiNote.data))) {
+        URL.revokeObjectURL(webworkerScriptUrl)
+        webworker.terminate()
+        reject(new Error('Invalid midi note returned'))
+        return
+      }
+      URL.revokeObjectURL(webworkerScriptUrl)
+      webworker.terminate()
+      resolve(midiNote.data)
+    }
+
+    webworker.onerror = (e) => {
+      webworker.terminate()
+      URL.revokeObjectURL(webworkerScriptUrl)
+      reject(e.error)
+    }
+
+    setTimeout(() => {
+      webworker.terminate()
+      URL.revokeObjectURL(webworkerScriptUrl)
+      reject(new Error('Time limit exceeded'))
+    }, 5000)
+
+    webworker.postMessage(null)
+  })
+}
+
 // TODO: add in x, y, width, height as an option
 // TODO: add in track as a midinote option
-function rgbaToMidiNoteData ({ red, green, blue, alpha, x, y }: Pixel): MidiNote | undefined {
-  // calculate normalized hsl
-  red /= 255; green /= 255; blue /= 255
-  const max = Math.max(red, green, blue)
-  const min = Math.min(red, green, blue)
-  const chroma = max - min
+// function rgbaToMidiNoteData ({ red, green, blue, alpha, x, y }: Pixel): MidiNote | undefined {
+//   // calculate normalized hsl
+//   red /= 255; green /= 255; blue /= 255
+//   const max = Math.max(red, green, blue)
+//   const min = Math.min(red, green, blue)
+//   const chroma = max - min
 
-  let hue: number = 0
-  if (chroma === 0) hue = 0
-  else {
-    switch (max) {
-      case red:
-        hue = ((green - blue) / chroma)
-        break
-      case green:
-        hue = (blue - red) / chroma + 2
-        break
-      case blue:
-        hue = (red - green) / chroma + 4
-        break
-    }
-    hue = ((hue + 6) % 6) / 6
-  }
-  if (hue < 0) { console.log(hue) }
+//   let hue: number = 0
+//   if (chroma === 0) hue = 0
+//   else {
+//     switch (max) {
+//       case red:
+//         hue = ((green - blue) / chroma)
+//         break
+//       case green:
+//         hue = (blue - red) / chroma + 2
+//         break
+//       case blue:
+//         hue = (red - green) / chroma + 4
+//         break
+//     }
+//     hue = ((hue + 6) % 6) / 6
+//   }
+//   if (hue < 0) { console.log(hue) }
 
-  const lightness = 0.5 * (max + min)
-  const saturation = lightness === 1 || lightness === 0 ? 0 : chroma / (1 - Math.abs(2 * lightness - 1))
+//   const lightness = 0.5 * (max + min)
+//   const saturation = lightness === 1 || lightness === 0 ? 0 : chroma / (1 - Math.abs(2 * lightness - 1))
 
-  const lerpToBearableMidiNote = (alpha: number): Tone.Unit.MidiNote => {
-    return Math.floor(40 + alpha * (100 - 40)) as Tone.Unit.MidiNote
-    // return Math.max(40, Math.min(70, Math.floor(alpha))) as Tone.Unit.MidiNote
-  }
+//   const lerpToBearableMidiNote = (alpha: number): Tone.Unit.MidiNote => {
+//     return Math.floor(40 + alpha * (100 - 40)) as Tone.Unit.MidiNote
+//     // return Math.max(40, Math.min(70, Math.floor(alpha))) as Tone.Unit.MidiNote
+//   }
 
-  return {
-    start: Math.random() * 100,
-    duration: saturation * 15,
-    pitch: lerpToBearableMidiNote(lightness),
-    velocity: alpha
-  }
-}
+//   return {
+//     start: Math.random() * 100,
+//     duration: saturation * 15,
+//     pitch: lerpToBearableMidiNote(lightness),
+//     velocity: alpha
+//   }
+// }

@@ -1,12 +1,8 @@
 import { useState, useEffect } from 'react'
-import { type Pixel, type MidiNote } from '../../types/image_to_midi'
+// import { type Pixel, type MidiNote } from '../../types/image_to_midi'
 
 interface FunctionTextInputProps {
-  setFunction: (func: (pixel: Pixel) => MidiNote | undefined) => void
-}
-
-function functionTextToFunction (functionText: string): (pixel: Pixel) => MidiNote | undefined {
-  return (pixel) => undefined
+  setFunctionText: (functionText: string) => void
 }
 
 export default function FunctionTextInput (props: FunctionTextInputProps): JSX.Element {
@@ -16,7 +12,7 @@ export default function FunctionTextInput (props: FunctionTextInputProps): JSX.E
   useEffect(() => {
     if (functionText == null) return
     try {
-      props.setFunction(functionTextToFunction(functionText))
+      props.setFunctionText(functionText)
     } catch (e) {
       console.log(e)
     }
@@ -25,7 +21,7 @@ export default function FunctionTextInput (props: FunctionTextInputProps): JSX.E
   return (
     <div className='h-96 w-96 border-2 border-glacier'>
       <textarea className='h-48 w-48 text-darkest-blue' onChange={(event) => { setCurrentFormValue(event.target.value) }} value={currentFormValue}></textarea>
-      <button className='h-20 w-20 bg-dark-blue' onClick={() => { setFunctionText(currentFormValue); setCurrentFormValue('') }}>Submit Function</button>
+      <button className='h-20 w-20 bg-dark-blue' onClick={() => { setFunctionText(currentFormValue) }}>Submit Function</button>
     </div>
   )
 }
