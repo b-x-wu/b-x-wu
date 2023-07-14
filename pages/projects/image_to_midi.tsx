@@ -1,10 +1,9 @@
-// import useSWR from 'swr'
 import * as Tone from 'tone'
 import { Midi } from '@tonejs/midi'
 import { type Note } from '@tonejs/midi/dist/Note'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { type Pixel, type MidiNote } from '../../types/image_to_midi'
+import { type Pixel, type MidiNote, isMidiNote } from '../../types/image_to_midi'
 import FunctionTextInput from '../../components/image-to-midi/functionTextInput'
 
 type Base64String = string
@@ -91,27 +90,6 @@ function MidiManager (props: MidiManagerProps): JSX.Element {
       let red: number | undefined; let green: number | undefined; let blue: number | undefined; let alpha: number | undefined
       let midiNoteData: MidiNote | undefined
 
-      // try {
-      //   await Promise.all(indices.map(async (idx, progress) => {
-      //     red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
-
-      //     if (red == null || green == null || blue == null || alpha == null) return
-
-      //     midiNoteData = await rgbaToMidiNoteData(props.functionText, { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
-      //     if (midiNoteData != null && midiNoteData.duration > 0) {
-      //       track.addNote({
-      //         midi: midiNoteData.pitch,
-      //         time: midiNoteData.start,
-      //         duration: midiNoteData.duration,
-      //         velocity: midiNoteData.velocity
-      //       })
-      //     }
-      //     if (progress % 100 === 0) console.log(`${progress}/${indices.length}`)
-      //   }))
-      // } catch (e) {
-      //   console.log(e)
-      //   return
-      // }
       try {
         let idx
         for (let progress = 0; progress < indices.length; progress++) {
@@ -120,7 +98,7 @@ function MidiManager (props: MidiManagerProps): JSX.Element {
 
           if (red == null || green == null || blue == null || alpha == null) return
 
-          midiNoteData = await rgbaToMidiNoteData(props.functionText, { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
+          midiNoteData = await rgbaToMidiNote(props.functionText, { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
           if (midiNoteData != null && midiNoteData.duration > 0) {
             track.addNote({
               midi: midiNoteData.pitch,
@@ -188,20 +166,10 @@ export default function ImageToMidi (): JSX.Element {
   )
 }
 
-function isMidiNote (o: any): boolean {
-  const midiNoteKeys = ['start', 'duration', 'pitch', 'velocity']
-  if (JSON.stringify(Object.keys(o).sort()) !== JSON.stringify(midiNoteKeys.sort())) return false
-  for (const key of midiNoteKeys) {
-    if (typeof o[key] !== 'number') return false
-  }
-  return true
-}
-
-async function rgbaToMidiNoteData (functionText: string, { red, green, blue, alpha, x, y }: Pixel): Promise<MidiNote | undefined> {
+async function rgbaToMidiNote (functionText: string, { red, green, blue, alpha, x, y }: Pixel): Promise<MidiNote | undefined> {
   return await new Promise((resolve, reject) => {
     functionText += 'onmessage = (pixel) => { try { postMessage(pixelToMidiNote(pixel)); } catch (e) { console.log(e); } }'
     const webworkerScriptUrl = URL.createObjectURL(new Blob([functionText], {
-    // const webworkerScriptUrl = URL.createObjectURL(new Blob(['console.log("inside the webworker")'], {
       type: 'text/javascript'
     }))
 
@@ -233,46 +201,3 @@ async function rgbaToMidiNoteData (functionText: string, { red, green, blue, alp
     webworker.postMessage(null)
   })
 }
-
-// TODO: add in x, y, width, height as an option
-// TODO: add in track as a midinote option
-// function rgbaToMidiNoteData ({ red, green, blue, alpha, x, y }: Pixel): MidiNote | undefined {
-//   // calculate normalized hsl
-//   red /= 255; green /= 255; blue /= 255
-//   const max = Math.max(red, green, blue)
-//   const min = Math.min(red, green, blue)
-//   const chroma = max - min
-
-//   let hue: number = 0
-//   if (chroma === 0) hue = 0
-//   else {
-//     switch (max) {
-//       case red:
-//         hue = ((green - blue) / chroma)
-//         break
-//       case green:
-//         hue = (blue - red) / chroma + 2
-//         break
-//       case blue:
-//         hue = (red - green) / chroma + 4
-//         break
-//     }
-//     hue = ((hue + 6) % 6) / 6
-//   }
-//   if (hue < 0) { console.log(hue) }
-
-//   const lightness = 0.5 * (max + min)
-//   const saturation = lightness === 1 || lightness === 0 ? 0 : chroma / (1 - Math.abs(2 * lightness - 1))
-
-//   const lerpToBearableMidiNote = (alpha: number): Tone.Unit.MidiNote => {
-//     return Math.floor(40 + alpha * (100 - 40)) as Tone.Unit.MidiNote
-//     // return Math.max(40, Math.min(70, Math.floor(alpha))) as Tone.Unit.MidiNote
-//   }
-
-//   return {
-//     start: Math.random() * 100,
-//     duration: saturation * 15,
-//     pitch: lerpToBearableMidiNote(lightness),
-//     velocity: alpha
-//   }
-// }
