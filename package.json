@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fisch0920/use-dark-mode": "^2.4.0",
+    "@monaco-editor/react": "^4.5.1",
     "@next/font": "13.1.1",
     "@tonejs/midi": "^2.0.28",
     "child_process": "^1.0.2",
