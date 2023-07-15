@@ -36,3 +36,5 @@ export interface Image {
   blueBuffer: Buffer
   indexBuffer?: Buffer
 }
+
+export type Base64String = string

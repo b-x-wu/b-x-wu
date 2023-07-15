@@ -74,3 +74,11 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     indexBuffer: indexBuffer.toString('base64')
   })
 }
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '4mb'
+    }
+  }
+}
