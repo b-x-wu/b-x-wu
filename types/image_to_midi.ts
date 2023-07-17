@@ -15,9 +15,9 @@ export function isMidiNote (o: any): boolean {
   for (const key of midiNoteKeys) {
     if (typeof o[key] !== 'number') return false
   }
-  if (o.pitch < 0 || o.pitch > 127) return false
-  if (o.velocity < 0 || o.velocity > 1) return false
-  if (o.start < 0) return false
+  // if (o.pitch < 0 || o.pitch > 127) return false
+  // if (o.velocity < 0 || o.velocity > 1) return false
+  // if (o.start < 0) return false
   return true
 }
 
