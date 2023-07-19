@@ -16,9 +16,9 @@ function clamp (val: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, val))
 }
 
-async function rgbaToMidiNote (functionText: string, { red, green, blue, alpha, x, y }: Pixel): Promise<MidiNote | undefined> {
+async function rgbaToMidiNote (functionText: string, pixel: Pixel): Promise<MidiNote | undefined> {
   return await new Promise((resolve, reject) => {
-    functionText += 'onmessage = (pixel) => { try { postMessage(pixelToMidiNote(pixel)); } catch (e) { console.log(e); } }'
+    functionText += 'onmessage = (message) => postMessage(pixelToMidiNote(message.data));'
     const webworkerScriptUrl = URL.createObjectURL(new Blob([functionText], {
       type: 'text/javascript'
     }))
@@ -48,7 +48,7 @@ async function rgbaToMidiNote (functionText: string, { red, green, blue, alpha, 
       reject(new Error('Time limit exceeded'))
     }, 5000)
 
-    webworker.postMessage(null)
+    webworker.postMessage(pixel)
   })
 }
 
@@ -102,7 +102,9 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
 
             if (red == null || green == null || blue == null || alpha == null) return
 
-            midiNote = await rgbaToMidiNote(props.functionText, { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
+            const pixel = { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) }
+            // console.log(pixel)
+            midiNote = await rgbaToMidiNote(props.functionText, pixel)
             if (midiNote != null && midiNote.duration > 0 && midiNote.start >= 0) {
               midi.tracks[midiNote.track == null ? 0 : midiNote.track].addNote({
                 midi: clamp(Math.floor(midiNote.pitch), 0, 127),
