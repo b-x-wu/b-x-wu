@@ -135,8 +135,8 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
   }
 
   const convertToMidiButton = (
-    <button onClick={handleConvertToMidi} className='flex flex-row items-center gap-x-2 rounded-lg bg-dark-blue py-3 px-4 text-sm'>
-      <Image src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Repeat_font_awesome.svg" className='h-5 w-5 invert' height={10} width={10} alt='Convert to Midi' aria-label='Convert to Midi' />
+    <button onClick={handleConvertToMidi} className='flex flex-row items-center gap-x-2 rounded-md bg-lighter-blue py-3 px-4 text-sm text-darkest-blue ring-0 transition-all duration-300 hover:ring-2 dark:bg-darkest-blue dark:text-glacier'>
+      <Image src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Repeat_font_awesome.svg" className='h-5 w-5 opacity-80 transition-all duration-300 dark:invert' height={10} width={10} alt='Convert to Midi' aria-label='Convert to Midi' />
       <div>
         Convert to Midi
       </div>
@@ -191,22 +191,22 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
       <div className='mx-auto flex h-fit flex-row items-center gap-x-4'>
         {!isPlaying
           ? <button onClick={() => { void playMidi() }} className='flex flex-row items-center gap-x-2'>
-              <div className='h-8 w-8 rounded-full bg-dim-gray'>
-                <Image src='/play-icon.svg' height={10} width={10} alt='Play' aria-label='Play' className='mx-auto h-full w-5/12 object-contain opacity-70 dark:invert' />
+              <div className='h-8 w-8 rounded-full bg-lighter-blue ring-0 transition-all duration-300 hover:ring-2 dark:bg-darkest-blue'>
+                <Image src='/play-icon.svg' height={10} width={10} alt='Play' aria-label='Play' className='mx-auto h-full w-5/12 object-contain opacity-70 transition-all duration-300 dark:invert' />
               </div>
               <div className='text-sm'>Play</div>
             </button>
           : <button onClick={() => { setIsPlaying(false); for (const synth of synths) synth.disconnect() }} className='flex flex-row items-center gap-x-2'>
-              <div className='h-8 w-8 rounded-full bg-dim-gray'>
-                <Image src='/stop-icon.svg' height={10} width={10} alt='Stop' aria-label='Stop' className='mx-auto h-full w-4/12 object-contain opacity-70 dark:invert' />
+              <div className='h-8 w-8 rounded-full bg-lighter-blue ring-0 transition-all duration-300 hover:ring-2 dark:bg-darkest-blue'>
+                <Image src='/stop-icon.svg' height={10} width={10} alt='Stop' aria-label='Stop' className='mx-auto h-full w-4/12 object-contain opacity-70 transition-all duration-300 dark:invert' />
               </div>
               <div className='text-sm'>Stop</div>
             </button>
         }
       </div>
       <div>
-        <a download="image.mid" href={midiUrl ?? '/'} className='mx-auto flex flex-row items-center gap-x-2 rounded-lg bg-dark-blue py-3 px-4 text-sm'>
-          <Image src='https://www.svgrepo.com/show/488905/download-2.svg' height={10} width={10} alt='Download Midi' aria-label='Download Midi' className='h-6 w-6 invert' />
+        <a download="image.mid" href={midiUrl ?? '/'} className='mx-auto flex flex-row items-center gap-x-2 rounded-md bg-lighter-blue py-3 px-4 text-sm text-darkest-blue ring-0 transition-all duration-300 hover:ring-2 dark:bg-darkest-blue dark:text-glacier'>
+          <Image src='https://www.svgrepo.com/show/488905/download-2.svg' height={10} width={10} alt='Download Midi' aria-label='Download Midi' className='h-6 w-6 opacity-80 transition-all duration-300 dark:invert' />
           <div>Download Midi</div>
         </a>
       </div>

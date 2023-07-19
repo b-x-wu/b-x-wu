@@ -41,8 +41,8 @@ function ImageUrlGetter (props: ImageGetterProps): JSX.Element {
 
   return (
     <div className='mx-auto flex w-96 max-w-full flex-row gap-x-2'>
-      <input type="text" placeholder='Image Url' className='w-full rounded-md border-2 border-darkest-blue bg-[#FFF] pl-2 text-darkest-blue' value={currentFormValue} onChange={(event) => { setCurrentFormValue(event.target.value) }}></input>
-      <button className='rounded-md bg-lighter-blue p-2 ring-0 transition-all duration-300 hover:cursor-pointer hover:ring-2 dark:bg-darkest-blue' onClick={() => { setImageUrl(currentFormValue) }}>Submit</button>
+      <input type="text" placeholder='Image Url' className='w-full rounded-md border-2 border-dim-gray bg-[#FFF] pl-2 text-darkest-blue' value={currentFormValue} onChange={(event) => { setCurrentFormValue(event.target.value) }}></input>
+      <button className='rounded-md bg-lighter-blue p-2 text-darkest-blue ring-0 transition-all duration-300 hover:cursor-pointer hover:ring-2 dark:bg-darkest-blue dark:text-glacier' onClick={() => { setImageUrl(currentFormValue) }}>Submit</button>
     </div>
   )
 }
@@ -60,7 +60,7 @@ function ImageFileGetter (props: ImageGetterProps): JSX.Element {
 
   return (
     <div className='mx-auto'>
-      <label className='rounded-md bg-lighter-blue p-2 ring-0 transition-all duration-300 hover:cursor-pointer hover:ring-2 dark:bg-darkest-blue'>
+      <label className='rounded-md bg-lighter-blue p-2 text-darkest-blue ring-0 transition-all duration-300 hover:cursor-pointer hover:ring-2 dark:bg-darkest-blue dark:text-glacier'>
         Upload File
         <input type="file" className='hidden' onChange={handleFileChange} />
       </label>
@@ -92,7 +92,7 @@ export function ImageInput (props: ImageInputProps): JSX.Element {
 
   if (imageBlobUrl == null) {
     return (
-      <div className='flex flex-col gap-y-2 text-sm'>
+      <div className='flex flex-col gap-y-2 text-sm lg:w-4/12 lg:self-center'>
         <ImageFileGetter setImageBlob={(imageBlob) => { void handleImageBlobChange(imageBlob) }} setConsoleMessage={props.setConsoleMessage}/>
         <div className='mx-auto'>or</div>
         <ImageUrlGetter setImageBlob={(imageBlob) => { void handleImageBlobChange(imageBlob) }} setConsoleMessage={props.setConsoleMessage} />
@@ -101,9 +101,11 @@ export function ImageInput (props: ImageInputProps): JSX.Element {
   }
 
   return (
-    <div className='relative h-96 w-full border-2 bg-dim-gray/50'>
-      <Image src={imageBlobUrl} width={100} height={100} className='h-auto max-h-full w-full object-contain' alt='Your Image' />
-      <Image src="/x-icon.svg" width={100} height={100} aria-label='Remove Image' alt='Remove Image' className='absolute right-2 top-2 h-4 w-auto hover:cursor-pointer' onClick={handleRemoveImage} />
+    <div className='relative h-96 w-full border-4 border-lighter-blue bg-lighter-blue/90 transition-all duration-300 dark:border-darkest-blue dark:bg-darkest-blue/95 lg:w-4/12'>
+      <div className='flex h-full flex-row items-center'>
+        <Image src={imageBlobUrl} width={100} height={100} className='h-auto max-h-full w-full object-contain' alt='Your Image' />
+      </div>
+      <Image src="/x-icon.svg" width={100} height={100} aria-label='Remove Image' alt='Remove Image' className='absolute right-2 top-2 h-3 w-auto opacity-80 transition-all duration-300 hover:cursor-pointer dark:invert' onClick={handleRemoveImage} />
     </div>
   )
 }

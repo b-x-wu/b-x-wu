@@ -11,11 +11,15 @@ export default function ImageToMidi (): JSX.Element {
   const [consoleMessage, setConsoleMessage] = useState<ConsoleMessage | undefined>(undefined)
 
   return (
-    <div className='relative flex flex-col space-y-5'>
-      <Console consoleMessage={consoleMessage} clearConsoleMessage={() => { setConsoleMessage(undefined) }} />
-      <FunctionTextInput setFunctionText={setFunctionText} />
-      <ImageInput setImage={setImage} setConsoleMessage={setConsoleMessage} />
-      {image == null || functionText == null ? <></> : <MidiManager image={image} functionText={functionText} setConsoleMessage={setConsoleMessage} />}
+    <div className='mx-auto flex flex-col gap-y-12 p-12'>
+      <div className='flex flex-col space-y-12'>
+        <Console consoleMessage={consoleMessage} clearConsoleMessage={() => { setConsoleMessage(undefined) }} />
+        <div className='flex flex-col space-y-12 lg:flex-row lg:space-x-8 lg:space-y-0'>
+          <FunctionTextInput setFunctionText={setFunctionText} />
+          <ImageInput setImage={setImage} setConsoleMessage={setConsoleMessage} />
+        </div>
+        {image == null || functionText == null ? <></> : <MidiManager image={image} functionText={functionText} setConsoleMessage={setConsoleMessage} />}
+      </div>
     </div>
   )
 }
