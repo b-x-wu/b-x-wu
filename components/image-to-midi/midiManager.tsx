@@ -1,88 +1,10 @@
 import { useState } from 'react'
-import { type Base64String, isMidiNote, type MidiNote, type Pixel } from '../../types/image_to_midi'
+import { type Base64String, isMidiNote, type MidiNote, type Pixel, waveformTrackToOscillatorType, type WaveformTrack } from '../../types/image_to_midi'
 import { Midi } from '@tonejs/midi'
 import * as Tone from 'tone'
 import ProgressBar from './progressBar'
 import { type Note } from '@tonejs/midi/dist/Note'
 import Image from 'next/image'
-
-// interface ADSRControllerProps {
-//   name: string
-//   disabled: boolean
-//   setAttack: (attack: number) => void
-//   setDecay: (decay: number) => void
-//   setSustain: (sustain: number) => void
-//   setRelease: (release: number) => void
-// }
-
-// function floatToRoundedExp (val: number): number {
-//   return Math.round(Math.exp(val) * 100) / 100
-// }
-
-// function ADSRController (props: ADSRControllerProps): JSX.Element {
-//   const [attackFormValue, setAttackFormValue] = useState<number>(0.02)
-//   const [decay, setDecay] = useState<number>(0.1)
-//   const [sustain, setSustain] = useState<number>(0.3)
-//   const [release, setRelease] = useState<number>(1)
-
-//   return (
-//     <div className='flex w-60 flex-col text-sm'>
-//       <div className='mx-auto'>{props.name}</div>
-//       <div className='flex w-full flex-row gap-x-2'>
-//         <div className='w-4/12 text-start'>Attack</div>
-//         <input
-//           disabled={props.disabled}
-//           step={0.001}
-//           type='range'
-//             min={Math.log(0.005)}
-//           max={Math.log(20)}
-//           value={attackFormValue}
-//           onChange={(event) => { setAttackFormValue(parseFloat(event.target.value)); props.setAttack(floatToRoundedExp(parseFloat(event.target.value))) }}
-//         />
-//         <div className='w-3/12 text-end'>{floatToRoundedExp(attackFormValue)}</div>
-//       </div>
-//       <div className='flex flex-row gap-x-2'>
-//         <div>Decay</div>
-//         <input
-//           disabled={props.disabled}
-//           step={0.01}
-//           type='range'
-//           min={0}
-//           max={3}
-//           value={decay}
-//           onChange={(event) => { setDecay(parseFloat(event.target.value)); props.setDecay(parseFloat(event.target.value)) }}
-//         />
-//         <div>{decay}</div>
-//       </div>
-//       <div className='flex flex-row gap-x-2'>
-//         <div>Sustain</div>
-//         <input
-//           disabled={props.disabled}
-//           step={0.01}
-//           type='range'
-//           min={0}
-//           max={1}
-//           value={sustain}
-//           onChange={(event) => { setSustain(parseFloat(event.target.value)); props.setSustain(parseFloat(event.target.value)) }}
-//         />
-//         <div>{sustain}</div>
-//       </div>
-//       <div className='flex flex-row gap-x-2'>
-//         <div>Release</div>
-//         <input
-//           disabled={props.disabled}
-//           step={0.01}
-//           type='range'
-//           min={0}
-//           max={3}
-//           value={release}
-//           onChange={(event) => { setRelease(parseFloat(event.target.value)); props.setRelease(parseFloat(event.target.value)) }}
-//         />
-//         <div>{release}</div>
-//       </div>
-//     </div>
-//   )
-// }
 
 interface MidiManagerProps {
   image: Base64String
@@ -135,8 +57,9 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
 
-  const handleOnClick = (): void => {
+  const handleConvertToMidi = (): void => {
     setIsLoading(true)
+    setIsPlaying(false)
     void (async () => {
       const res = await fetch('/api/image_to_midi/image_processor', {
         method: 'POST',
@@ -154,7 +77,7 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
       const indices = Buffer.from(data.indexBuffer, 'base64').toJSON().data
 
       const midi = new Midi()
-      const track = midi.addTrack()
+      for (let i = 0; i < 4; i++) midi.addTrack()
 
       let red: number | undefined; let green: number | undefined; let blue: number | undefined; let alpha: number | undefined
       let midiNote: MidiNote | undefined
@@ -169,7 +92,7 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
 
           midiNote = await rgbaToMidiNote(props.functionText, { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
           if (midiNote != null && midiNote.duration > 0 && midiNote.start >= 0) {
-            track.addNote({
+            midi.tracks[midiNote.track == null ? 0 : midiNote.track].addNote({
               midi: clamp(Math.floor(midiNote.pitch), 0, 127),
               time: midiNote.start,
               duration: midiNote.duration,
@@ -194,7 +117,7 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
   }
 
   const convertToMidiButton = (
-    <button onClick={handleOnClick} className='flex flex-row items-center gap-x-2 rounded-lg bg-dark-blue py-3 px-4 text-sm'>
+    <button onClick={handleConvertToMidi} className='flex flex-row items-center gap-x-2 rounded-lg bg-dark-blue py-3 px-4 text-sm'>
       <Image src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Repeat_font_awesome.svg" className='h-5 w-5 invert' height={10} width={10} alt='Convert to Midi' aria-label='Convert to Midi' />
       <div>
         Convert to Midi
@@ -218,14 +141,13 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
     )
   }
 
-  const synth = new Tone.PolySynth(Tone.Synth, {
-    envelope: {
-      attack: 0.02,
-      decay: 0.1,
-      sustain: 0.3,
-      release: 1
-    }
-  }).toDestination()
+  const synths = new Array(4).fill(0).map((_, waveformTrack) => {
+    return new Tone.PolySynth(Tone.Synth, {
+      oscillator: {
+        type: waveformTrackToOscillatorType.get(waveformTrack as WaveformTrack) ?? 'sine'
+      }
+    }).toDestination()
+  })
 
   const playMidi = async (): Promise<void> => {
     await Tone.start()
@@ -233,12 +155,14 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
     const midi = new Midi(midiBuffer)
 
     const baseStartTime = Tone.now() + 0.5
-    const midiPart = new Tone.Part((time, note: Note) => {
-      synth.triggerAttackRelease(note.name, note.duration, baseStartTime + note.time, note.velocity)
-    }, midi.tracks[0].notes) // TODO: add warning for max polyphony reached
+    Array(4).fill(0).map((_, waveformTrack) => {
+      return new Tone.Part((time, note: Note) => {
+        synths[waveformTrack].triggerAttackRelease(note.name, note.duration, baseStartTime + note.time, note.velocity)
+      }, midi.tracks[waveformTrack].notes).start()
+    })
+    // TODO: add warning for max polyphony reached
 
     setIsPlaying(true)
-    midiPart.start()
     Tone.Transport.start()
   }
 
@@ -248,15 +172,14 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
         {convertToMidiButton}
       </div>
       <div className='mx-auto flex h-fit flex-row items-center gap-x-4'>
-        {/* Download midi button */}
         {!isPlaying
           ? <button onClick={() => { void playMidi() }} className='flex flex-row items-center gap-x-2'>
               <div className='h-8 w-8 rounded-full bg-dim-gray'>
-                <Image src='/play-icon.svg' height={10} width={10} alt='Play' aria-label='Play' className='mx-auto h-full w-6/12 object-contain opacity-70 dark:invert' />
+                <Image src='/play-icon.svg' height={10} width={10} alt='Play' aria-label='Play' className='mx-auto h-full w-5/12 object-contain opacity-70 dark:invert' />
               </div>
               <div className='text-sm'>Play</div>
             </button>
-          : <button onClick={() => { setIsPlaying(false); synth.disconnect() }} className='flex flex-row items-center gap-x-2'>
+          : <button onClick={() => { setIsPlaying(false); for (const synth of synths) synth.disconnect() }} className='flex flex-row items-center gap-x-2'>
               <div className='h-8 w-8 rounded-full bg-dim-gray'>
                 <Image src='/stop-icon.svg' height={10} width={10} alt='Stop' aria-label='Stop' className='mx-auto h-full w-4/12 object-contain opacity-70 dark:invert' />
               </div>
