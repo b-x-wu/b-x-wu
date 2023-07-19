@@ -52,3 +52,11 @@ export interface Image {
 }
 
 export type Base64String = string
+
+export enum ConsoleMessageType {
+  WARNING, ERROR
+}
+export interface ConsoleMessage {
+  type: ConsoleMessageType
+  message: string
+}
