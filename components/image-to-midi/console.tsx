@@ -2,7 +2,7 @@ import { ConsoleMessageType, type ConsoleMessage } from '../../types/image_to_mi
 import Image from 'next/image'
 
 interface ConsoleProps {
-  consoleMessage: ConsoleMessage
+  consoleMessage: ConsoleMessage | undefined
   clearConsoleMessage: () => void
 }
 

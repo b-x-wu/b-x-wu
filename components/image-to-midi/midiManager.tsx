@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { type Base64String, isMidiNote, type MidiNote, type Pixel, waveformTrackToOscillatorType, type WaveformTrack } from '../../types/image_to_midi'
+import { type Base64String, isMidiNote, type MidiNote, type Pixel, waveformTrackToOscillatorType, type WaveformTrack, type ConsoleMessage, ConsoleMessageType } from '../../types/image_to_midi'
 import { Midi } from '@tonejs/midi'
 import * as Tone from 'tone'
 import ProgressBar from './progressBar'
@@ -9,6 +9,7 @@ import Image from 'next/image'
 interface MidiManagerProps {
   image: Base64String
   functionText: string
+  setConsoleMessage: (consoleMessage: ConsoleMessage) => void
 }
 
 function clamp (val: number, min: number, max: number): number {
@@ -68,56 +69,65 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
     setIsLoading(true)
     setIsPlaying(false)
     void (async () => {
-      const res = await fetch('/api/image_to_midi/image_processor', {
-        method: 'POST',
-        body: JSON.stringify({ image: props.image })
-      })
-
-      if (res.status >= 400) return
-      const data = await res.json()
-      const width = data.width
-      // const height = data.height
-      const redBuffer = Buffer.from(data.redBuffer, 'base64')
-      const greenBuffer = Buffer.from(data.greenBuffer, 'base64')
-      const blueBuffer = Buffer.from(data.blueBuffer, 'base64')
-      const alphaBuffer = Buffer.from(data.alphaBuffer, 'base64')
-      const indices = Buffer.from(data.indexBuffer, 'base64').toJSON().data
-
-      const midi = new Midi()
-      for (let i = 0; i < 4; i++) midi.addTrack()
-
-      let red: number | undefined; let green: number | undefined; let blue: number | undefined; let alpha: number | undefined
-      let midiNote: MidiNote | undefined
-
       try {
-        let idx
-        for (let progress = 0; progress < indices.length; progress++) {
-          idx = indices[progress]
-          red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
+        const res = await fetch('/api/image_to_midi/image_processor', {
+          method: 'POST',
+          body: JSON.stringify({ image: props.image })
+        })
 
-          if (red == null || green == null || blue == null || alpha == null) return
-
-          midiNote = await rgbaToMidiNote(props.functionText, { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
-          if (midiNote != null && midiNote.duration > 0 && midiNote.start >= 0) {
-            midi.tracks[midiNote.track == null ? 0 : midiNote.track].addNote({
-              midi: clamp(Math.floor(midiNote.pitch), 0, 127),
-              time: midiNote.start,
-              duration: midiNote.duration,
-              velocity: clamp(midiNote.velocity, 0, 1)
-            })
-          }
-          setCurrentProgress(progress / indices.length)
+        if (res.status >= 400) {
+          props.setConsoleMessage({ type: ConsoleMessageType.ERROR, message: 'Error parsing image.' })
+          throw new Error()
         }
-      } catch (e) {
-        console.log(e)
-      }
+        const data = await res.json()
+        const width = data.width
+        // const height = data.height
+        const redBuffer = Buffer.from(data.redBuffer, 'base64')
+        const greenBuffer = Buffer.from(data.greenBuffer, 'base64')
+        const blueBuffer = Buffer.from(data.blueBuffer, 'base64')
+        const alphaBuffer = Buffer.from(data.alphaBuffer, 'base64')
+        const indices = Buffer.from(data.indexBuffer, 'base64').toJSON().data
 
-      try {
-        const midiBuffer = Buffer.from(midi.toArray())
-        setMidiBuffer(midiBuffer)
-      } catch (e: any) {
-        console.log({ message: 'Error encoding midi buffer.', data: e })
+        const midi = new Midi()
+        for (let i = 0; i < 4; i++) midi.addTrack()
+
+        let red: number | undefined; let green: number | undefined; let blue: number | undefined; let alpha: number | undefined
+        let midiNote: MidiNote | undefined
+
+        try {
+          let idx
+          for (let progress = 0; progress < indices.length; progress++) {
+            idx = indices[progress]
+            red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
+
+            if (red == null || green == null || blue == null || alpha == null) return
+
+            midiNote = await rgbaToMidiNote(props.functionText, { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) })
+            if (midiNote != null && midiNote.duration > 0 && midiNote.start >= 0) {
+              midi.tracks[midiNote.track == null ? 0 : midiNote.track].addNote({
+                midi: clamp(Math.floor(midiNote.pitch), 0, 127),
+                time: midiNote.start,
+                duration: midiNote.duration,
+                velocity: clamp(midiNote.velocity, 0, 1)
+              })
+            }
+            setCurrentProgress(progress / indices.length)
+          }
+        } catch (e: any) {
+          props.setConsoleMessage({ type: ConsoleMessageType.ERROR, message: e.toString() })
+          throw e
+        }
+
+        try {
+          const midiBuffer = Buffer.from(midi.toArray())
+          setMidiBuffer(midiBuffer)
+        } catch (e: any) {
+          props.setConsoleMessage({ type: ConsoleMessageType.ERROR, message: 'Error encoding midi buffer.' })
+          throw e
+        }
+      } catch {
       } finally {
+        setCurrentProgress(0)
         setIsLoading(false)
         setCurrentProgress(0)
       }
@@ -168,7 +178,6 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
         synths[waveformTrack].triggerAttackRelease(note.name, note.duration, baseStartTime + note.time, note.velocity)
       }, midi.tracks[waveformTrack].notes).start()
     })
-    // TODO: add warning for max polyphony reached
 
     setIsPlaying(true)
     Tone.Transport.start()

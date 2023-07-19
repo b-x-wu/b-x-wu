@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { type Base64String } from '../../types/image_to_midi'
+import { type ConsoleMessage, type Base64String, ConsoleMessageType } from '../../types/image_to_midi'
 import Image from 'next/image'
 
 interface ImageGetterProps {
   setImageBlob: (imageBlob: Blob) => void
+  setConsoleMessage: (consoleMessage: ConsoleMessage) => void
 }
 
 // https://stackoverflow.com/questions/18650168/convert-blob-to-base64
@@ -27,12 +28,14 @@ function ImageUrlGetter (props: ImageGetterProps): JSX.Element {
       if (imageUrl == null) return
       try {
         const res = await fetch(imageUrl)
-        if (res.status >= 400) return
+        if (res.status >= 400) throw new Error()
         const contentType = res.headers.get('Content-Type')
-        if (contentType == null || !contentType.includes('image')) return
+        if (contentType == null || !contentType.includes('image')) throw new Error()
 
         props.setImageBlob(await res.blob())
-      } catch {} // TODO: really really add error messages
+      } catch {
+        props.setConsoleMessage({ type: ConsoleMessageType.ERROR, message: 'Error retrieving image from url.' })
+      }
     })()
   }, [imageUrl])
 
@@ -47,8 +50,12 @@ function ImageUrlGetter (props: ImageGetterProps): JSX.Element {
 function ImageFileGetter (props: ImageGetterProps): JSX.Element {
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     event.preventDefault()
-    if (event.target.files == null) return
-    props.setImageBlob(event.target.files[0])
+    try {
+      if (event.target.files == null) throw new Error()
+      props.setImageBlob(event.target.files[0])
+    } catch {
+      props.setConsoleMessage({ type: ConsoleMessageType.ERROR, message: 'Error retrieving image from file' })
+    }
   }
 
   return (
@@ -63,6 +70,7 @@ function ImageFileGetter (props: ImageGetterProps): JSX.Element {
 
 interface ImageInputProps {
   setImage: (image: Base64String | undefined) => void
+  setConsoleMessage: (consoleMessage: ConsoleMessage) => void
 }
 
 export function ImageInput (props: ImageInputProps): JSX.Element {
@@ -85,9 +93,9 @@ export function ImageInput (props: ImageInputProps): JSX.Element {
   if (imageBlobUrl == null) {
     return (
       <div className='flex flex-col gap-y-2 text-sm'>
-        <ImageFileGetter setImageBlob={(imageBlob) => { void handleImageBlobChange(imageBlob) }} />
+        <ImageFileGetter setImageBlob={(imageBlob) => { void handleImageBlobChange(imageBlob) }} setConsoleMessage={props.setConsoleMessage}/>
         <div className='mx-auto'>or</div>
-        <ImageUrlGetter setImageBlob={(imageBlob) => { void handleImageBlobChange(imageBlob) }} />
+        <ImageUrlGetter setImageBlob={(imageBlob) => { void handleImageBlobChange(imageBlob) }} setConsoleMessage={props.setConsoleMessage} />
       </div>
     )
   }
