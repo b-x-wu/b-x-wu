@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { type Base64String, isMidiNote, type MidiNote, type Pixel, waveformTrackToOscillatorType, type WaveformTrack } from '../../types/image_to_midi'
 import { Midi } from '@tonejs/midi'
 import * as Tone from 'tone'
@@ -56,6 +56,13 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
   const [currentProgress, setCurrentProgress] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
+  const [midiUrl, setMidiUrl] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (midiBuffer == null) return
+    if (midiUrl != null) URL.revokeObjectURL(midiUrl)
+    setMidiUrl(URL.createObjectURL(new Blob([midiBuffer])))
+  }, [midiBuffer])
 
   const handleConvertToMidi = (): void => {
     setIsLoading(true)
@@ -112,6 +119,7 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
         console.log({ message: 'Error encoding midi buffer.', data: e })
       } finally {
         setIsLoading(false)
+        setCurrentProgress(0)
       }
     })()
   }
@@ -188,10 +196,10 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
         }
       </div>
       <div>
-        <button className='mx-auto flex flex-row items-center gap-x-2 rounded-lg bg-dark-blue py-3 px-4 text-sm'>
+        <a download="image.mid" href={midiUrl ?? '/'} className='mx-auto flex flex-row items-center gap-x-2 rounded-lg bg-dark-blue py-3 px-4 text-sm'>
           <Image src='https://www.svgrepo.com/show/488905/download-2.svg' height={10} width={10} alt='Download Midi' aria-label='Download Midi' className='h-6 w-6 invert' />
           <div>Download Midi</div>
-        </button>
+        </a>
       </div>
     </div>
   )
