@@ -1,5 +1,4 @@
 import type Tone from 'tone'
-import { type NonCustomOscillatorType } from 'tone/build/esm/source/oscillator/OscillatorInterface'
 
 export interface Pixel {
   red: number
@@ -20,26 +19,12 @@ export function isMidiNote (o: any): boolean {
   return true
 }
 
-export enum WaveformTrack {
-  SINE,
-  TRIANGLE,
-  SQUARE,
-  SAWTOOTH,
-}
-
-export const waveformTrackToOscillatorType = new Map<WaveformTrack, NonCustomOscillatorType>([
-  [WaveformTrack.SINE, 'sine'],
-  [WaveformTrack.TRIANGLE, 'triangle'],
-  [WaveformTrack.SQUARE, 'square'],
-  [WaveformTrack.SAWTOOTH, 'sawtooth']
-])
-
 export interface MidiNote {
   start: number
   duration: number
   pitch: Tone.Unit.MidiNote
   velocity: number
-  track?: WaveformTrack
+  track?: number
 }
 
 export interface Image {

@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
-import { type Base64String, isMidiNote, type MidiNote, type Pixel, waveformTrackToOscillatorType, type WaveformTrack, type ConsoleMessage, ConsoleMessageType, type Image as ApiImage } from '../../types/image_to_midi'
+import { type Base64String, isMidiNote, type MidiNote, type Pixel, type ConsoleMessage, ConsoleMessageType, type Image as ApiImage } from '../../types/image_to_midi'
 import { Midi } from '@tonejs/midi'
-import * as Tone from 'tone'
 import ProgressBar from './progressBar'
-import { type Note } from '@tonejs/midi/dist/Note'
 import Image from 'next/image'
 
 interface MidiManagerProps {
@@ -56,7 +54,6 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
   const [midiBuffer, setMidiBuffer] = useState<ArrayBuffer | undefined>(undefined)
   const [currentProgress, setCurrentProgress] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [midiUrl, setMidiUrl] = useState<string | undefined>(undefined)
 
   useEffect(() => {
@@ -67,7 +64,6 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
 
   const handleConvertToMidi = (): void => {
     setIsLoading(true)
-    setIsPlaying(false)
     void (async () => {
       try {
         const res = await fetch('/api/image_to_midi/image_processor', {
@@ -102,15 +98,12 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
             idx = indexArray[progress]
             red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
 
-            if (red == null || green == null || blue == null || alpha == null) {
-              console.log('null value found')
-              continue
-            }
+            if (red == null || green == null || blue == null || alpha == null) continue
 
             const pixel = { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) }
             midiNote = await rgbaToMidiNote(props.functionText, pixel)
             if (midiNote != null && midiNote.duration > 0 && midiNote.start >= 0) {
-              midi.tracks[midiNote.track == null ? 0 : midiNote.track].addNote({
+              midi.tracks[midiNote.track == null ? 0 : Math.max(0, Math.floor(midiNote.track))].addNote({
                 midi: clamp(Math.floor(midiNote.pitch), 0, 127),
                 time: midiNote.start,
                 duration: midiNote.duration,
@@ -135,7 +128,6 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
       } finally {
         setCurrentProgress(0)
         setIsLoading(false)
-        setCurrentProgress(0)
       }
     })()
   }
@@ -165,50 +157,10 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
     )
   }
 
-  const synths = new Array(4).fill(0).map((_, waveformTrack) => {
-    return new Tone.PolySynth(Tone.Synth, {
-      oscillator: {
-        type: waveformTrackToOscillatorType.get(waveformTrack as WaveformTrack) ?? 'sine'
-      }
-    }).toDestination()
-  })
-
-  const playMidi = async (): Promise<void> => {
-    await Tone.start()
-
-    const midi = new Midi(midiBuffer)
-
-    const baseStartTime = Tone.now() + 0.5
-    Array(4).fill(0).map((_, waveformTrack) => {
-      return new Tone.Part((time, note: Note) => {
-        synths[waveformTrack].triggerAttackRelease(note.name, note.duration, baseStartTime + note.time, note.velocity)
-      }, midi.tracks[waveformTrack].notes).start()
-    })
-
-    setIsPlaying(true)
-    Tone.Transport.start()
-  }
-
   return (
     <div className='mx-auto flex flex-col gap-y-6'>
       <div>
         {convertToMidiButton}
-      </div>
-      <div className='mx-auto flex h-fit flex-row items-center gap-x-4'>
-        {!isPlaying
-          ? <button onClick={() => { void playMidi() }} className='flex flex-row items-center gap-x-2'>
-              <div className='h-8 w-8 rounded-full bg-lighter-blue ring-0 transition-all duration-300 hover:ring-2 dark:bg-darkest-blue'>
-                <Image src='/play-icon.svg' height={10} width={10} alt='Play' aria-label='Play' className='mx-auto h-full w-5/12 object-contain opacity-70 transition-all duration-300 dark:invert' />
-              </div>
-              <div className='text-sm'>Play</div>
-            </button>
-          : <button onClick={() => { setIsPlaying(false); for (const synth of synths) synth.disconnect() }} className='flex flex-row items-center gap-x-2'>
-              <div className='h-8 w-8 rounded-full bg-lighter-blue ring-0 transition-all duration-300 hover:ring-2 dark:bg-darkest-blue'>
-                <Image src='/stop-icon.svg' height={10} width={10} alt='Stop' aria-label='Stop' className='mx-auto h-full w-4/12 object-contain opacity-70 transition-all duration-300 dark:invert' />
-              </div>
-              <div className='text-sm'>Stop</div>
-            </button>
-        }
       </div>
       <div>
         <a download="image.mid" href={midiUrl ?? '/'} className='mx-auto flex flex-row items-center gap-x-2 rounded-md bg-lighter-blue py-3 px-4 text-sm text-darkest-blue ring-0 transition-all duration-300 hover:ring-2 dark:bg-darkest-blue dark:text-glacier'>
