@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { type Base64String, isMidiNote, type MidiNote, type Pixel, waveformTrackToOscillatorType, type WaveformTrack, type ConsoleMessage, ConsoleMessageType } from '../../types/image_to_midi'
+import { type Base64String, isMidiNote, type MidiNote, type Pixel, waveformTrackToOscillatorType, type WaveformTrack, type ConsoleMessage, ConsoleMessageType, type Image as ApiImage } from '../../types/image_to_midi'
 import { Midi } from '@tonejs/midi'
 import * as Tone from 'tone'
 import ProgressBar from './progressBar'
@@ -79,19 +79,16 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
           props.setConsoleMessage({ type: ConsoleMessageType.ERROR, message: 'Error parsing image.' })
           throw new Error()
         }
-        const data = await res.json()
+        const data: ApiImage = await res.json()
         const width = data.width
-        // const height = data.height
-        const redBuffer = Buffer.from(data.redBuffer, 'base64')
-        const greenBuffer = Buffer.from(data.greenBuffer, 'base64')
-        const blueBuffer = Buffer.from(data.blueBuffer, 'base64')
-        const alphaBuffer = Buffer.from(data.alphaBuffer, 'base64')
-        const indices = Buffer.from(data.indexBuffer, 'base64').toJSON().data
-        const decodedIndexArray = Array.from<string>(data.encodedIndexArray).reduce<number[]>((prev, cur) => {
+        const redBuffer = Buffer.from(data.encodedRedBuffer, 'base64')
+        const greenBuffer = Buffer.from(data.encodedGreenBuffer, 'base64')
+        const blueBuffer = Buffer.from(data.encodedBlueBuffer, 'base64')
+        const alphaBuffer = Buffer.from(data.encodedAlphaBuffer, 'base64')
+        const indexArray = Array.from<string>(data.encodedIndexArray).reduce<number[]>((prev, cur) => {
           prev.push(cur.charCodeAt(0))
           return prev
         }, [])
-        // console.log(Math.max(...decodedIndexArray))
 
         const midi = new Midi()
         for (let i = 0; i < 4; i++) midi.addTrack()
@@ -101,13 +98,9 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
 
         try {
           let idx
-          for (let progress = 0; progress < indices.length; progress++) {
-            // if (!isLoading) break
-            // idx = indices[progress]
-            // const decodedIndexArrayIdx = decodedIndexArray[progress]
-            idx = decodedIndexArray[progress]
+          for (let progress = 0; progress < indexArray.length; progress++) {
+            idx = indexArray[progress]
             red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
-            // console.log({ red: redBuffer.at(decodedIndexArrayIdx), green: greenBuffer.at(decodedIndexArrayIdx), blue: blueBuffer.at(decodedIndexArrayIdx), alpha: alphaBuffer.at(decodedIndexArrayIdx) })
 
             if (red == null || green == null || blue == null || alpha == null) {
               console.log('null value found')
@@ -115,7 +108,6 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
             }
 
             const pixel = { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) }
-            // console.log(pixel)
             midiNote = await rgbaToMidiNote(props.functionText, pixel)
             if (midiNote != null && midiNote.duration > 0 && midiNote.start >= 0) {
               midi.tracks[midiNote.track == null ? 0 : midiNote.track].addNote({
@@ -125,7 +117,7 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
                 velocity: clamp(midiNote.velocity, 0, 1)
               })
             }
-            setCurrentProgress(progress / indices.length)
+            setCurrentProgress(progress / indexArray.length)
           }
         } catch (e: any) {
           props.setConsoleMessage({ type: ConsoleMessageType.ERROR, message: e.toString() })
@@ -169,7 +161,6 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
     return (
       <>
         <ProgressBar currentProgress={currentProgress} maxProgress={1} />
-        {/* <button onClick={() => { setIsLoading(false) } } className='h-12 w-24 bg-light-gray'>Cancel</button> */}
       </>
     )
   }

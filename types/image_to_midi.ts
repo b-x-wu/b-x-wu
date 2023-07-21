@@ -45,10 +45,11 @@ export interface MidiNote {
 export interface Image {
   width: number
   height: number
-  redBuffer: Buffer
-  greenBuffer: Buffer
-  blueBuffer: Buffer
-  indexBuffer?: Buffer
+  encodedRedBuffer: string
+  encodedGreenBuffer: string
+  encodedBlueBuffer: string
+  encodedAlphaBuffer: string
+  encodedIndexArray: string
 }
 
 export type Base64String = string

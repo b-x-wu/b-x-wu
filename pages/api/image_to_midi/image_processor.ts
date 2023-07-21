@@ -1,6 +1,7 @@
 import { type NextApiRequest, type NextApiResponse } from 'next'
 import { type ApiFailResponse } from '../../../types/types'
 import sharp from 'sharp'
+import { type Image } from '../../../types/image_to_midi'
 
 const MAX_NOTES = 10_000
 
@@ -17,7 +18,7 @@ function generateRandomSequence (maxValue: number): number[] {
   return sequence
 }
 
-export default async function handler (req: NextApiRequest, res: NextApiResponse<any | ApiFailResponse>): Promise<void> {
+export default async function handler (req: NextApiRequest, res: NextApiResponse<Image | ApiFailResponse>): Promise<void> {
   let image: string | undefined
   try {
     image = JSON.parse(req.body).image
@@ -61,16 +62,14 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   const greenBuffer: Buffer = Buffer.from(indexArray.map<number>((idx) => rawGreenBuffer.at(idx) ?? 0))
   const blueBuffer: Buffer = Buffer.from(indexArray.map<number>((idx) => rawBlueBuffer.at(idx) ?? 0))
   const alphaBuffer: Buffer = Buffer.from(indexArray.map<number>((idx) => rawAlphaBuffer.at(idx) ?? 0))
-  const indexBuffer: Buffer = Buffer.from(indexArray)
 
   res.json({
     height: sharpImageMetadata.height,
     width: sharpImageMetadata.width,
-    redBuffer: redBuffer.toString('base64'),
-    greenBuffer: greenBuffer.toString('base64'),
-    blueBuffer: blueBuffer.toString('base64'),
-    alphaBuffer: alphaBuffer.toString('base64'),
-    indexBuffer: indexBuffer.toString('base64'),
+    encodedRedBuffer: redBuffer.toString('base64'),
+    encodedGreenBuffer: greenBuffer.toString('base64'),
+    encodedBlueBuffer: blueBuffer.toString('base64'),
+    encodedAlphaBuffer: alphaBuffer.toString('base64'),
     encodedIndexArray: String.fromCharCode(...indexArray)
   })
 }
