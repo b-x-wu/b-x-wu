@@ -87,6 +87,11 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
         const blueBuffer = Buffer.from(data.blueBuffer, 'base64')
         const alphaBuffer = Buffer.from(data.alphaBuffer, 'base64')
         const indices = Buffer.from(data.indexBuffer, 'base64').toJSON().data
+        const decodedIndexArray = Array.from<string>(data.encodedIndexArray).reduce<number[]>((prev, cur) => {
+          prev.push(cur.charCodeAt(0))
+          return prev
+        }, [])
+        // console.log(Math.max(...decodedIndexArray))
 
         const midi = new Midi()
         for (let i = 0; i < 4; i++) midi.addTrack()
@@ -97,10 +102,17 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
         try {
           let idx
           for (let progress = 0; progress < indices.length; progress++) {
-            idx = indices[progress]
+            // if (!isLoading) break
+            // idx = indices[progress]
+            // const decodedIndexArrayIdx = decodedIndexArray[progress]
+            idx = decodedIndexArray[progress]
             red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
+            // console.log({ red: redBuffer.at(decodedIndexArrayIdx), green: greenBuffer.at(decodedIndexArrayIdx), blue: blueBuffer.at(decodedIndexArrayIdx), alpha: alphaBuffer.at(decodedIndexArrayIdx) })
 
-            if (red == null || green == null || blue == null || alpha == null) return
+            if (red == null || green == null || blue == null || alpha == null) {
+              console.log('null value found')
+              continue
+            }
 
             const pixel = { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) }
             // console.log(pixel)
@@ -157,6 +169,7 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
     return (
       <>
         <ProgressBar currentProgress={currentProgress} maxProgress={1} />
+        {/* <button onClick={() => { setIsLoading(false) } } className='h-12 w-24 bg-light-gray'>Cancel</button> */}
       </>
     )
   }

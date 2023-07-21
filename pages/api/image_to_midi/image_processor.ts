@@ -4,17 +4,16 @@ import sharp from 'sharp'
 
 const MAX_NOTES = 10_000
 
-function generateRandomSequence (maxValue: number, maxSize: number): number[] {
-  const sequence = [...Array(maxValue + 1).keys()]
+function generateRandomSequence (maxValue: number): number[] {
+  const sequence = [...Array(maxValue).keys()]
   let j: number
   let temp: number
-  for (let i = 0; i < Math.min(maxValue - 1, maxSize); i++) {
+  for (let i = 0; i < maxValue; i++) {
     j = Math.floor(Math.random() * (maxValue - i)) + i
     temp = sequence[j]
     sequence[j] = sequence[i]
     sequence[i] = temp
   }
-  if (maxSize <= maxValue) return sequence.slice(0, maxSize)
   return sequence
 }
 
@@ -56,7 +55,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
   const rawAlphaBuffer = sharpImageMetadata.hasAlpha != null && sharpImageMetadata.hasAlpha
     ? await sharpImage.extractChannel('alpha').raw().toBuffer()
     : Buffer.from(new Array(sharpImageMetadata.width * sharpImageMetadata.height - 1).fill(1))
-  const indexArray = generateRandomSequence(sharpImageMetadata.height * sharpImageMetadata.width - 1, MAX_NOTES)
+  const indexArray = generateRandomSequence(Math.min(sharpImageMetadata.height * sharpImageMetadata.width, MAX_NOTES))
 
   const redBuffer: Buffer = Buffer.from(indexArray.map<number>((idx) => rawRedBuffer.at(idx) ?? 0))
   const greenBuffer: Buffer = Buffer.from(indexArray.map<number>((idx) => rawGreenBuffer.at(idx) ?? 0))
@@ -71,7 +70,8 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     greenBuffer: greenBuffer.toString('base64'),
     blueBuffer: blueBuffer.toString('base64'),
     alphaBuffer: alphaBuffer.toString('base64'),
-    indexBuffer: indexBuffer.toString('base64')
+    indexBuffer: indexBuffer.toString('base64'),
+    encodedIndexArray: String.fromCharCode(...indexArray)
   })
 }
 
