@@ -34,7 +34,7 @@ export default function ImageToMidi (): JSX.Element {
           </p>
         </div>
       </div>
-      <div className='mx-auto flex w-[75%] flex-col gap-y-10'>
+      <div className='mx-auto flex w-[80%] flex-col gap-y-10'>
         <h2 className='p-2 text-center text-2xl'>Documentation</h2>
         <div className='flex flex-col gap-y-4'>
           <h3 className='w-fit bg-light-gray px-1 font-mono text-xl font-bold text-darkest-blue transition-all duration-300 dark:bg-dim-gray/50 dark:text-glacier'>Pixel</h3>
@@ -44,42 +44,42 @@ export default function ImageToMidi (): JSX.Element {
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>red</span><span className='text-xs leading-5'>integer between 0 and 255 inclusive</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The red value of the pixel.
                 </p>
               </div>
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>green</span><span className='text-xs leading-5'>integer between 0 and 255 inclusive</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The green value of the pixel.
                 </p>
               </div>
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>blue</span><span className='text-xs leading-5'>integer between 0 and 255 inclusive</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The blue value of the pixel.
                 </p>
               </div>
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>alpha</span><span className='text-xs leading-5'>integer between 0 and 255 inclusive</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The alpha value of the pixel, or the pixel&apos;s level of opacity. 0 is completely transparent, and 255 is completely opaque.
                 </p>
               </div>
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>x</span><span className='text-xs leading-5'>non-negative integer</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The zero-indexed x coordinate of the pixel. Values range from zero to the pixel width of the image minus one with zero representing a pixel on the left border and the width minus one representing a pixel on the right.
                 </p>
               </div>
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>y</span><span className='text-xs leading-5'>non-negative integer</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The zero-indexed y coordinate of the pixel. Values range from zero to the pixel height of the image minus one with zero representing a pixel on the top border and the height minus one representing a pixel on the bottom.
                 </p>
               </div>
@@ -109,35 +109,35 @@ export default function ImageToMidi (): JSX.Element {
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>start</span><span className='text-xs leading-5'>non-negative number</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The start time of the note in seconds. When less than zero, the note will not be present in the final MIDI file.
                 </p>
               </div>
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>duration</span><span className='text-xs leading-5'>positive number</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The duration of the note in seconds. When non-positive, the note will not be present in the final MIDI file.
                 </p>
               </div>
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>pitch</span><span className='text-xs leading-5'>integer between 0 and 127 inclusive</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The numeric pitch value of the note. Zero corresponds to C-1 and 127 corresponds to G9. A complete guide to corresponding notes can be found <Link className='font-bold hover:underline' href="https://studiocode.dev/resources/midi-middle-c/" target='_blank' rel='noreferrer'>here</Link>. Values below zero will be rounded up to zero, and values above 127 will be rounded down to 127.
                 </p>
               </div>
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>velocity</span><span className='text-xs leading-5'>number between 0 and 1 inclusive</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The velocity of the note, normalized to be between zero and one. Typically, velocity corresponds to how forcefully a note is played with zero representing with no force and one representing maximum force.
                 </p>
               </div>
               <hr />
               <div className='flex flex-col text-sm'>
                 <div className='flex flex-row gap-x-2 py-2'><span className='font-mono font-semibold'>track</span><span className='text-xs leading-5'>non-negative integer (optional)</span></div>
-                <p className='text-xs leading-loose'>
+                <p className='leading-loose'>
                   The zero indexed track number to place the note on. Defaults to zero, the first track.
                 </p>
               </div>
