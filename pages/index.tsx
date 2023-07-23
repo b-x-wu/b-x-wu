@@ -103,10 +103,10 @@ export default function Home (): JSX.Element {
             description='A customizable reskin for the terminal that makes it look like a visual novel.'
           />
           <FeaturedProject
-            name="Graphics Engine"
-            imagePath="/project_images/graphics_engine.bmp"
-            url='https://github.com/bruce-x-wu/graphics-engine'
-            description='A 3D graphics renderer built from scratch'
+            name="Image to MIDI"
+            imagePath="/project_images/image-to-midi.png"
+            url='/projects/image_to_midi'
+            description='A generative computer music tool that converts images to MIDI'
           />
           <FeaturedProject
             name="brucexwu.com"
