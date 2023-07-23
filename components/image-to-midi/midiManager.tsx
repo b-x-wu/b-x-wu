@@ -95,13 +95,19 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
         try {
           let idx
           for (let progress = 0; progress < indexArray.length; progress++) {
+            setCurrentProgress(progress / indexArray.length)
             idx = indexArray[progress]
             red = redBuffer.at(idx); green = greenBuffer.at(idx); blue = blueBuffer.at(idx); alpha = alphaBuffer.at(idx)
 
             if (red == null || green == null || blue == null || alpha == null) continue
 
             const pixel = { red, green, blue, alpha, x: idx % width, y: Math.floor(idx / width) }
-            midiNote = await rgbaToMidiNote(props.functionText, pixel)
+            try {
+              midiNote = await rgbaToMidiNote(props.functionText, pixel)
+            } catch (e: any) {
+              props.setConsoleMessage({ type: ConsoleMessageType.WARNING, message: `Note skipped. (${e.toString() as string})` })
+              continue
+            }
             if (midiNote != null && midiNote.duration > 0 && midiNote.start >= 0) {
               midi.tracks[midiNote.track == null ? 0 : Math.max(0, Math.floor(midiNote.track))].addNote({
                 midi: clamp(Math.floor(midiNote.pitch), 0, 127),
@@ -110,7 +116,6 @@ export function MidiManager (props: MidiManagerProps): JSX.Element {
                 velocity: clamp(midiNote.velocity, 0, 1)
               })
             }
-            setCurrentProgress(progress / indexArray.length)
           }
         } catch (e: any) {
           props.setConsoleMessage({ type: ConsoleMessageType.ERROR, message: e.toString() })
