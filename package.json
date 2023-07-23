@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "@fisch0920/use-dark-mode": "^2.4.0",
+    "@monaco-editor/react": "^4.5.1",
     "@next/font": "13.1.1",
-    "@types/node": "18.11.18",
-    "@types/react": "18.0.26",
-    "@types/react-dom": "18.0.10",
+    "@tonejs/midi": "^2.0.28",
+    "child_process": "^1.0.2",
     "eslint-config-next": "13.1.1",
+    "fs": "^0.0.1-security",
     "mongodb": "^5.5.0",
     "next": "13.1.1",
     "react": "18.2.0",
@@ -24,9 +25,13 @@
     "rehype-slug": "^5.1.0",
     "rehype-toc": "^3.0.2",
     "sharp": "^0.32.0",
-    "swr": "^2.0.3"
+    "swr": "^2.0.3",
+    "tone": "^14.7.77"
   },
   "devDependencies": {
+    "@types/node": "^20.3.3",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
     "@types/react-syntax-highlighter": "^15.5.6",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "autoprefixer": "^10.4.13",
