@@ -1,2 +1,2 @@
 web: npm start
-every-tweet: cd every-tweet && npm start
+every-tweet: npm run start:every-tweet
