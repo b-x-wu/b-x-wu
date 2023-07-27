@@ -1,5 +1,3 @@
-import type Tone from 'tone'
-
 export interface Pixel {
   red: number
   green: number
@@ -22,7 +20,7 @@ export function isMidiNote (o: any): boolean {
 export interface MidiNote {
   start: number
   duration: number
-  pitch: Tone.Unit.MidiNote
+  pitch: number
   velocity: number
   track?: number
 }
