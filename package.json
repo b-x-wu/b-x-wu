@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start:every-tweet": "cd every-tweet && tsc && node ./dist/index.js"
   },
   "dependencies": {
     "@fisch0920/use-dark-mode": "^2.4.0",
@@ -14,6 +15,7 @@
     "@next/font": "13.1.1",
     "@tonejs/midi": "^2.0.28",
     "child_process": "^1.0.2",
+    "dotenv": "^16.3.1",
     "eslint-config-next": "13.1.1",
     "fs": "^0.0.1-security",
     "mongodb": "^5.5.0",
@@ -25,7 +27,8 @@
     "rehype-slug": "^5.1.0",
     "rehype-toc": "^3.0.2",
     "sharp": "^0.32.0",
-    "swr": "^2.0.3"
+    "swr": "^2.0.3",
+    "twitter-api-v2": "^1.15.1"
   },
   "devDependencies": {
     "@types/node": "^20.3.3",
