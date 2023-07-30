@@ -59,9 +59,13 @@ async function popLatestMongoCommit (client: MongoClient): Promise<Commit | null
 }
 
 export async function handleTweetCommit (twitterClient: TwitterApiReadWrite, octokitClient: Octokit, mongoClient: MongoClient): Promise<void> {
-  const commit = await popLatestMongoCommit(mongoClient)
-  if (commit == null) {
-    return
+  try {
+    const commit = await popLatestMongoCommit(mongoClient)
+    if (commit == null) {
+      return
+    }
+    await broadcastCommit(twitterClient, octokitClient, commit)
+  } catch (e: any) {
+    console.error(e.toString())
   }
-  await broadcastCommit(twitterClient, octokitClient, commit)
 }

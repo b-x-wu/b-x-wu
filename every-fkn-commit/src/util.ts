@@ -1,14 +1,14 @@
-import { MongoClient } from "mongodb"
-import { Octokit } from "octokit"
-import { handleNewestCommit } from "./handleNewestCommit"
+import { type MongoClient } from 'mongodb'
+import { type Octokit } from 'octokit'
+import { handleNewestCommit } from './handleNewestCommit'
 
 export async function sleep (ms: number): Promise<void> {
-  return new Promise((resolve) => {
+  await new Promise((resolve) => {
     setTimeout(resolve, ms)
   })
 }
 
-export async function loadFreshCommits (mongoClient: MongoClient, octokitClient: Octokit) {
+export async function loadFreshCommits (mongoClient: MongoClient, octokitClient: Octokit): Promise<void> {
   await handleNewestCommit(octokitClient, mongoClient, 'l')
   await sleep(2000)
   await handleNewestCommit(octokitClient, mongoClient, 'm')

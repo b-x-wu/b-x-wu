@@ -37,10 +37,14 @@ async function insertNewCommit (client: MongoClient, commit: Commit): Promise<bo
 }
 
 export async function handleNewestCommit (octokitClient: Octokit, mongoClient: MongoClient, keyword: string): Promise<void> {
-  const commit = await getLatestGithubCommit(octokitClient, keyword)
-  if (commit == null) {
-    return
-  }
+  try {
+    const commit = await getLatestGithubCommit(octokitClient, keyword)
+    if (commit == null) {
+      return
+    }
 
-  await insertNewCommit(mongoClient, commit)
+    await insertNewCommit(mongoClient, commit)
+  } catch (e: any) {
+    console.error(e.toString())
+  }
 }

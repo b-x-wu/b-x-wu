@@ -24,7 +24,7 @@ async function main (): Promise<void> {
     accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET ?? ''
   })).readWrite
 
-  const handleTweetCommitTask = schedule('29 * * * *', () => {
+  const handleTweetCommitTask = schedule('29,59 * * * *', () => {
     void (async () => {
       await handleTweetCommit(twitterClient, octokitClient, mongoClient)
     })()
