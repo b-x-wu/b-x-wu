@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "start:every-tweet": "cd every-tweet && tsc && node ./dist/index.js",
     "start:every-fkn-commit": "cd every-fkn-commit && tsc && node ./dist/index.js"
   },
   "dependencies": {
