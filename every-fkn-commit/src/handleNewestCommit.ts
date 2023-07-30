@@ -43,6 +43,7 @@ export async function handleNewestCommit (octokitClient: Octokit, mongoClient: M
       return
     }
 
+    console.log(`Fetched commit: \n${JSON.stringify(commit, null, 2)}\n`)
     await insertNewCommit(mongoClient, commit)
   } catch (e: any) {
     console.error(e.toString())

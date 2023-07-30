@@ -36,6 +36,7 @@ async function main (): Promise<void> {
     })()
   })
 
+  console.log('Starting tasks.')
   handleTweetCommitTask.start()
   handleNewestCommitTask.start()
 

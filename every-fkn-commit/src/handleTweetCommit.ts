@@ -35,9 +35,8 @@ async function broadcastCommit (twitterClient: TwitterApiReadWrite, octokitClien
   const tweet = await commitToTweet(octokitClient, commit)
   if (process.env.NODE_ENV === 'production') {
     await twitterClient.v2.tweet({ text: tweet })
-    return
   }
-  console.log(tweet)
+  console.log(`Posting tweet:\n${tweet}\n'`)
 }
 
 async function popLatestMongoCommit (client: MongoClient): Promise<Commit | null> {
