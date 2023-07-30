@@ -1,2 +1,2 @@
 web: npm start
-every-fkn-tweet: npm run start:every-fkn-tweet
+every-fkn-commit: npm run start:every-fkn-commit
