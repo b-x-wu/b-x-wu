@@ -23,9 +23,9 @@ export default function ImageToMidi (): JSX.Element {
             other creative applications should be possible.
           </p>
           <p className='leading-loose'>
-            To use, upload an image, either through a url or file, whose size is <span className='font-bold'>less than 4 MB</span>. Then, modify the example <span className='bg-dim-gray p-[1px] font-mono'>pixelToMidiNote</span> function
+            To use, upload an image, either through a url or file, whose size is <span className='font-bold'>less than 4 MB</span>. Then, modify the example <span className='bg-light-gray p-[1px] font-mono dark:bg-dim-gray/70'>pixelToMidiNote</span> function
             so that each pixel&apos;s attributes are transformed into your desired MIDI note. Documentation on pixel and MIDI note attributes are given below.
-            Return values from the function that are not <span className='bg-dim-gray p-[1px] font-mono'>MidiNote</span>s will be skipped in the conversion. Also note that there is a <span className='font-bold'>5 second time limit</span> for function runtime;
+            Return values from the function that are not <span className='bg-light-gray p-[1px] font-mono dark:bg-dim-gray/70'>MidiNote</span>s will be skipped in the conversion. Also note that there is a <span className='font-bold'>5 second time limit</span> for function runtime;
             individual pixel conversions that take longer than this will be skipped.
           </p>
           <p className='leading-loose'>
