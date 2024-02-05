@@ -1,6 +1,6 @@
-# Hello :wave:
+# Hi! :wave:
 
-I'm Bruce. Welcome to my GitHub page! I upload my tiny mini-projects here that I work on in my free time.
+I'm B. Welcome to my GitHub page! I upload my tiny mini-projects here that I work on in my free time.
 
 I'm a software development engineer at Amazon and a recent graduate in Math and Computer Science from NYU. I'm interested in building tools that make data and development more accessible for everyone.
 
